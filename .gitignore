@@ -1,0 +1,16 @@
+# maven binaries and release files
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# eclipse project files
+.classpath
+.project
+.settings/
+
+# windows files
+Desktop.ini
+Thumbs.db
