@@ -32,14 +32,26 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <junit.version>4.12</junit.version>
+    <com.google.inject.guice.version>4.0</com.google.inject.guice.version>
   </properties>
 
   <dependencies>
+    <!-- JUnit - unit-testing -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <version>${junit.version}</version>
       <scope>test</scope>
+    </dependency>
+    
+    <!-- guice - dependency injection -->
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <version>${com.google.inject.guice.version}</version>
     </dependency>
   </dependencies>
 </project>
