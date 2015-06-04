@@ -1,14 +1,15 @@
-package at.aau.util;
+package at.aau.dwaspgui.util;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import at.aau.view.AbstractView;
-import at.aau.viewmodel.ViewModel;
+import at.aau.dwaspgui.view.AbstractView;
+import at.aau.dwaspgui.viewmodel.ViewModel;
 
 /**
  * Locates views + scenes according to a naming convention.
@@ -25,14 +26,15 @@ public class ViewLocator {
 	public static Scene loadScene(AbstractView<?> view) {
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		String fxmlFilename = view.getClass().getSimpleName() + FXML_FILE_ENDING;
+		String resourceBaseName = view.getClass().getCanonicalName();
 		URL fxmlResource = view.getClass().getResource(fxmlFilename);
 
 		fxmlLoader.setController(view);
 		fxmlLoader.setLocation(fxmlResource);
+		fxmlLoader.setResources(ResourceBundle.getBundle(resourceBaseName, Locale.ENGLISH));
 
 		try {
-			Parent root = fxmlLoader.load(fxmlResource.openStream());
-			return new Scene(root);
+			return new Scene(fxmlLoader.load());
 		} catch (IOException e) {
 			throw new RuntimeException("Could not load the FXML file", e);
 		}

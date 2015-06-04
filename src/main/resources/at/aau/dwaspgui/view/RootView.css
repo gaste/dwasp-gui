@@ -1,0 +1,12 @@
+/*#project-view {
+}
+
+#project-view .tree-cell {
+    -fx-background-color: #f3f3f3;
+    -fx-text-fill: #2c2c2c;
+}
+
+#project-view .tree-cell:selected {
+	-fx-background-color: #3399ff;
+	-fx-text-fill: #ffffff;
+}*/

@@ -1,4 +1,4 @@
-package at.aau.util;
+package at.aau.dwaspgui.util;
 
 import javafx.application.Platform;
 

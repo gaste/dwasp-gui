@@ -1,0 +1,83 @@
+package at.aau.dwaspgui.domain;
+
+import java.io.IOException;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import at.aau.dwaspgui.domain.DirectEncoding;
+import at.aau.dwaspgui.domain.Encoding;
+import at.aau.dwaspgui.domain.FileEncoding;
+import at.aau.dwaspgui.domain.Instance;
+import at.aau.dwaspgui.domain.Project;
+import at.aau.dwaspgui.parser.XMLProjectParserImpl;
+import at.aau.dwaspgui.parser.ProjectParsingException;
+import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
+
+/**
+ * Unit tests for {@see ProjectParserXMLImpl}.
+ * 
+ * @author Philip Gasteiger
+ */
+@RunWith(JUnit4.class)
+public class ProjectParserXMLImplTest {
+	private XMLProjectParserImpl parser;
+	
+	@Before
+	public void setUp() throws IOException {
+		parser = new XMLProjectParserImpl();
+	}
+	
+	// -------------------------------------------------------------------------
+	// parseProject tests
+	// -------------------------------------------------------------------------
+	@Test
+	public void parseProject_projectValid_throwsException()
+			throws ProjectParsingException {
+		Project project = parser.parseProject(getClass().getResourceAsStream("projectValid.xml"));
+		
+		assertEquals("/foo/bar", project.getBaseDirectory());
+		assertEquals(4, project.getProgram().size());
+		assertEquals(2, project.getInstances().size());
+		
+		int numFileEncodings = 0;
+		int numDirectEncodings = 0;
+		
+		for (Encoding encoding : project.getProgram()) {
+			if (encoding instanceof DirectEncoding)
+				numDirectEncodings ++;
+			else if (encoding instanceof FileEncoding)
+				numFileEncodings ++;
+			else
+				fail("Found encoding that is neither DirectEncoding nor FileEncoding");
+		}
+		
+		assertEquals(2, numDirectEncodings);
+		assertEquals(2, numFileEncodings);
+		
+		for (Instance instance : project.getInstances()) {
+			assertThat(instance.getInstance(), instanceOf(FileEncoding.class));
+		}
+	}
+	
+	@Test(expected=ProjectParsingException.class)
+	public void parseProject_projectNoBasedirectory_throwsException()
+			throws ProjectParsingException {
+		parser.parseProject(getClass().getResourceAsStream("projectNoBasedirectory.xml"));
+	}
+	
+	@Test(expected=ProjectParsingException.class)
+	public void parseProject_projectNoEncodings_throwsException()
+			throws ProjectParsingException {
+		parser.parseProject(getClass().getResourceAsStream("projectNoEncodings.xml"));
+	}
+	
+	@Test(expected=ProjectParsingException.class)
+	public void parseProject_projectNoInstances_throwsException()
+			throws ProjectParsingException {
+		parser.parseProject(getClass().getResourceAsStream("projectNoInstances.xml"));
+	}
+}

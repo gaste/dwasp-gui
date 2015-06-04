@@ -1,4 +1,4 @@
-package at.aau.viewmodel;
+package at.aau.dwaspgui.viewmodel;
 
 /**
  * Marker interface for a view model.
