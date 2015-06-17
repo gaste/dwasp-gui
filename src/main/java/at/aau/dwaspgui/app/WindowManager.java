@@ -23,6 +23,7 @@ public class WindowManager {
 
 	public WindowManager(Stage stage) {
 		this.stage = stage;
+		this.stage.setTitle("DWASP");
 	}
 
 	private void showScene(final Scene scene) {

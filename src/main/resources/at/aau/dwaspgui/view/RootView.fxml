@@ -9,15 +9,15 @@
 <?import javafx.scene.text.Font?>
 <?import org.fxmisc.richtext.LineNumberFactory?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@RootView.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@RootView.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar>
         <menus>
-          <Menu mnemonicParsing="false" text="File">
+          <Menu mnemonicParsing="false" text="%menu.file">
             <items>
-                  <MenuItem mnemonicParsing="false" onAction="#openAction" text="%menu.open" />
+                  <MenuItem mnemonicParsing="false" onAction="#openAction" text="%menu.file.open" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-              <MenuItem mnemonicParsing="false" onAction="#exitAction" text="%menu.exit" />
+              <MenuItem mnemonicParsing="false" onAction="#exitAction" text="%menu.file.exit" />
             </items>
           </Menu>
         </menus>
@@ -35,12 +35,17 @@
                      <children>
                         <ToolBar prefHeight="40.0" prefWidth="200.0">
                           <items>
-                            <Button mnemonicParsing="false" onAction="#runAction" text="%button.run" />
-                              <Button mnemonicParsing="false" onAction="#debugAction" text="%button.debug" />
+                              <MenuButton fx:id="debugButton" mnemonicParsing="false" text="%button.debug">
+                                <items>
+                                  <MenuItem mnemonicParsing="false" text="Action 1" />
+                                  <MenuItem mnemonicParsing="false" text="Action 2" />
+                                </items>
+                              </MenuButton>
+                              <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stopAction" text="Stop" />
+                              <Button fx:id="askButton" mnemonicParsing="false" onAction="#askAction" text="Ask" />
                           </items>
                         </ToolBar>
-                        <CodeArea fx:id="codeArea" stylesheets="@asp-core-2-keywords.css" VBox.vgrow="ALWAYS">
-                        	<font><Font name="Consolas" size="24" /></font>
+                        <CodeArea id="code-area" fx:id="codeArea" stylesheets="@asp-core-2-keywords.css" VBox.vgrow="ALWAYS">
                         </CodeArea>
                      </children>
                   </VBox>

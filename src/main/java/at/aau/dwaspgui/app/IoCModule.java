@@ -1,6 +1,8 @@
 package at.aau.dwaspgui.app;
 
 import javafx.stage.Stage;
+import at.aau.dwaspgui.debug.Debugger;
+import at.aau.dwaspgui.debug.DebuggerImpl;
 import at.aau.dwaspgui.parser.XMLProjectParser;
 import at.aau.dwaspgui.parser.XMLProjectParserImpl;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
@@ -25,5 +27,6 @@ public class IoCModule extends AbstractModule {
 		bind(WindowManager.class).toInstance(new WindowManager(primaryStage));
 		bind(RootViewModel.class).in(Scopes.SINGLETON);
 		bind(XMLProjectParser.class).to(XMLProjectParserImpl.class).in(Scopes.SINGLETON);
+		bind(Debugger.class).to(DebuggerImpl.class).in(Scopes.SINGLETON);
 	}
 }

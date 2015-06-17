@@ -1,13 +1,13 @@
 .keyword {
-    -fx-fill: purple;
+    -fx-fill: #0000ff;
     -fx-font-weight: bold;
 }
 .dot {
     -fx-font-weight: bold;
-    -fx-fill: purple;
+    -fx-fill: #0000ff;
 }
 .paren {
-    -fx-fill: firebrick;
+    -fx-fill: black;
     -fx-font-weight: bold;
 }
 .bracket {
@@ -19,8 +19,11 @@
     -fx-font-weight: bold;
 }
 .string {
-    -fx-fill: blue;
+    -fx-fill: #A31515;
 }
 .comment {
-	-fx-fill: cadetblue;
+	-fx-fill: #008000;
+}
+.core-element {
+	-fx-fill: red;
 }

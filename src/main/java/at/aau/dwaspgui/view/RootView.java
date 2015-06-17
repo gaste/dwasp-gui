@@ -3,14 +3,19 @@ package at.aau.dwaspgui.view;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 
+import at.aau.dwaspgui.domain.TestCase;
 import at.aau.dwaspgui.view.highlight.AspCore2Highlight;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
 import at.aau.dwaspgui.viewmodel.project.AbstractProjectItemViewModel;
@@ -19,6 +24,9 @@ public class RootView extends AbstractView<RootViewModel> {
 	// JavaFX controls
 	@FXML private TreeView<AbstractProjectItemViewModel> projectTreeView;
 	@FXML private CodeArea codeArea;
+	@FXML private MenuButton debugButton;
+	@FXML private Button stopButton;
+	@FXML private Button askButton;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -26,6 +34,24 @@ public class RootView extends AbstractView<RootViewModel> {
 				(obs, oldProject, newProject) -> {
 					projectChanged(newProject);
 				});
+		
+		viewModel.testCases().addListener(new ListChangeListener<TestCase> () {
+			@Override
+			public void onChanged(Change<? extends TestCase> c) {
+				debugButton.getItems().clear();
+				for(TestCase tc : viewModel.testCases()) {
+					MenuItem item = new MenuItem(tc.getName());
+					item.setOnAction((e) -> {
+						viewModel.debugAction(tc);
+					});
+					debugButton.getItems().add(item);
+				}
+			}
+		});
+		
+		debugButton.disableProperty().bind(viewModel.isDebugging());
+		stopButton.visibleProperty().bind(viewModel.isDebugging());
+		askButton.visibleProperty().bind(viewModel.isDebugging());
 		
 		initializeProjectView();
 		initializeCodeArea();
@@ -74,12 +100,12 @@ public class RootView extends AbstractView<RootViewModel> {
 	}
 	
 	@FXML
-	public void runAction() {
-		
+	public void stopAction() {
+		viewModel.stopAction();
 	}
 	
 	@FXML
-	public void debugAction() {
-		
+	public void askAction() {
+		viewModel.askAction();
 	}
 }

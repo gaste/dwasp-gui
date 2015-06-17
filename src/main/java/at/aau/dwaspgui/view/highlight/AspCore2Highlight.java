@@ -15,7 +15,8 @@ import org.fxmisc.richtext.StyleSpansBuilder;
  */
 public class AspCore2Highlight {
 	private static final String[] KEYWORDS = new String[] {
-			"\\|", "\\b(not)\\b", ":-", ":~", "#count", "#max", "#min", "#sum"		
+			"\\|", "\\b(not)\\b", ":-", ":~", "#count", "#max", "#min", "#sum",
+			"assertTrue", "assertFalse"
 	};
 
 	private static final String KEYWORD_PATTERN = String.join("|", KEYWORDS);

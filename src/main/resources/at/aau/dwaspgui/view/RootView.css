@@ -1,4 +1,5 @@
-/*#project-view {
+#project-view {
+	-fx-background-color: #f3f3f3;
 }
 
 #project-view .tree-cell {
@@ -9,4 +10,31 @@
 #project-view .tree-cell:selected {
 	-fx-background-color: #3399ff;
 	-fx-text-fill: #ffffff;
+}
+/*
+.menu-bar {
+    -fx-background-color: #f3f3f3;
 }*/
+
+.split-pane {
+	-fx-background-color: #f3f3f3;
+}
+
+.split-pane .split-pane-divider {
+   -fx-background-color: transparent;
+   -fx-background-insets: 0;
+   -fx-border-color: d3d3d3;
+   -fx-border-width: 0 1 0 0;
+}
+
+.lineno {
+	-fx-font: 18pt "Consolas";
+	-fx-background-color: #ffffff;
+	-fx-text-fill: #2B91AF;
+	-fx-border-color: #d3d3d3;
+	-fx-border-width: 0 1 0 0;
+}
+
+#code-area {
+	-fx-font: 16pt "Consolas";
+}
