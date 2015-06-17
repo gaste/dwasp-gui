@@ -20,7 +20,6 @@ import org.xml.sax.SAXException;
 import at.aau.dwaspgui.domain.DirectEncoding;
 import at.aau.dwaspgui.domain.Encoding;
 import at.aau.dwaspgui.domain.FileEncoding;
-import at.aau.dwaspgui.domain.Instance;
 import at.aau.dwaspgui.domain.Project;
 import at.aau.dwaspgui.domain.TestCase;
 import at.aau.dwaspgui.util.Messages;
@@ -37,10 +36,6 @@ public class XMLProjectParserImpl implements XMLProjectParser {
 	private static final String TAG_TEST_CASE = "testCase";
 	private static final String TAG_TEST_CASE_NAME = "name";
 	private static final String TAG_TEST_CASE_ASSERTIONS = "assertions";
-	private static final String TAG_INSTANCES = "instances";
-	private static final String TAG_INSTANCE = "instance";
-	private static final String TAG_INSTANCE_NAME = "name";
-	private static final String TAG_INSTANCE_FILE = "file";
 	private static final String TAG_ENDOCINGS = "encodings";
 	private static final String TAG_ENCODING_DIRECT = "encodingDirect";
 	private static final String TAG_ENCODING_FILE = "encodingFile";
@@ -80,9 +75,9 @@ public class XMLProjectParserImpl implements XMLProjectParser {
 		
 		String baseDirectory = getBaseDirectory(doc);
 		Set<Encoding> encodings = getEncodings(doc, baseDirectory);
-		Set<Instance> instances = getInstances(doc, baseDirectory);
+		Set<TestCase> testCases = getTestCases(doc, baseDirectory);
 		
-		return new Project(baseDirectory, encodings, instances);
+		return new Project(baseDirectory, encodings, testCases);
 	}
 
 	private String getBaseDirectory(Document doc) throws ProjectParsingException {
@@ -116,45 +111,28 @@ public class XMLProjectParserImpl implements XMLProjectParser {
 		return encodings;
 	}
 
-	private Set<Instance> getInstances(Document doc, String baseDirectory)
+	private Set<TestCase> getTestCases(Document doc, String baseDirectory)
 			throws ProjectParsingException {
-		Node node = doc.getElementsByTagName(TAG_INSTANCES).item(0);
+		Node node = doc.getElementsByTagName(TAG_TEST_CASES).item(0);
 		
 		if (node == null)
-			throw new ProjectParsingException(Messages.PARSER_NO_INSTANCES.format());
+			throw new ProjectParsingException(Messages.PARSER_NO_TESTCASES.format());
 		
-		NodeList instancesList = node.getChildNodes();
-		Set<Instance> instances = new HashSet<Instance>();
+		NodeList testCasesList = node.getChildNodes();
+		Set<TestCase> testCases = new HashSet<TestCase>();
 		
-		for (int i = 0; i < instancesList.getLength(); i ++) {
-			Node instance = instancesList.item(i);
+		for (int i = 0; i < testCasesList.getLength(); i ++) {
+			Node testCase = testCasesList.item(i);
 			
-			if (instance.getNodeName().equals(TAG_INSTANCE)
-					&& instance instanceof Element) {
-				Element instanceEl = (Element) instance;
-				String instanceName = instanceEl.getElementsByTagName(TAG_INSTANCE_NAME).item(0).getTextContent();
-				String instanceFile = instanceEl.getElementsByTagName(TAG_INSTANCE_FILE).item(0).getTextContent();
-				NodeList testCasesList = instanceEl.getElementsByTagName(TAG_TEST_CASES).item(0).getChildNodes();
-				Set<TestCase> testCases = new HashSet<TestCase>();
-				
-				for (int j = 0; j < testCasesList.getLength(); j ++) {
-					Node testCase = testCasesList.item(j);
-					
-					if (testCase.getNodeName().equals(TAG_TEST_CASE)
-							&& testCase instanceof Element) {
-						Element testCaseEl = (Element) testCase;
+			if (testCase.getNodeName().equals(TAG_TEST_CASE)
+					&& testCase instanceof Element) {
+				Element testCaseEl = (Element) testCase;
+				String testCaseName = testCaseEl.getElementsByTagName(TAG_TEST_CASE_NAME).item(0).getTextContent();
+				String assertions = testCaseEl.getElementsByTagName(TAG_TEST_CASE_ASSERTIONS).item(0).getTextContent();
 						
-						String testCaseName = testCaseEl.getElementsByTagName(TAG_TEST_CASE_NAME).item(0).getTextContent();
-						String assertions = testCaseEl.getElementsByTagName(TAG_TEST_CASE_ASSERTIONS).item(0).getTextContent();
-						
-						testCases.add(new TestCase(testCaseName, assertions));
-					}
-				}
-
-				instances.add(new Instance(instanceName, new FileEncoding(
-						baseDirectory, instanceFile), testCases));
+				testCases.add(new TestCase(testCaseName, assertions));
 			}
 		}
-		return instances;
+		return testCases;
 	}
 }

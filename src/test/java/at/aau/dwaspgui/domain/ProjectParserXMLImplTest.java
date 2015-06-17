@@ -1,5 +1,8 @@
 package at.aau.dwaspgui.domain;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 
 import org.junit.Before;
@@ -7,15 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import at.aau.dwaspgui.domain.DirectEncoding;
-import at.aau.dwaspgui.domain.Encoding;
-import at.aau.dwaspgui.domain.FileEncoding;
-import at.aau.dwaspgui.domain.Instance;
-import at.aau.dwaspgui.domain.Project;
-import at.aau.dwaspgui.parser.XMLProjectParserImpl;
 import at.aau.dwaspgui.parser.ProjectParsingException;
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
+import at.aau.dwaspgui.parser.XMLProjectParserImpl;
 
 /**
  * Unit tests for {@see ProjectParserXMLImpl}.
@@ -41,7 +37,7 @@ public class ProjectParserXMLImplTest {
 		
 		assertEquals("/foo/bar", project.getBaseDirectory());
 		assertEquals(4, project.getProgram().size());
-		assertEquals(2, project.getInstances().size());
+		assertEquals(3, project.getTestCases().size());
 		
 		int numFileEncodings = 0;
 		int numDirectEncodings = 0;
@@ -57,10 +53,6 @@ public class ProjectParserXMLImplTest {
 		
 		assertEquals(2, numDirectEncodings);
 		assertEquals(2, numFileEncodings);
-		
-		for (Instance instance : project.getInstances()) {
-			assertThat(instance.getInstance(), instanceOf(FileEncoding.class));
-		}
 	}
 	
 	@Test(expected=ProjectParsingException.class)
@@ -78,6 +70,6 @@ public class ProjectParserXMLImplTest {
 	@Test(expected=ProjectParsingException.class)
 	public void parseProject_projectNoInstances_throwsException()
 			throws ProjectParsingException {
-		parser.parseProject(getClass().getResourceAsStream("projectNoInstances.xml"));
+		parser.parseProject(getClass().getResourceAsStream("projectNoTestcases.xml"));
 	}
 }

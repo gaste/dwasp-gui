@@ -12,7 +12,7 @@ public enum Messages {
 	PARSER_PROJECT_NOT_FOUND("parser.projectfile.notfound")
   , PARSER_INVALIDXML("parser.projectfile.invalidxml")
   , PARSER_IOERROR("parser.ioerror")
-  , PARSER_NO_INSTANCES("parser.noinstances")
+  , PARSER_NO_TESTCASES("parser.notestcases")
   , PARSER_NO_ENCODINGS("parser.noencodings")
   , PARSER_NO_BASEDIRECTORY("parser.nobasedirectory")
   , ERROR_OPEN_PROJECT("error.openproject")

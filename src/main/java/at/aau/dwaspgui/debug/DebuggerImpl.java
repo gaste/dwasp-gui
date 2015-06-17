@@ -21,8 +21,7 @@ public class DebuggerImpl implements Debugger {
 	private BooleanProperty isComputingQuery = new SimpleBooleanProperty(false);
 	
 	@Override
-	public void startDebugger(Set<Encoding> program, Encoding instance,
-			TestCase testCase) {
+	public void startDebugger(Set<Encoding> program, TestCase testCase) {
 		isRunning.set(true);
 		for (Consumer<List<CoreItem>> callback : coreCallbacks) {
 			CoreItem i = new CoreItem(program.iterator().next(), 2, 0);

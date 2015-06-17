@@ -16,12 +16,12 @@ public class Project {
 	private Set<Encoding> program;
 	
 	/** Set of instances of the program */
-	private Set<Instance> instances;
+	private Set<TestCase> testCases;
 	
-	public Project(String baseDirectory, Set<Encoding> program, Set<Instance> instances) {
+	public Project(String baseDirectory, Set<Encoding> program, Set<TestCase> testCases) {
 		this.baseDirectory = baseDirectory;
 		this.program = program;
-		this.instances = instances;
+		this.testCases = testCases;
 	}
 
 	public String getBaseDirectory() {
@@ -32,7 +32,7 @@ public class Project {
 		return program;
 	}
 
-	public Set<Instance> getInstances() {
-		return instances;
+	public Set<TestCase> getTestCases() {
+		return testCases;
 	}
 }

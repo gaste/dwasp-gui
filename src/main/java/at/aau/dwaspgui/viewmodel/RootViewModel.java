@@ -13,8 +13,6 @@ import org.w3c.dom.Document;
 
 import at.aau.dwaspgui.app.WindowManager;
 import at.aau.dwaspgui.debug.Debugger;
-import at.aau.dwaspgui.domain.Encoding;
-import at.aau.dwaspgui.domain.Instance;
 import at.aau.dwaspgui.domain.Project;
 import at.aau.dwaspgui.domain.QueryAnswer;
 import at.aau.dwaspgui.domain.TestCase;
@@ -77,12 +75,7 @@ public class RootViewModel implements ViewModel {
 		this.projectViewModel.set(AbstractProjectItemViewModel.create(project));
 		
 		testCases.clear();
-		
-		for (Instance instance : project.getInstances()) {
-			for (TestCase testCase : instance.getTestCases()) {
-				testCases.add(testCase);
-			}
-		}
+		testCases.addAll(project.getTestCases());
 	}
 	
 	public void exitAction() {
@@ -90,17 +83,7 @@ public class RootViewModel implements ViewModel {
 	}
 	
 	public void debugAction(TestCase testCase) {
-		Encoding instance = null;
-		
-		for (Instance i : project.getInstances()) {
-			for (TestCase c : i.getTestCases()) {
-				if (c == testCase) {
-					instance = i.getInstance();
-				}
-			}
-		}
-		
-		debugger.startDebugger(project.getProgram(), instance, testCase);
+		debugger.startDebugger(project.getProgram(), testCase);
 	}
 	
 	public ObjectProperty<AbstractProjectItemViewModel> projectProperty() {
