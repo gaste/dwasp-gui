@@ -28,11 +28,13 @@
 }
 
 .lineno {
-	-fx-font: 18pt "Consolas";
+	-fx-font: 16pt "Consolas";
 	-fx-background-color: #ffffff;
-	-fx-text-fill: #2B91AF;
+	-fx-text-fill: #d3d3d3;
 	-fx-border-color: #d3d3d3;
 	-fx-border-width: 0 1 0 0;
+	-fx-border-insets: 0 15 0 0;
+	-fx-padding: 0 15 0 15;
 }
 
 #code-area {

@@ -23,4 +23,9 @@ class ProjectItemEncodingViewModel extends AbstractProjectItemViewModel {
 	public String getContent() {
 		return encoding.getContent();
 	}
+
+	@Override
+	public Encoding getEncoding() {
+		return encoding;
+	}
 }

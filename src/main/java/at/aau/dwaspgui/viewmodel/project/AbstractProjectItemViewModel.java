@@ -2,6 +2,7 @@ package at.aau.dwaspgui.viewmodel.project;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import at.aau.dwaspgui.domain.Encoding;
 import at.aau.dwaspgui.domain.Project;
 
 /**
@@ -25,7 +26,11 @@ public abstract class AbstractProjectItemViewModel {
 	
 	public abstract boolean isEditable();
 	
+	public final boolean isEncoding() { return getEncoding() != null; }
+	
 	public abstract String getContent();
+	
+	public abstract Encoding getEncoding();
 	
 	public static AbstractProjectItemViewModel create(Project p) {
 		return new ProjectItemViewModel(p);

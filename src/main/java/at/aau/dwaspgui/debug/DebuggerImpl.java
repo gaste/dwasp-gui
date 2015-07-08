@@ -24,7 +24,7 @@ public class DebuggerImpl implements Debugger {
 	public void startDebugger(Set<Encoding> program, TestCase testCase) {
 		isRunning.set(true);
 		for (Consumer<List<CoreItem>> callback : coreCallbacks) {
-			CoreItem i = new CoreItem(program.iterator().next(), 2, 0);
+			CoreItem i = new CoreItem(program.iterator().next(), 0, 10);
 			callback.accept(Arrays.asList(i));
 		}
 	}

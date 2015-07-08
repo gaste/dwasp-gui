@@ -1,5 +1,6 @@
 package at.aau.dwaspgui.viewmodel.project;
 
+import at.aau.dwaspgui.domain.Encoding;
 import at.aau.dwaspgui.domain.TestCase;
 
 class ProjectItemTestCaseViewModel extends AbstractProjectItemViewModel {
@@ -22,5 +23,10 @@ class ProjectItemTestCaseViewModel extends AbstractProjectItemViewModel {
 	@Override
 	public String getContent() {
 		return testCase.getAssertions();
+	}
+
+	@Override
+	public Encoding getEncoding() {
+		return null;
 	}
 }

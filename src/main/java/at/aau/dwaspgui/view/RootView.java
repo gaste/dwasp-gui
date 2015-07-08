@@ -14,8 +14,12 @@ import javafx.scene.control.TreeView;
 
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
+import org.fxmisc.richtext.UndoActions;
+import org.fxmisc.undo.UndoManagerFactory;
 
+import at.aau.dwaspgui.domain.CoreItem;
 import at.aau.dwaspgui.domain.TestCase;
+import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.view.highlight.AspCore2Highlight;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
 import at.aau.dwaspgui.viewmodel.project.AbstractProjectItemViewModel;
@@ -49,6 +53,15 @@ public class RootView extends AbstractView<RootViewModel> {
 			}
 		});
 		
+		viewModel.coreItems().addListener(new ListChangeListener<CoreItem>() {
+			@Override
+			public void onChanged(Change<? extends CoreItem> c) {
+				JFXUtil.runOnJFX(() -> {
+					codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.selectedEncoding().get(), codeArea.getText(), viewModel.coreItems()));
+				});
+			}
+		});
+		
 		debugButton.disableProperty().bind(viewModel.isDebugging());
 		stopButton.visibleProperty().bind(viewModel.isDebugging());
 		askButton.visibleProperty().bind(viewModel.isDebugging());
@@ -62,6 +75,10 @@ public class RootView extends AbstractView<RootViewModel> {
 				(obs, oldProjectItem, newProjectItem) -> {
 					if (newProjectItem.getValue().isEditable()) {
 						codeArea.replaceText(newProjectItem.getValue().getContent());
+						codeArea.getUndoManager().forgetHistory();
+					}
+					if (newProjectItem.getValue().isEncoding()) {
+						viewModel.selectedEncoding().set(newProjectItem.getValue().getEncoding());
 					}
 				});
 	}
@@ -69,7 +86,7 @@ public class RootView extends AbstractView<RootViewModel> {
 	private void initializeCodeArea() {
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 		codeArea.textProperty().addListener((obs, oldText, newText) -> {
-            codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(newText));
+            codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.selectedEncoding().get(), newText, viewModel.coreItems()));
         });
 	}
 	

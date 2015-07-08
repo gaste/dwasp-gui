@@ -13,6 +13,8 @@ import org.w3c.dom.Document;
 
 import at.aau.dwaspgui.app.WindowManager;
 import at.aau.dwaspgui.debug.Debugger;
+import at.aau.dwaspgui.domain.CoreItem;
+import at.aau.dwaspgui.domain.Encoding;
 import at.aau.dwaspgui.domain.Project;
 import at.aau.dwaspgui.domain.QueryAnswer;
 import at.aau.dwaspgui.domain.TestCase;
@@ -33,8 +35,10 @@ public class RootViewModel implements ViewModel {
 	private final XMLProjectParser projectParser;
 	private final Debugger debugger;
 	private Project project;
+	private ObjectProperty<Encoding> selectedEncoding = new SimpleObjectProperty<Encoding>();
 	private ObjectProperty<AbstractProjectItemViewModel> projectViewModel = new SimpleObjectProperty<AbstractProjectItemViewModel>();
 	private ObservableList<TestCase> testCases = FXCollections.observableArrayList();
+	private ObservableList<CoreItem> coreItems = FXCollections.observableArrayList();
 	
 	@Inject
 	public RootViewModel(WindowManager windowManager,
@@ -44,7 +48,8 @@ public class RootViewModel implements ViewModel {
 		this.debugger = debugger;
 		
 		debugger.registerCoreCallback((coreItems) -> {
-			System.out.println("IN CORE!");
+			this.coreItems.clear();
+			this.coreItems.addAll(coreItems);
 		});
 	}
 	
@@ -90,8 +95,16 @@ public class RootViewModel implements ViewModel {
 		return this.projectViewModel;
 	}
 	
+	public ObjectProperty<Encoding> selectedEncoding() {
+		return this.selectedEncoding;
+	}
+	
 	public ObservableList<TestCase> testCases() {
 		return this.testCases;
+	}
+	
+	public ObservableList<CoreItem> coreItems() {
+		return this.coreItems;
 	}
 	
 	public BooleanProperty isDebugging() {
@@ -104,6 +117,7 @@ public class RootViewModel implements ViewModel {
 	
 	public void askAction() {
 		debugger.computeQuery((atom) -> {
+			System.out.println("in ask action");
 			return QueryAnswer.YES;
 		});
 	}

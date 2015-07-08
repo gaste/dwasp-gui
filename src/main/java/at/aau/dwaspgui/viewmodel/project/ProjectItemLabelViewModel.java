@@ -1,5 +1,7 @@
 package at.aau.dwaspgui.viewmodel.project;
 
+import at.aau.dwaspgui.domain.Encoding;
+
 class ProjectItemLabelViewModel extends AbstractProjectItemViewModel {
 	private final String label;
 	
@@ -19,6 +21,11 @@ class ProjectItemLabelViewModel extends AbstractProjectItemViewModel {
 
 	@Override
 	public String getContent() {
+		return null;
+	}
+
+	@Override
+	public Encoding getEncoding() {
 		return null;
 	}
 }

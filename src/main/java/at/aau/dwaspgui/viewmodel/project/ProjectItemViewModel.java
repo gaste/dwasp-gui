@@ -35,4 +35,9 @@ class ProjectItemViewModel extends AbstractProjectItemViewModel {
 	public String getContent() {
 		return null;
 	}
+
+	@Override
+	public Encoding getEncoding() {
+		return null;
+	}
 }

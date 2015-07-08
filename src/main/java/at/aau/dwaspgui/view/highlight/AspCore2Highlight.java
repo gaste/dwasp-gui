@@ -1,15 +1,20 @@
 package at.aau.dwaspgui.view.highlight;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
 
+import at.aau.dwaspgui.domain.CoreItem;
+import at.aau.dwaspgui.domain.Encoding;
+
 /**
- * Syntax hightlight for the ASP Core 2 language.
+ * Syntax highlight for the ASP Core 2 language.
  * 
  * @author Philip Gasteiger
  */
@@ -44,6 +49,7 @@ public class AspCore2Highlight {
 	private static final String CSS_BRACE = "brace";
 	private static final String CSS_PAREN = "paren";
 	private static final String CSS_KEYWORD = "keyword";
+	private static final String CSS_CORE_ELEMENT = "core-element";
 	
 	private static final Pattern HIGHLIGHT_PATTERN = Pattern.compile(
                "(?<" + GROUP_KEYWORD + ">" + KEYWORD_PATTERN + ")"
@@ -55,7 +61,11 @@ public class AspCore2Highlight {
             + "|(?<" + GROUP_COMMENT + ">" + COMMENT_PATTERN + ")"
     );
 
-	public static StyleSpans<Collection<String>> computeHighlighting(String text) {
+	public static StyleSpans<Collection<String>> computeHighlighting(Encoding encoding, String text) {
+		return computeHighlighting(encoding, text, Collections.emptyList());
+	}
+	
+	public static StyleSpans<Collection<String>> computeHighlighting(Encoding encoding, String text, List<CoreItem> coreItems) {
 		StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
 		Matcher matcher = HIGHLIGHT_PATTERN.matcher(text);
         
@@ -72,13 +82,26 @@ public class AspCore2Highlight {
                     matcher.group(GROUP_COMMENT) != null ? CSS_COMMENT :
                     null;
             
-            spansBuilder.add(Collections.emptyList(), matcher.start() - lastMatchEnd);
-            spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
+            List<String> style = new ArrayList<String>();
+            style.add(styleClass);
+            
+            spansBuilder.add(new ArrayList<String>(), matcher.start() - lastMatchEnd);
+            spansBuilder.add(style, matcher.end() - matcher.start());
             lastMatchEnd = matcher.end();
         }
         
         spansBuilder.add(Collections.emptyList(), text.length() - lastMatchEnd);
+        StyleSpans<Collection<String>> styleSpans = spansBuilder.create();
         
-        return spansBuilder.create();
+        for (CoreItem ci : coreItems) {
+			if (ci.getEncoding().equals(encoding)) {
+				for (int i = ci.getFromIndex();
+						 i < ci.getFromIndex() + ci.getLength()
+				      && i < text.length(); i++) {
+					styleSpans.getStyleSpan(i).getStyle().add(CSS_CORE_ELEMENT);
+				}
+			}
+        }
+        return styleSpans;
 	}
 }
