@@ -1,12 +1,14 @@
 package at.aau.dwaspgui.view.highlight;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.fxmisc.richtext.StyleSpan;
 import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
 
@@ -82,26 +84,26 @@ public class AspCore2Highlight {
                     matcher.group(GROUP_COMMENT) != null ? CSS_COMMENT :
                     null;
             
-            List<String> style = new ArrayList<String>();
-            style.add(styleClass);
-            
             spansBuilder.add(new ArrayList<String>(), matcher.start() - lastMatchEnd);
-            spansBuilder.add(style, matcher.end() - matcher.start());
+            spansBuilder.add(new ArrayList<String>(Arrays.asList(styleClass)), matcher.end() - matcher.start());
             lastMatchEnd = matcher.end();
         }
         
-        spansBuilder.add(Collections.emptyList(), text.length() - lastMatchEnd);
+        spansBuilder.add(new ArrayList<String>(), text.length() - lastMatchEnd);
         StyleSpans<Collection<String>> styleSpans = spansBuilder.create();
         
         for (CoreItem ci : coreItems) {
 			if (ci.getEncoding().equals(encoding)) {
-				for (int i = ci.getFromIndex();
-						 i < ci.getFromIndex() + ci.getLength()
-				      && i < text.length(); i++) {
-					styleSpans.getStyleSpan(i).getStyle().add(CSS_CORE_ELEMENT);
+				StyleSpans<Collection<String>> sv = styleSpans.subView(ci.getFromIndex(), ci.getFromIndex() + ci.getLength());
+				
+				for (StyleSpan<Collection<String>> s : sv) {
+					s.getStyle().add(CSS_CORE_ELEMENT);
 				}
+				
+				styleSpans.concat(sv);
 			}
         }
+        
         return styleSpans;
 	}
 }

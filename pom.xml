@@ -67,6 +67,14 @@
       <artifactId>aspide-notifier</artifactId>
       <version>1.0</version>
     </dependency>
+    
+    <!-- gringo-wrapper -->
+    <dependency>
+      <groupId>at.aau</groupId>
+      <artifactId>gringo-wrapper</artifactId>
+      <version>1.5.1</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
   
   <repositories>

@@ -13,7 +13,7 @@ import at.aau.dwaspgui.domain.TestCase;
 
 
 public interface Debugger {
-	void startDebugger(Set<Encoding> program, TestCase testCase);
+	void startDebugger(Set<Encoding> program, TestCase testCase) throws DebuggerException;
 	void stopDebugger();
 	void computeQuery(Function<String, QueryAnswer> callback);
 	void registerCoreCallback(Consumer<List<CoreItem>> callback);

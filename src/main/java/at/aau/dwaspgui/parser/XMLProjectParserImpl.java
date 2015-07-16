@@ -46,7 +46,7 @@ public class XMLProjectParserImpl implements XMLProjectParser {
 		try {
 			return parseProject(new FileInputStream(projectFile));
 		} catch (FileNotFoundException e) {
-			throw new ProjectParsingException(Messages.PARSER_PROJECT_NOT_FOUND
+			throw new ProjectParsingException(Messages.PRJPARSER_PROJECT_NOT_FOUND
 					.format(projectFile.getAbsoluteFile()), e);
 		}
 	}
@@ -62,9 +62,9 @@ public class XMLProjectParserImpl implements XMLProjectParser {
 		} catch (ParserConfigurationException e) {
 			throw new RuntimeException(e);
 		} catch (SAXException e) {
-			throw new ProjectParsingException(Messages.PARSER_INVALIDXML.format(), e);
+			throw new ProjectParsingException(Messages.PRJPARSER_INVALIDXML.format(), e);
 		} catch (IOException e) {
-			throw new ProjectParsingException(Messages.PARSER_IOERROR.format(), e); 
+			throw new ProjectParsingException(Messages.PRJPARSER_IOERROR.format(), e); 
 		}
 	}
 	
@@ -84,7 +84,7 @@ public class XMLProjectParserImpl implements XMLProjectParser {
 		Node node = doc.getElementsByTagName(TAG_BASE_DIRECTORY).item(0);
 		
 		if (node == null)
-			throw new ProjectParsingException(Messages.PARSER_NO_BASEDIRECTORY.format());
+			throw new ProjectParsingException(Messages.PRJPARSER_NO_BASEDIRECTORY.format());
 		
 		return node.getTextContent();
 	}
@@ -94,7 +94,7 @@ public class XMLProjectParserImpl implements XMLProjectParser {
 		Node node = doc.getElementsByTagName(TAG_ENDOCINGS).item(0);
 		
 		if (node == null)
-			throw new ProjectParsingException(Messages.PARSER_NO_ENCODINGS.format());
+			throw new ProjectParsingException(Messages.PRJPARSER_NO_ENCODINGS.format());
 		
 		NodeList encodingsList = node.getChildNodes();
 		Set<Encoding> encodings = new HashSet<Encoding>();
@@ -116,7 +116,7 @@ public class XMLProjectParserImpl implements XMLProjectParser {
 		Node node = doc.getElementsByTagName(TAG_TEST_CASES).item(0);
 		
 		if (node == null)
-			throw new ProjectParsingException(Messages.PARSER_NO_TESTCASES.format());
+			throw new ProjectParsingException(Messages.PRJPARSER_NO_TESTCASES.format());
 		
 		NodeList testCasesList = node.getChildNodes();
 		Set<TestCase> testCases = new HashSet<TestCase>();

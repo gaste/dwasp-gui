@@ -9,13 +9,17 @@ import java.util.ResourceBundle;
  * @author Philip Gasteiger
  */
 public enum Messages {
-	PARSER_PROJECT_NOT_FOUND("parser.projectfile.notfound")
-  , PARSER_INVALIDXML("parser.projectfile.invalidxml")
-  , PARSER_IOERROR("parser.ioerror")
-  , PARSER_NO_TESTCASES("parser.notestcases")
-  , PARSER_NO_ENCODINGS("parser.noencodings")
-  , PARSER_NO_BASEDIRECTORY("parser.nobasedirectory")
+	PRJPARSER_PROJECT_NOT_FOUND("prjparser.projectfile.notfound")
+  , PRJPARSER_INVALIDXML("prjparser.projectfile.invalidxml")
+  , PRJPARSER_IOERROR("prjparser.ioerror")
+  , PRJPARSER_NO_TESTCASES("prjparser.notestcases")
+  , PRJPARSER_NO_ENCODINGS("prjparser.noencodings")
+  , PRJPARSER_NO_BASEDIRECTORY("prjparser.nobasedirectory")
   , ERROR_OPEN_PROJECT("error.openproject")
+  , ERROR_GROUNDING("error.grounding")
+  , ERROR_START_DEBUGGER("error.debugger.start")
+  , MSGPARSER_INVALID_MESSAGE("msgparser.invalidmessage")
+  , MSGPARSER_IOERROR("msgparser.ioerror")
   ;
 
 	private static final String BUNDLE_BASENAME = Messages.class.getCanonicalName();

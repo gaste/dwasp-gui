@@ -13,6 +13,7 @@ import org.w3c.dom.Document;
 
 import at.aau.dwaspgui.app.WindowManager;
 import at.aau.dwaspgui.debug.Debugger;
+import at.aau.dwaspgui.debug.DebuggerException;
 import at.aau.dwaspgui.domain.CoreItem;
 import at.aau.dwaspgui.domain.Encoding;
 import at.aau.dwaspgui.domain.Project;
@@ -88,7 +89,12 @@ public class RootViewModel implements ViewModel {
 	}
 	
 	public void debugAction(TestCase testCase) {
-		debugger.startDebugger(project.getProgram(), testCase);
+		try {
+			debugger.startDebugger(project.getProgram(), testCase);
+		} catch (DebuggerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public ObjectProperty<AbstractProjectItemViewModel> projectProperty() {

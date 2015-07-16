@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 import org.w3c.dom.Document;
 
+import at.aau.dwaspgui.debug.Debugger;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
 
 import com.google.inject.Guice;
@@ -66,6 +67,11 @@ public class App extends Application {
 		if (params.size() == 1) {
 			rootViewModel.openProject(new File(params.get(0)));
 		}
+	}
+	
+	public void stop() throws Exception {
+		Debugger debugger = injector.getInstance(Debugger.class);
+		debugger.stopDebugger();
 	}
 	
 	private void initializeIoC(Stage primaryStage) {

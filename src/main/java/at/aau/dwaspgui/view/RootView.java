@@ -14,8 +14,6 @@ import javafx.scene.control.TreeView;
 
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
-import org.fxmisc.richtext.UndoActions;
-import org.fxmisc.undo.UndoManagerFactory;
 
 import at.aau.dwaspgui.domain.CoreItem;
 import at.aau.dwaspgui.domain.TestCase;
@@ -73,12 +71,13 @@ public class RootView extends AbstractView<RootViewModel> {
 	private void initializeProjectView() {
 		projectTreeView.getSelectionModel().selectedItemProperty().addListener(
 				(obs, oldProjectItem, newProjectItem) -> {
+					if (newProjectItem.getValue().isEncoding()) {
+						viewModel.selectedEncoding().set(newProjectItem.getValue().getEncoding());
+					}
+					
 					if (newProjectItem.getValue().isEditable()) {
 						codeArea.replaceText(newProjectItem.getValue().getContent());
 						codeArea.getUndoManager().forgetHistory();
-					}
-					if (newProjectItem.getValue().isEncoding()) {
-						viewModel.selectedEncoding().set(newProjectItem.getValue().getEncoding());
 					}
 				});
 	}
