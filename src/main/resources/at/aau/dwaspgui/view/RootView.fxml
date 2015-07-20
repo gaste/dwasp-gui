@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -35,13 +37,19 @@
                      <children>
                         <ToolBar prefHeight="40.0" prefWidth="200.0">
                           <items>
-                              <MenuButton fx:id="debugButton" mnemonicParsing="false" text="%button.debug">
+                              <MenuButton fx:id="debugButton" mnemonicParsing="false" styleClass="button" text="%button.debug">
                                 <items>
                                   <MenuItem mnemonicParsing="false" text="Action 1" />
                                   <MenuItem mnemonicParsing="false" text="Action 2" />
                                 </items>
+                                 <graphic>
+                                    <FontAwesomeIconView fill="#368632" glyphName="PLAY" />
+                                 </graphic>
                               </MenuButton>
-                              <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stopAction" text="Stop" />
+                              <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stopAction" textFill="#9d0000">
+                                 <graphic>
+                                    <FontAwesomeIconView fill="#9d240c" glyphName="STOP" />
+                                 </graphic></Button>
                               <Button fx:id="askButton" mnemonicParsing="false" onAction="#askAction" text="Ask" />
                           </items>
                         </ToolBar>

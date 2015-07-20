@@ -61,6 +61,12 @@
       <version>${org.fxmisc.richtext.richtextfx.version}</version>
     </dependency>
     
+    <!-- FontAwesomeFX - icons for JavaFX -->
+    <dependency><groupId>de.jensd</groupId>
+      <artifactId>fontawesomefx</artifactId>
+      <version>8.4</version>
+    </dependency>
+    
     <!-- ASPIDE notifier -->
     <dependency>
       <groupId>it.unical.mat.aspide</groupId>
