@@ -1,19 +1,24 @@
 package at.aau.dwaspgui.view;
 
 import java.net.URL;
+import java.time.Duration;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.stage.Popup;
 
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
+import org.fxmisc.richtext.MouseOverTextEvent;
 
 import at.aau.dwaspgui.domain.CoreItem;
 import at.aau.dwaspgui.domain.TestCase;
@@ -87,6 +92,38 @@ public class RootView extends AbstractView<RootViewModel> {
 		codeArea.textProperty().addListener((obs, oldText, newText) -> {
             codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.selectedEncoding().get(), newText, viewModel.coreItems()));
         });
+		codeArea.editableProperty().bind(viewModel.isDebugging().not());
+				
+		Popup popup = new Popup();
+		Label popupMsg = new Label();
+		popupMsg.getStylesheets().add("/at/aau/dwaspgui/view/popup.css");
+		popupMsg.getStyleClass().add("popup");
+		popup.getContent().add(popupMsg);
+		
+		codeArea.setMouseOverTextDelay(Duration.ofSeconds(1));
+		codeArea.addEventHandler(MouseOverTextEvent.MOUSE_OVER_TEXT_BEGIN, e -> {
+			if (viewModel.isDebugging().get()) {
+				int chIdx = e.getCharacterIndex();
+				
+				for (CoreItem ci : viewModel.coreItems().filtered(ci -> ci.getEncoding() == viewModel.selectedEncoding().get())) {
+					if (chIdx >= ci.getFromIndex() && chIdx <= ci.getFromIndex() + ci.getLength()) {
+						StringBuilder popupText = new StringBuilder();
+						popupText.append(ci.getSubstitutions().toString());
+						popupText.append("\n\n");
+						for (Map<String, String> substitution : ci.getSubstitutions()) {
+							popupText.append(ci.getRule().getGroundedRule(substitution));
+							popupText.append("\n");
+						}
+						
+						popupMsg.setText(popupText.toString());
+						popup.show(codeArea, e.getScreenPosition().getX(), e.getScreenPosition().getY() + 10);
+					}
+				}
+			}
+		});
+		codeArea.addEventHandler(MouseOverTextEvent.MOUSE_OVER_TEXT_END, e -> {
+			popup.hide();
+		});
 	}
 	
 	private void projectChanged(AbstractProjectItemViewModel project) {

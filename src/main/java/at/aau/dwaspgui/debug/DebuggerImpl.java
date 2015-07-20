@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -145,8 +145,9 @@ public class DebuggerImpl implements Debugger {
 	};
 	
 	private void notifyCores() {
-		Executor executor = Executors.newSingleThreadExecutor();
+		ExecutorService executor = Executors.newSingleThreadExecutor();
 		executor.execute(coreRequest);
+		executor.shutdown();
 	}
 
 	@Override
