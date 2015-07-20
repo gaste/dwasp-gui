@@ -27,6 +27,76 @@
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
+      
+      <!-- jar packaging configuration -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.5</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <mainClass>${main.class}</mainClass>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      
+      <!-- appassembler plugin that generates scripts -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+        <version>1.9</version>
+        <executions>
+          <execution>
+            <id>assemble-app</id>
+            <phase>package</phase>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <repositoryLayout>flat</repositoryLayout>
+          <repositoryName>lib</repositoryName>
+          <installArtifacts>false</installArtifacts>
+          <!-- increase allowed heap size -->
+          <extraJvmArguments>-Xmx32g</extraJvmArguments>
+          <!-- generate bin scripts for windows and unix -->
+          <platforms>
+            <platform>windows</platform>
+            <platform>unix</platform>
+          </platforms>
+          <programs>
+            <program>
+              <mainClass>${main.class}</mainClass>
+              <id>dwasp-gui</id>
+            </program>
+          </programs>
+        </configuration>
+      </plugin>
+      
+      <!-- assembly plugin to package the binaries -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.5.3</version>
+        <configuration>
+          <descriptor>src/main/assembly/assembly.xml</descriptor>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
@@ -64,7 +134,7 @@
     <!-- FontAwesomeFX - icons for JavaFX -->
     <dependency><groupId>de.jensd</groupId>
       <artifactId>fontawesomefx</artifactId>
-      <version>8.4</version>
+      <version>${de.jensd.fontawesomefx.verison}</version>
     </dependency>
     
     <!-- ASPIDE notifier -->
@@ -78,7 +148,7 @@
     <dependency>
       <groupId>at.aau</groupId>
       <artifactId>gringo-wrapper</artifactId>
-      <version>1.5.1</version>
+      <version>${at.aau.gringo-wrapper.version}</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
@@ -94,11 +164,14 @@
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <main.class>at.aau.dwaspgui.app.App</main.class>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <junit.version>4.12</junit.version>
     <org.hamcrest.version>1.3</org.hamcrest.version>
     <com.google.inject.guice.version>4.0</com.google.inject.guice.version>
     <org.fxmisc.richtext.richtextfx.version>0.6.4</org.fxmisc.richtext.richtextfx.version>
+    <de.jensd.fontawesomefx.verison>8.4</de.jensd.fontawesomefx.verison>
+    <at.aau.gringo-wrapper.version>1.5.1</at.aau.gringo-wrapper.version>
   </properties>
 </project>
