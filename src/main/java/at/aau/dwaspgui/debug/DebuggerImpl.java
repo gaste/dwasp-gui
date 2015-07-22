@@ -11,15 +11,17 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.util.Pair;
 import at.aau.GringoWrapper;
 import at.aau.Rule;
+import at.aau.dwaspgui.debug.protocol.AssertionMessage;
 import at.aau.dwaspgui.debug.protocol.CoreResponse;
 import at.aau.dwaspgui.debug.protocol.Message;
 import at.aau.dwaspgui.debug.protocol.MessageParsingException;
+import at.aau.dwaspgui.debug.protocol.QueryResponse;
 import at.aau.dwaspgui.debug.protocol.RequestMessage;
 import at.aau.dwaspgui.debug.protocol.RequestMessage.RequestType;
 import at.aau.dwaspgui.domain.CoreItem;
@@ -32,12 +34,16 @@ import at.aau.postprocessing.PostprocessingException;
 
 public class DebuggerImpl implements Debugger {
 	private List<Consumer<List<CoreItem>>> coreCallbacks = new ArrayList<Consumer<List<CoreItem>>>();
+	private List<Consumer<List<String>>> queryCallbacks = new ArrayList<Consumer<List<String>>>();
+	
 	private BooleanProperty isRunning = new SimpleBooleanProperty(false);
 	private BooleanProperty isComputingCore = new SimpleBooleanProperty(false);
 	private BooleanProperty isComputingQuery = new SimpleBooleanProperty(false);
-	private Set<Encoding> currentProgram = null;
+	
 	private Process debugger = null;
+	private Set<Encoding> currentProgram = null;
 	private Map<String, Rule> debugRuleMap = null;
+	private ExecutorService debuggerExecutor = null;
 	
 	private static final String DEBUGGER_COMMAND = "dwasp";
 	private static final String DEBUGGER_OPTION_INPUT_FILE = "--debug=";
@@ -52,6 +58,7 @@ public class DebuggerImpl implements Debugger {
 		isRunning.set(true);
 		
 		currentProgram = program;
+		debuggerExecutor = Executors.newSingleThreadExecutor();
 		
 		groundProgram(program, DEBUG_FILE_NAME);
 		startDebugger(DEBUG_FILE_NAME);
@@ -86,6 +93,7 @@ public class DebuggerImpl implements Debugger {
 		try {
 			debugger = builder.start();
 			notifyCores();
+			getQuery();
 		} catch (IOException e) {
 			throw new DebuggerException(Messages.ERROR_START_DEBUGGER.format(), e);
 		}
@@ -144,17 +152,57 @@ public class DebuggerImpl implements Debugger {
 		}
 	};
 	
-	private void notifyCores() {
-		ExecutorService executor = Executors.newSingleThreadExecutor();
-		executor.execute(coreRequest);
-		executor.shutdown();
-	}
+	private Runnable queryRequest = () -> {
+		try{
+			RequestMessage request = new RequestMessage(RequestType.GET_QUERY);
+			request.writeToOutputStream(debugger.getOutputStream());
+			
+			Message resp = Message.parseFromInputStream(debugger.getInputStream());
+			
+			if (resp instanceof QueryResponse) {
+				QueryResponse response = (QueryResponse) resp;
+				
+				queryCallbacks.forEach(c -> c.accept(response.getAtoms()));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (MessageParsingException e) {
+			e.printStackTrace();
+		}
+	};
+	
 
+	private void notifyCores() {
+		debuggerExecutor.execute(coreRequest);
+	}
+	
+	private void getQuery() {
+		debuggerExecutor.execute(queryRequest);
+	}
+	
+	@Override
+	public void assertAtoms(List<Pair<String, QueryAnswer>> assertions) {
+		debuggerExecutor.execute(() -> {
+			try {
+				AssertionMessage msg = new AssertionMessage(assertions);
+				msg.writeToOutputStream(debugger.getOutputStream());
+				
+				notifyCores();
+				getQuery();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+	}
+	
 	@Override
 	public void stopDebugger() {
 		isRunning.set(false);
 		currentProgram = null;
 		debugRuleMap = null;
+		debuggerExecutor.shutdownNow();
+		
+		coreCallbacks.forEach((c) -> { c.accept(new ArrayList<CoreItem>()); });
 		
 		if (debugger != null && debugger.isAlive()) 
 			debugger.destroy();
@@ -166,23 +214,11 @@ public class DebuggerImpl implements Debugger {
 	}
 
 	@Override
-	public void computeQuery(Function<String, QueryAnswer> callback) {
-		QueryAnswer a = callback.apply("col(1,r)");
-		System.out.println("Answered: " + a);
+	public void registerQueryCallback(Consumer<List<String>> callback) {
+		queryCallbacks.add(callback);
 	}
 
-	@Override
-	public BooleanProperty isRunning() {
-		return isRunning;
-	}
-
-	@Override
-	public BooleanProperty isComputingCore() {
-		return isComputingCore;
-	}
-
-	@Override
-	public BooleanProperty isComputingQuery() {
-		return isComputingQuery;
-	}
+	@Override public BooleanProperty isRunning() { return isRunning; }
+	@Override public BooleanProperty isComputingCore() { return isComputingCore; }
+	@Override public BooleanProperty isComputingQuery() { return isComputingQuery; }
 }

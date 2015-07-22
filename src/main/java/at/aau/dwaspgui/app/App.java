@@ -69,6 +69,7 @@ public class App extends Application {
 		}
 	}
 	
+	@Override
 	public void stop() throws Exception {
 		Debugger debugger = injector.getInstance(Debugger.class);
 		debugger.stopDebugger();

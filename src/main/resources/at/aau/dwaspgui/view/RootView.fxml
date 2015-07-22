@@ -28,7 +28,17 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
                <children>
-                  <TreeView id="project-view" fx:id="projectTreeView" layoutX="-16.0" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <TreeView id="project-view" fx:id="projectTreeView" showRoot="false" VBox.vgrow="ALWAYS" />
+                        <ListView fx:id="queryListView" minHeight="100.0" />
+                        <ToolBar prefHeight="40.0" prefWidth="200.0">
+                          <items>
+                            <Button fx:id="assertButton" mnemonicParsing="false" onAction="#assertAction" text="Send" />
+                          </items>
+                        </ToolBar>
+                     </children>
+                  </VBox>
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
@@ -37,7 +47,7 @@
                      <children>
                         <ToolBar prefHeight="40.0" prefWidth="200.0">
                           <items>
-                              <MenuButton fx:id="debugButton" mnemonicParsing="false" styleClass="button" text="%button.debug">
+                              <MenuButton fx:id="debugButton" mnemonicParsing="false" styleClass="btn" text="%button.debug">
                                 <items>
                                   <MenuItem mnemonicParsing="false" text="Action 1" />
                                   <MenuItem mnemonicParsing="false" text="Action 2" />
@@ -46,11 +56,10 @@
                                     <FontAwesomeIconView fill="#368632" glyphName="PLAY" />
                                  </graphic>
                               </MenuButton>
-                              <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stopAction" textFill="#9d0000">
+                              <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stopAction" styleClass="btn" textFill="#9d0000">
                                  <graphic>
-                                    <FontAwesomeIconView fill="#9d240c" glyphName="STOP" />
+                                    <FontAwesomeIconView fill="#9d240c" glyphName="STOP" styleClass="btn" />
                                  </graphic></Button>
-                              <Button fx:id="askButton" mnemonicParsing="false" onAction="#askAction" text="Ask" />
                           </items>
                         </ToolBar>
                         <CodeArea id="code-area" fx:id="codeArea" stylesheets="@asp-core-2-keywords.css" VBox.vgrow="ALWAYS">

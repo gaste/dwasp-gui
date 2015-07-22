@@ -18,6 +18,8 @@ public class ResponseMessage extends Message {
 		
 		if (message.startsWith(CoreResponse.MESSAGE_IDENTIFIER))
 			return new CoreResponse(message);
+		else if (message.startsWith(QueryResponse.MESSAGE_IDENTIFIER))
+			return new QueryResponse(message);
 		else
 			throw new MessageParsingException(Messages.MSGPARSER_INVALID_MESSAGE.format());
 	}

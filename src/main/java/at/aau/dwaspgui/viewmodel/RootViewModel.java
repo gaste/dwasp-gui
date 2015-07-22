@@ -1,6 +1,7 @@
 package at.aau.dwaspgui.viewmodel;
 
 import java.io.File;
+import java.util.List;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -8,6 +9,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.util.Pair;
 
 import org.w3c.dom.Document;
 
@@ -21,6 +23,7 @@ import at.aau.dwaspgui.domain.QueryAnswer;
 import at.aau.dwaspgui.domain.TestCase;
 import at.aau.dwaspgui.parser.ProjectParsingException;
 import at.aau.dwaspgui.parser.XMLProjectParser;
+import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.util.Messages;
 import at.aau.dwaspgui.viewmodel.project.AbstractProjectItemViewModel;
 
@@ -40,6 +43,7 @@ public class RootViewModel implements ViewModel {
 	private ObjectProperty<AbstractProjectItemViewModel> projectViewModel = new SimpleObjectProperty<AbstractProjectItemViewModel>();
 	private ObservableList<TestCase> testCases = FXCollections.observableArrayList();
 	private ObservableList<CoreItem> coreItems = FXCollections.observableArrayList();
+	private ObservableList<String> queryAtoms = FXCollections.observableArrayList();
 	
 	@Inject
 	public RootViewModel(WindowManager windowManager,
@@ -49,8 +53,17 @@ public class RootViewModel implements ViewModel {
 		this.debugger = debugger;
 		
 		debugger.registerCoreCallback((coreItems) -> {
-			this.coreItems.clear();
-			this.coreItems.addAll(coreItems);
+			JFXUtil.runOnJFX(() -> {
+				this.coreItems.clear();
+				this.coreItems.addAll(coreItems);
+			});
+		});
+		
+		debugger.registerQueryCallback((queryAtoms) -> {
+			JFXUtil.runOnJFX(() -> {
+				this.queryAtoms.clear();
+				this.queryAtoms.addAll(queryAtoms);
+			});
 		});
 	}
 	
@@ -113,6 +126,10 @@ public class RootViewModel implements ViewModel {
 		return this.coreItems;
 	}
 	
+	public ObservableList<String> queryAtoms() {
+		return this.queryAtoms;
+	}
+	
 	public BooleanProperty isDebugging() {
 		return debugger.isRunning();
 	}
@@ -121,10 +138,7 @@ public class RootViewModel implements ViewModel {
 		debugger.stopDebugger();
 	}
 	
-	public void askAction() {
-		debugger.computeQuery((atom) -> {
-			System.out.println("in ask action");
-			return QueryAnswer.YES;
-		});
+	public void assertAction(List<Pair<String, QueryAnswer>> assertions) {
+		debugger.assertAtoms(assertions);
 	}
 }
