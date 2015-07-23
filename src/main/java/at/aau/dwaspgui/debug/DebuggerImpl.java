@@ -200,7 +200,11 @@ public class DebuggerImpl implements Debugger {
 		isRunning.set(false);
 		currentProgram = null;
 		debugRuleMap = null;
-		debuggerExecutor.shutdownNow();
+		
+		if (debuggerExecutor != null) {
+			debuggerExecutor.shutdownNow();
+			debuggerExecutor = null;
+		}
 		
 		coreCallbacks.forEach((c) -> { c.accept(new ArrayList<CoreItem>()); });
 		

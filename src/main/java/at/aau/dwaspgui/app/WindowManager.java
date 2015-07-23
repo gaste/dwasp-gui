@@ -3,6 +3,8 @@ package at.aau.dwaspgui.app;
 import java.io.File;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -61,7 +63,8 @@ public class WindowManager {
 	}
 	
 	public void showErrorDialog(Messages message, Exception details, Object... arguments) {
-		// TODO implement showing dialogs
-		System.out.println(message.format(arguments));
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setContentText(message.format(arguments));
+		alert.show();
 	}
 }

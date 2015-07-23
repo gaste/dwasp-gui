@@ -52,38 +52,34 @@ public class RootView extends AbstractView<RootViewModel> {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		viewModel.projectProperty().addListener(
-				(obs, oldProject, newProject) -> {
-					projectChanged(newProject);
-				});
-		
-		viewModel.testCases().addListener(new ListChangeListener<TestCase> () {
-			@Override
-			public void onChanged(Change<? extends TestCase> c) {
-				debugButton.getItems().clear();
-				for(TestCase tc : viewModel.testCases()) {
-					MenuItem item = new MenuItem(tc.getName());
-					item.setOnAction((e) -> {
-						viewModel.debugAction(tc);
-					});
-					debugButton.getItems().add(item);
-				}
+		// refresh the project
+		viewModel.projectProperty().addListener((obs, oldProject, newProject) -> {
+			projectChanged(newProject);
+		});
+
+		// refresh test cases from the menu
+		viewModel.testCases().addListener((ListChangeListener.Change<? extends TestCase> c) -> {
+			debugButton.getItems().clear();
+			
+			for(TestCase testCase : viewModel.testCases()) {
+				MenuItem item = new MenuItem(testCase.getName());
+				item.setOnAction(e -> viewModel.debugAction(testCase));
+
+				debugButton.getItems().add(item);
 			}
 		});
 		
-		viewModel.coreItems().addListener(new ListChangeListener<CoreItem>() {
-			@Override
-			public void onChanged(Change<? extends CoreItem> c) {
-				JFXUtil.runOnJFX(() -> {
-					codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.selectedEncoding().get(), codeArea.getText(), viewModel.coreItems()));
-				});
-			}
+		// add listener for the core highlight inside the editor
+		viewModel.coreItems().addListener((ListChangeListener.Change<? extends CoreItem> c) -> {
+			JFXUtil.runOnJFX(() -> {
+				codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.selectedEncodingProperty().get(), codeArea.getText(), viewModel.coreItems()));
+			});
 		});
 		
-		debugButton.disableProperty().bind(viewModel.isDebugging());
-		stopButton.visibleProperty().bind(viewModel.isDebugging());
-		assertButton.visibleProperty().bind(viewModel.isDebugging());
-		queryListView.visibleProperty().bind(viewModel.isDebugging());
+		debugButton.disableProperty().bind(viewModel.isDebuggingProperty());
+		stopButton.visibleProperty().bind(viewModel.isDebuggingProperty());
+		assertButton.visibleProperty().bind(viewModel.isDebuggingProperty());
+		queryListView.visibleProperty().bind(viewModel.isDebuggingProperty());
 		
 		queryListView.setItems(viewModel.queryAtoms());
 		queryListView.setCellFactory((list) -> {
@@ -137,32 +133,31 @@ public class RootView extends AbstractView<RootViewModel> {
 	}
 
 	private void initializeProjectView() {
-		projectTreeView.getSelectionModel().selectedItemProperty().addListener(
-			(obs, oldProjectItem, newProjectItem) -> {
-				if (newProjectItem.getValue().isEncoding()) {
-					viewModel.selectedEncoding().set(newProjectItem.getValue().getEncoding());
-				} else {
-					viewModel.selectedEncoding().set(null);
-				}
-				
-				if (newProjectItem.getValue().isEditable()) {
-					codeArea.replaceText(newProjectItem.getValue().getContent());
-					codeArea.getUndoManager().forgetHistory();
-				}
-				
-				// non-editable project items are not selectable
-				if (!newProjectItem.getValue().isEditable()) {
-					Platform.runLater(() -> projectTreeView.getSelectionModel().select(oldProjectItem));
-				}
-			});
+		projectTreeView.getSelectionModel().selectedItemProperty().addListener((obs, oldProjectItem, newProjectItem) -> {
+			if (newProjectItem.getValue().isEncoding()) {
+				viewModel.selectedEncodingProperty().set(newProjectItem.getValue().getEncoding());
+			} else {
+				viewModel.selectedEncodingProperty().set(null);
+			}
+			
+			if (newProjectItem.getValue().isEditable()) {
+				codeArea.replaceText(newProjectItem.getValue().getContent());
+				codeArea.getUndoManager().forgetHistory();
+			}
+			
+			// non-editable project items are not selectable
+			if (!newProjectItem.getValue().isEditable()) {
+				Platform.runLater(() -> projectTreeView.getSelectionModel().select(oldProjectItem));
+			}
+		});
 	}
 	
 	private void initializeCodeArea() {
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 		codeArea.textProperty().addListener((obs, oldText, newText) -> {
-            codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.selectedEncoding().get(), newText, viewModel.coreItems()));
+            codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.selectedEncodingProperty().get(), newText, viewModel.coreItems()));
         });
-		codeArea.editableProperty().bind(viewModel.isDebugging().not());
+		codeArea.editableProperty().bind(viewModel.isDebuggingProperty().not());
 				
 		Popup popup = new Popup();
 		Label popupMsg = new Label();
@@ -172,10 +167,10 @@ public class RootView extends AbstractView<RootViewModel> {
 		
 		codeArea.setMouseOverTextDelay(Duration.ofSeconds(1));
 		codeArea.addEventHandler(MouseOverTextEvent.MOUSE_OVER_TEXT_BEGIN, e -> {
-			if (viewModel.isDebugging().get()) {
+			if (viewModel.isDebuggingProperty().get()) {
 				int chIdx = e.getCharacterIndex();
 				
-				for (CoreItem ci : viewModel.coreItems().filtered(ci -> ci.getEncoding() == viewModel.selectedEncoding().get())) {
+				for (CoreItem ci : viewModel.coreItems().filtered(ci -> ci.getEncoding() == viewModel.selectedEncodingProperty().get())) {
 					if (chIdx >= ci.getFromIndex() && chIdx <= ci.getFromIndex() + ci.getLength()) {
 						StringBuilder popupText = new StringBuilder();
 						popupText.append(ci.getSubstitutions().toString());

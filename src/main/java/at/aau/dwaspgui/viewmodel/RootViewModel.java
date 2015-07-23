@@ -67,10 +67,6 @@ public class RootViewModel implements ViewModel {
 		});
 	}
 	
-	public void openAction() {
-		openProject(windowManager.chooseFile());
-	}
-	
 	public void openProject(File projectFile) {
 		if (projectFile != null && projectFile.exists()) {
 			try {
@@ -78,6 +74,8 @@ public class RootViewModel implements ViewModel {
 			} catch (ProjectParsingException e) {
 				windowManager.showErrorDialog(Messages.ERROR_OPEN_PROJECT, e);
 			}
+		} else {
+			windowManager.showErrorDialog(Messages.ERROR_OPEN_PROJECT, null);
 		}
 	}
 	
@@ -96,6 +94,10 @@ public class RootViewModel implements ViewModel {
 		testCases.clear();
 		testCases.addAll(project.getTestCases());
 	}
+
+	public void openAction() {
+		openProject(windowManager.chooseFile());
+	}
 	
 	public void exitAction() {
 		Platform.exit();
@@ -105,33 +107,8 @@ public class RootViewModel implements ViewModel {
 		try {
 			debugger.startDebugger(project.getProgram(), testCase);
 		} catch (DebuggerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			windowManager.showErrorDialog(Messages.ERROR_START_DEBUGGER, e);
 		}
-	}
-	
-	public ObjectProperty<AbstractProjectItemViewModel> projectProperty() {
-		return this.projectViewModel;
-	}
-	
-	public ObjectProperty<Encoding> selectedEncoding() {
-		return this.selectedEncoding;
-	}
-	
-	public ObservableList<TestCase> testCases() {
-		return this.testCases;
-	}
-	
-	public ObservableList<CoreItem> coreItems() {
-		return this.coreItems;
-	}
-	
-	public ObservableList<String> queryAtoms() {
-		return this.queryAtoms;
-	}
-	
-	public BooleanProperty isDebugging() {
-		return debugger.isRunning();
 	}
 
 	public void stopAction() {
@@ -141,4 +118,12 @@ public class RootViewModel implements ViewModel {
 	public void assertAction(List<Pair<String, QueryAnswer>> assertions) {
 		debugger.assertAtoms(assertions);
 	}
+
+	// properties and lists
+	public ObjectProperty<AbstractProjectItemViewModel> projectProperty() { return projectViewModel; }
+	public ObjectProperty<Encoding> selectedEncodingProperty() { return selectedEncoding; }
+	public BooleanProperty isDebuggingProperty() { return debugger.isRunning(); }
+	public ObservableList<TestCase> testCases() { return this.testCases; }
+	public ObservableList<CoreItem> coreItems() { return this.coreItems; }
+	public ObservableList<String> queryAtoms() { return this.queryAtoms; }
 }
