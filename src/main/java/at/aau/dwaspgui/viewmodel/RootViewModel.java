@@ -1,17 +1,12 @@
 package at.aau.dwaspgui.viewmodel;
 
 import java.io.File;
-import java.util.List;
-
-import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.util.Pair;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.w3c.dom.Document;
+
+import com.google.inject.Inject;
 
 import at.aau.dwaspgui.app.WindowManager;
 import at.aau.dwaspgui.debug.Debugger;
@@ -26,8 +21,13 @@ import at.aau.dwaspgui.parser.XMLProjectParser;
 import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.util.Messages;
 import at.aau.dwaspgui.viewmodel.project.AbstractProjectItemViewModel;
-
-import com.google.inject.Inject;
+import at.aau.dwaspgui.viewmodel.query.QueryViewModel;
+import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * Main view model of the application.
@@ -43,7 +43,7 @@ public class RootViewModel implements ViewModel {
 	private ObjectProperty<AbstractProjectItemViewModel> projectViewModel = new SimpleObjectProperty<AbstractProjectItemViewModel>();
 	private ObservableList<TestCase> testCases = FXCollections.observableArrayList();
 	private ObservableList<CoreItem> coreItems = FXCollections.observableArrayList();
-	private ObservableList<String> queryAtoms = FXCollections.observableArrayList();
+	private ObservableList<QueryViewModel> queryAtoms = FXCollections.observableArrayList();
 	
 	@Inject
 	public RootViewModel(WindowManager windowManager,
@@ -62,7 +62,9 @@ public class RootViewModel implements ViewModel {
 		debugger.registerQueryCallback((queryAtoms) -> {
 			JFXUtil.runOnJFX(() -> {
 				this.queryAtoms.clear();
-				this.queryAtoms.addAll(queryAtoms);
+				for (String atom : queryAtoms) {
+					this.queryAtoms.add(new QueryViewModel(atom));
+				}
 			});
 		});
 	}
@@ -115,7 +117,15 @@ public class RootViewModel implements ViewModel {
 		debugger.stopDebugger();
 	}
 	
-	public void assertAction(List<Pair<String, QueryAnswer>> assertions) {
+	public void assertAction() {
+		Map<String, QueryAnswer> assertions = new HashMap<String, QueryAnswer>();
+		
+		for (QueryViewModel query : queryAtoms) {
+			if (query.getAnswer() != QueryAnswer.UNKNOWN) {
+				assertions.put(query.getAtom(), query.getAnswer());
+			}
+		}
+		
 		debugger.assertAtoms(assertions);
 	}
 
@@ -125,5 +135,5 @@ public class RootViewModel implements ViewModel {
 	public BooleanProperty isDebuggingProperty() { return debugger.isRunning(); }
 	public ObservableList<TestCase> testCases() { return this.testCases; }
 	public ObservableList<CoreItem> coreItems() { return this.coreItems; }
-	public ObservableList<String> queryAtoms() { return this.queryAtoms; }
+	public ObservableList<QueryViewModel> queryAtoms() { return this.queryAtoms; }
 }

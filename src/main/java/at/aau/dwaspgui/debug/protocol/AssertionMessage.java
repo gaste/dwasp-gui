@@ -1,8 +1,7 @@
 package at.aau.dwaspgui.debug.protocol;
 
-import java.util.List;
+import java.util.Map;
 
-import javafx.util.Pair;
 import at.aau.dwaspgui.domain.QueryAnswer;
 
 
@@ -14,9 +13,9 @@ public class AssertionMessage extends Message {
 	private static final char QUERY_ANSWER_NO = 'n';
 	private static final char QUERY_ANSWER_UNDEFINED = 'u';
 	
-	private List<Pair<String, QueryAnswer>> assertions;
+	private Map<String, QueryAnswer> assertions;
 	
-	public AssertionMessage(List<Pair<String, QueryAnswer>> assertions) {
+	public AssertionMessage(Map<String, QueryAnswer> assertions) {
 		this.assertions = assertions;
 	}
 
@@ -26,11 +25,11 @@ public class AssertionMessage extends Message {
 		
 		msg.append(MESSAGE_IDENTIFIER);
 		
-		assertions.forEach(a -> {
+		assertions.forEach((atom, answer) -> {
 			msg.append(DELIMITER_PART);
-			msg.append(a.getKey());
+			msg.append(atom);
 			msg.append('=');
-			msg.append(getQueryAnswerEncoding(a.getValue()));
+			msg.append(getQueryAnswerEncoding(answer));
 		});
 		
 		return msg.toString();

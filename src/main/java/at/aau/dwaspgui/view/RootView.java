@@ -2,53 +2,41 @@ package at.aau.dwaspgui.view;
 
 import java.net.URL;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-
-import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.stage.Popup;
-import javafx.util.Pair;
 
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.MouseOverTextEvent;
 
 import at.aau.dwaspgui.domain.CoreItem;
-import at.aau.dwaspgui.domain.QueryAnswer;
 import at.aau.dwaspgui.domain.TestCase;
 import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.view.highlight.AspCore2Highlight;
+import at.aau.dwaspgui.view.query.QueryListView;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
 import at.aau.dwaspgui.viewmodel.project.AbstractProjectItemViewModel;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.stage.Popup;
 
 public class RootView extends AbstractView<RootViewModel> {
 	// JavaFX controls
 	@FXML private TreeView<AbstractProjectItemViewModel> projectTreeView;
-	@FXML private ListView<String> queryListView;
+	@FXML private QueryListView queryListView;
 	@FXML private CodeArea codeArea;
 	@FXML private MenuButton debugButton;
 	@FXML private Button stopButton;
 	@FXML private Button assertButton;
-	
-	private Map<String, QueryAnswer> assertions = new HashMap<String, QueryAnswer>();
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -80,53 +68,8 @@ public class RootView extends AbstractView<RootViewModel> {
 		stopButton.visibleProperty().bind(viewModel.isDebuggingProperty());
 		assertButton.visibleProperty().bind(viewModel.isDebuggingProperty());
 		queryListView.visibleProperty().bind(viewModel.isDebuggingProperty());
-		
-		queryListView.setItems(viewModel.queryAtoms());
-		queryListView.setCellFactory((list) -> {
-			return new ListCell<String>() {
-				@Override
-				protected void updateItem(String item, boolean empty) {
-					super.updateItem(item, empty);
-					
-					System.out.println("in update item: Item = '" + item + "'");
-					
-					if (item != null && item != "") {
-						ToggleGroup group = new ToggleGroup();
 
-						ToggleButton yes = new ToggleButton("yes");
-						yes.getStyleClass().add("btn-true");
-						yes.setToggleGroup(group);
-						yes.selectedProperty().addListener((o) -> {
-							assertions.put(item, QueryAnswer.YES);
-						});
-
-						ToggleButton no = new ToggleButton("no");
-						no.getStyleClass().add("btn-false");
-						no.setToggleGroup(group);
-						no.selectedProperty().addListener((o) -> {
-							assertions.put(item, QueryAnswer.NO);
-						});
-
-						ToggleButton undef = new ToggleButton("undef");
-						undef.getStyleClass().add("btn-undef");
-						undef.setToggleGroup(group);
-						undef.setSelected(true);
-						undef.selectedProperty().addListener((o) -> {
-							assertions.put(item, QueryAnswer.UNKNOWN);
-						});
-						
-						HBox toggleBox = new HBox(yes, no, undef);
-						HBox labelBox = new HBox(new Label(item));
-						HBox hbox = new HBox(labelBox, toggleBox);
-						HBox.setHgrow(labelBox, Priority.ALWAYS);
-						hbox.setSpacing(10);
-                        setGraphic(hbox);
-					} else {
-						setGraphic(new HBox());
-					}
-				}
-			};
-		});
+		Bindings.bindContentBidirectional(viewModel.queryAtoms(), queryListView.getQueries());
 		
 		initializeProjectView();
 		initializeCodeArea();
@@ -226,12 +169,6 @@ public class RootView extends AbstractView<RootViewModel> {
 	
 	@FXML
 	public void assertAction() {
-		List<Pair<String, QueryAnswer>> a = new ArrayList<Pair<String,QueryAnswer>>();
-		assertions.forEach((atom, answer) -> {
-			if (answer != QueryAnswer.UNKNOWN){
-				a.add(new Pair<String, QueryAnswer>(atom, answer));
-			}
-		});
-		viewModel.assertAction(a);
+		viewModel.assertAction();
 	}
 }

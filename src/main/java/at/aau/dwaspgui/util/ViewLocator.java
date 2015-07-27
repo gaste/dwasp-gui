@@ -20,6 +20,28 @@ public class ViewLocator {
 	private static final String FXML_FILE_ENDING = ".fxml";
 	
 	/**
+	 * Load the control from an .fxml file in the same package and with the same
+	 * name of the control.
+	 */
+	public static void loadControlView(Object control) {
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		String fxmlFilename = control.getClass().getSimpleName() + FXML_FILE_ENDING;
+		String resourceBaseName = control.getClass().getCanonicalName();
+		URL fxmlResource = control.getClass().getResource(fxmlFilename);
+
+		fxmlLoader.setLocation(fxmlResource);
+		fxmlLoader.setRoot(control);
+		fxmlLoader.setController(control);
+		fxmlLoader.setResources(ResourceBundle.getBundle(resourceBaseName, Locale.ENGLISH));
+
+        try {
+            fxmlLoader.load();
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+	}
+	
+	/**
 	 * Load the scene from an .fxml file in the same package and with the same
 	 * name of the view.
 	 */

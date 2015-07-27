@@ -12,9 +12,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.util.Pair;
 import at.aau.GringoWrapper;
 import at.aau.Rule;
 import at.aau.dwaspgui.debug.protocol.AssertionMessage;
@@ -31,6 +28,8 @@ import at.aau.dwaspgui.domain.TestCase;
 import at.aau.dwaspgui.util.Messages;
 import at.aau.grounder.GroundingException;
 import at.aau.postprocessing.PostprocessingException;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 public class DebuggerImpl implements Debugger {
 	private List<Consumer<List<CoreItem>>> coreCallbacks = new ArrayList<Consumer<List<CoreItem>>>();
@@ -181,7 +180,7 @@ public class DebuggerImpl implements Debugger {
 	}
 	
 	@Override
-	public void assertAtoms(List<Pair<String, QueryAnswer>> assertions) {
+	public void assertAtoms(Map<String, QueryAnswer> assertions) {
 		debuggerExecutor.execute(() -> {
 			try {
 				AssertionMessage msg = new AssertionMessage(assertions);
