@@ -1,10 +1,10 @@
 .keyword {
-    -fx-fill: #0000ff;
+    -fx-fill: gray;/*#0000ff;*/
     -fx-font-weight: bold;
 }
 .dot {
+    -fx-fill: gray;/*#0000ff;*/
     -fx-font-weight: bold;
-    -fx-fill: #0000ff;
 }
 .paren {
     -fx-fill: black;
@@ -25,5 +25,5 @@
 	-fx-fill: #008000;
 }
 .core-element {
-	-fx-fill: orangered;
+	-fx-fill: #d9534f;
 }

@@ -3,6 +3,7 @@ package at.aau.dwaspgui.debug.protocol;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class QueryResponse extends ResponseMessage {
 	/** the identifier of this message type */
@@ -11,7 +12,7 @@ public class QueryResponse extends ResponseMessage {
 	private final List<String> atoms;
 	
 	public QueryResponse(String message) {
-		atoms = Arrays.asList(getMessageParts(message));
+		atoms = Arrays.asList(getMessageParts(message)).stream().filter((atom) -> !atom.isEmpty()).collect(Collectors.toList());
 	}
 	
 	private String[] getMessageParts(String message) {

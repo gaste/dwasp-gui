@@ -152,23 +152,8 @@ public class RootView extends AbstractView<RootViewModel> {
 		}
 	}
 	
-	@FXML
-	public void openAction() {
-		viewModel.openAction();
-	}
-	
-	@FXML
-	public void exitAction() {
-		viewModel.exitAction();
-	}
-	
-	@FXML
-	public void stopAction() {
-		viewModel.stopAction();
-	}
-	
-	@FXML
-	public void assertAction() {
-		viewModel.assertAction();
-	}
+	@FXML public void openAction() { viewModel.openAction(); }
+	@FXML public void exitAction() { viewModel.exitAction(); }
+	@FXML public void stopAction() { viewModel.stopAction(); }
+	@FXML public void assertAction() { viewModel.assertAction(); }
 }

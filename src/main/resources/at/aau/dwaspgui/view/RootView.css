@@ -1,54 +1,70 @@
-/*
+* {
+	/* colors for window chrome */
+	-col-chrome-low: rgb(242,242,242);
+	-col-chrome-mid: rgb(230,230,230);
+	-col-chrome-high: rgb(204,204,204);
+	
+	-col-menu-low: rgb(210,210,210);
+	-col-menu-high: rgb(180,180,180);
+	
+	/* colors for lists */
+	-col-list-hover: rgb(229,229,229);
+	-col-list-press: rgb(204,204,204);
+	-col-list-select: rgb(153,201,239);
+	-col-list-select-hover: rgb(102,174,231);
+	-col-list-select-press: rgb(77,161,227);
+	
+	/* colors for specific contexts */
+	-col-success: #5cb85c;
+	-col-danger: #d9534f;
+}
+
 .menu-bar {
-    -fx-background-color: #f3f3f3;
-}*/
+    -fx-background-color: -col-menu-low;
+    -fx-border-color: -col-menu-high;
+    -fx-border-width: 0 0 1 0; 
+}
 
 #project-view {
-	-fx-background-color: #f3f3f3;
+	-fx-background-color: -col-chrome-low;
+	-fx-padding: 0px;
+	-fx-border-insets: 0px;
 }
 
 #project-view .tree-cell {
-    -fx-background-color: #f3f3f3;
+    -fx-background-color: -col-chrome-low;
     -fx-text-fill: #2c2c2c;
 }
 
 #project-view .tree-cell:selected {
-	-fx-background-color: #3399ff;
-	-fx-text-fill: #ffffff;
+	-fx-background-color: -col-list-select;
+	-fx-text-fill: white;
 }
 
-.btn {
-	-fx-border-radius: 0;
-	-fx-border-color: transparent;
-    -fx-background-color: transparent, transparent, transparent, transparent;
-}
-
-.btn:hover{
-	-fx-border-radius: 0;
-	-fx-border-color: rgb(0,150,201);
-    -fx-background-color: transparent, rgb(201,222,245), rgb(201,222,245), transparent;
-}
-
-.btn:armed {
-	-fx-border-radius: 0;
-    -fx-background-color: transparent, rgb(0,122,204), rgb(0,122,204), transparent;
+#project-view .tree-cell:selected:hover {
+	-fx-background-color: -col-list-select-hover;
+	-fx-text-fill: white;
 }
 
 .split-pane {
-	-fx-background-color: #f3f3f3;
+	-fx-background-color: -col-chrome-low;
+	-fx-padding: 0px;
 }
 
-.split-pane .split-pane-divider {
-   -fx-background-color: transparent;
-   -fx-background-insets: 0;
-   -fx-border-color: d3d3d3;
+.split-pane *.split-pane-divider, 
+.split-pane *.vertical-grabber, 
+.split-pane *.horizontal-grabber {
+   -fx-background-color: null;
+   -fx-border-color: -col-chrome-high;
    -fx-border-width: 0 1 0 0;
+   -fx-border-insets: 0;
+   -fx-padding: 0px;
 }
 
 .lineno {
-	-fx-font: 16pt "Consolas";
+	-fx-font: 14pt "Consolas";
 	-fx-background-color: #ffffff;
-	-fx-text-fill: #d3d3d3;
+	-fx-text-fill: -col-chrome-mid;
 	-fx-border-color: #d3d3d3;
 	-fx-border-width: 0 1 0 0;
 	-fx-border-insets: 0 15 0 0;
@@ -56,5 +72,87 @@
 }
 
 #code-area {
-	-fx-font: 16pt "Consolas";
+	-fx-font: 14pt "Consolas";
 }
+
+.query-container {
+	-fx-padding: 0.25em 0.5em 0.25em 0.5em;
+}
+
+
+#icon-true {
+	-fx-fill: -col-success;
+}
+
+#icon-false {
+	-fx-fill: -col-danger;
+}
+
+
+/*
+ * .tool-bar
+ */
+.tool-bar {
+	-fx-background-color: -col-chrome-low;
+	-fx-border-width: 0 0 1 0;
+	-fx-border-color: -col-chrome-high;
+}
+ 
+.tool-bar .button,
+.tool-bar .menu-button {
+	-fx-border-color: -col-chrome-high;
+	-fx-border-width: 1;
+	-fx-border-radius: 5;
+	-fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-background-radius: 5;
+}
+
+.tool-bar .button:hover,
+.tool-bar .menu-button:hover {
+	-fx-background-color: derive(-col-chrome-mid, 30%);
+}
+
+.tool-bar .button:armed,
+.tool-bar .menu-button:armed {
+	-fx-background-color: -col-chrome-mid;
+}
+/* .tool-bar */
+
+
+/*
+ * .toggle-button
+ */
+.toggle-button {
+	-fx-border-color: -col-chrome-high;
+	-fx-border-width: 1;
+	-fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.toggle-button:hover {
+	-fx-background-color: derive(-col-chrome-mid, 30%);
+}
+
+.toggle-button:selected,
+.toggle-button:hover:selected {
+	-fx-background-color: -col-chrome-mid;
+}
+
+.toggle-button.center-pill {
+	-fx-border-width: 1 0 1 1;
+}
+
+.toggle-button.left-pill {
+	-fx-border-width: 1 0 1 1;
+	-fx-border-radius: 5 0 0 5;
+	-fx-background-radius: 5 0 0 5;
+}
+
+.toggle-button.right-pill {
+    -fx-border-width: 1 1 1 1;
+    -fx-border-radius: 0 5 5 0;
+    -fx-background-radius: 0 5 5 0;
+}
+/* .toggle-button */

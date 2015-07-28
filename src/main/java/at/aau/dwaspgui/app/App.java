@@ -24,6 +24,7 @@ import com.google.inject.Injector;
 public class App extends Application {
 	private static Injector injector;
 	
+	@SuppressWarnings("unused")
 	private final AspideNotifier notifier;
 	
 	public static void main(String[] args) {
