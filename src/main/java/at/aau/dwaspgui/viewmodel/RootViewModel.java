@@ -70,14 +70,16 @@ public class RootViewModel implements ViewModel {
 	}
 	
 	public void openProject(File projectFile) {
-		if (projectFile != null && projectFile.exists()) {
-			try {
-				openProject(projectParser.parseProject(projectFile));
-			} catch (ProjectParsingException e) {
-				windowManager.showErrorDialog(Messages.ERROR_OPEN_PROJECT, e);
-			}
-		} else {
-			windowManager.showErrorDialog(Messages.ERROR_OPEN_PROJECT, null);
+		if (projectFile == null) 
+			return;
+		
+		if (!projectFile.exists())
+			windowManager.showErrorDialog(Messages.OPENPRJ_FILE_NOT_FOUND);
+		
+		try {
+			openProject(projectParser.parseProject(projectFile));
+		} catch (ProjectParsingException e) {
+			windowManager.showErrorDialog(Messages.ERROR_OPEN_PROJECT, e);
 		}
 	}
 	

@@ -69,4 +69,10 @@ public class WindowManager {
 		alert.setContentText(message.format(arguments));
 		alert.show();
 	}
+	
+	public void showErrorDialog(Messages message, Object... arguments) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setContentText(message.format(arguments));
+		alert.show();
+	}
 }

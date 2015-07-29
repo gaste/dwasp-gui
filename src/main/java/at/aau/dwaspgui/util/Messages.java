@@ -18,6 +18,7 @@ public enum Messages {
   , ERROR_OPEN_PROJECT("error.openproject")
   , ERROR_GROUNDING("error.grounding")
   , ERROR_START_DEBUGGER("error.debugger.start")
+  , OPENPRJ_FILE_NOT_FOUND("openprj.filenotfound")
   , MSGPARSER_INVALID_MESSAGE("msgparser.invalidmessage")
   , MSGPARSER_IOERROR("msgparser.ioerror")
   ;
