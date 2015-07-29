@@ -11,6 +11,10 @@
 <?import javafx.scene.text.Font?>
 <?import org.fxmisc.richtext.LineNumberFactory?>
 <?import at.aau.dwaspgui.view.query.QueryListView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.Pane?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@RootView.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -31,13 +35,21 @@
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <TreeView id="project-view" fx:id="projectTreeView" showRoot="false" VBox.vgrow="ALWAYS" />
-                        <QueryListView fx:id="queryListView" />
-                        <ToolBar prefHeight="40.0" prefWidth="200.0">
-                          <items>
-                            <Button fx:id="assertButton" mnemonicParsing="false" onAction="#assertAction" text="Send" />
-                          </items>
-                        </ToolBar>
+                     	<Label styleClass="header-label" text="%label.project" />
+                        <ListView id="project-view" fx:id="projectListView" />
+                     	<Label styleClass="header-label" text="%label.testcases" />
+                     	<ListView fx:id="testCaseListView" />
+                     	<Pane VBox.vgrow="ALWAYS" />
+                        <VBox id="query-view" fx:id="queryView">
+	                        <Label styleClass="header-label" text="%label.queries" />
+	                        <QueryListView fx:id="queryListView" />
+	                        <ToolBar prefHeight="40.0" prefWidth="200.0">
+	                          <items>
+	                          	<Pane HBox.hgrow="ALWAYS" />
+	                            <Button fx:id="assertButton" mnemonicParsing="false" onAction="#assertAction" text="Send" />
+	                          </items>
+	                        </ToolBar>
+                        </VBox>
                      </children>
                   </VBox>
                </children>

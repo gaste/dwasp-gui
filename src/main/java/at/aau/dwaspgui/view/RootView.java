@@ -10,29 +10,29 @@ import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.MouseOverTextEvent;
 
 import at.aau.dwaspgui.domain.CoreItem;
+import at.aau.dwaspgui.domain.Encoding;
 import at.aau.dwaspgui.domain.TestCase;
 import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.view.highlight.AspCore2Highlight;
 import at.aau.dwaspgui.view.query.QueryListView;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
-import at.aau.dwaspgui.viewmodel.project.AbstractProjectItemViewModel;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 
 public class RootView extends AbstractView<RootViewModel> {
 	// JavaFX controls
-	@FXML private TreeView<AbstractProjectItemViewModel> projectTreeView;
+	@FXML private ListView<Encoding> projectListView;
+	@FXML private ListView<TestCase> testCaseListView;
 	@FXML private QueryListView queryListView;
+	@FXML private VBox queryView;
 	@FXML private CodeArea codeArea;
 	@FXML private MenuButton debugButton;
 	@FXML private Button stopButton;
@@ -40,10 +40,8 @@ public class RootView extends AbstractView<RootViewModel> {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// refresh the project
-		viewModel.projectProperty().addListener((obs, oldProject, newProject) -> {
-			projectChanged(newProject);
-		});
+		initProjectListView();
+		initTestCaseListView();
 
 		// refresh test cases from the menu
 		viewModel.testCases().addListener((ListChangeListener.Change<? extends TestCase> c) -> {
@@ -66,8 +64,7 @@ public class RootView extends AbstractView<RootViewModel> {
 		
 		debugButton.disableProperty().bind(viewModel.isDebuggingProperty());
 		stopButton.visibleProperty().bind(viewModel.isDebuggingProperty());
-		assertButton.visibleProperty().bind(viewModel.isDebuggingProperty());
-		queryListView.visibleProperty().bind(viewModel.isDebuggingProperty());
+		queryView.visibleProperty().bind(viewModel.isDebuggingProperty());
 
 		Bindings.bindContentBidirectional(viewModel.queryAtoms(), queryListView.getQueries());
 		
@@ -75,33 +72,46 @@ public class RootView extends AbstractView<RootViewModel> {
 		initializeCodeArea();
 	}
 
+	private void initProjectListView() {
+		projectListView.itemsProperty().set(viewModel.encodings());
+		projectListView.prefHeightProperty().bind(Bindings.size(viewModel.encodings()).multiply(29));
+	}
+
+	private void initTestCaseListView() {
+		testCaseListView.itemsProperty().set(viewModel.testCases());
+		testCaseListView.prefHeightProperty().bind(Bindings.size(viewModel.testCases()).multiply(29));
+
+		testCaseListView.getSelectionModel().selectedItemProperty().addListener((obs, oldTC, newTC) -> {
+			if (newTC == null) return;	
+			
+			projectListView.getSelectionModel().clearSelection();
+
+			viewModel.selectedEncodingProperty().set(null);
+			
+			codeArea.replaceText(newTC.getAssertions());
+			codeArea.getUndoManager().forgetHistory();
+		});
+	}
+
 	private void initializeProjectView() {
-		projectTreeView.getSelectionModel().selectedItemProperty().addListener((obs, oldProjectItem, newProjectItem) -> {
-			if (newProjectItem.getValue().isEncoding()) {
-				viewModel.selectedEncodingProperty().set(newProjectItem.getValue().getEncoding());
-			} else {
-				viewModel.selectedEncodingProperty().set(null);
-			}
+		projectListView.getSelectionModel().selectedItemProperty().addListener((obs, oldProjectItem, newProjectItem) -> {
+			if (newProjectItem == null) return;	
+			else testCaseListView.getSelectionModel().clearSelection();
 			
-			if (newProjectItem.getValue().isEditable()) {
-				codeArea.replaceText(newProjectItem.getValue().getContent());
-				codeArea.getUndoManager().forgetHistory();
-			}
+			viewModel.selectedEncodingProperty().set(newProjectItem);
 			
-			// non-editable project items are not selectable
-			if (!newProjectItem.getValue().isEditable()) {
-				Platform.runLater(() -> projectTreeView.getSelectionModel().select(oldProjectItem));
-			}
+			codeArea.replaceText(newProjectItem.getContent());
+			codeArea.getUndoManager().forgetHistory();
 		});
 	}
 	
 	private void initializeCodeArea() {
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
+		codeArea.editableProperty().bind(viewModel.isDebuggingProperty().not());
 		codeArea.textProperty().addListener((obs, oldText, newText) -> {
             codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.selectedEncodingProperty().get(), newText, viewModel.coreItems()));
         });
-		codeArea.editableProperty().bind(viewModel.isDebuggingProperty().not());
-				
+			
 		Popup popup = new Popup();
 		Label popupMsg = new Label();
 		popupMsg.getStylesheets().add("/at/aau/dwaspgui/view/popup.css");
@@ -132,24 +142,6 @@ public class RootView extends AbstractView<RootViewModel> {
 		codeArea.addEventHandler(MouseOverTextEvent.MOUSE_OVER_TEXT_END, e -> {
 			popup.hide();
 		});
-	}
-	
-	private void projectChanged(AbstractProjectItemViewModel project) {
-		TreeItem<AbstractProjectItemViewModel> root = new TreeItem<AbstractProjectItemViewModel>(project);
-		
-		addChildren(root, project.getChildren());
-		
-		projectTreeView.setRoot(root);
-		projectTreeView.getSelectionModel().select(0);
-		
-	}
-	
-	private void addChildren(TreeItem<AbstractProjectItemViewModel> parent, ObservableList<AbstractProjectItemViewModel> children) {
-		for (AbstractProjectItemViewModel child : children) {
-			TreeItem<AbstractProjectItemViewModel> childItem = new TreeItem<AbstractProjectItemViewModel>(child);
-			addChildren(childItem, child.getChildren());
-			parent.getChildren().add(childItem);
-		}
 	}
 	
 	@FXML public void openAction() { viewModel.openAction(); }

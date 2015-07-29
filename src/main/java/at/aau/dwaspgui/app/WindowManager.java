@@ -2,17 +2,18 @@ package at.aau.dwaspgui.app;
 
 import java.io.File;
 
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.util.Messages;
 import at.aau.dwaspgui.util.ViewLocator;
 import at.aau.dwaspgui.view.AbstractView;
 import at.aau.dwaspgui.viewmodel.ViewModel;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 /**
  * Provides methods to show views on the main window as well as dialogs.
@@ -25,7 +26,8 @@ public class WindowManager {
 
 	public WindowManager(Stage stage) {
 		this.stage = stage;
-		this.stage.setTitle("DWASP");
+		this.stage.setTitle("DWASP - ASP Debugger");
+		this.stage.getIcons().add(new Image(WindowManager.class.getResourceAsStream("icon.png")));
 	}
 
 	private void showScene(final Scene scene) {

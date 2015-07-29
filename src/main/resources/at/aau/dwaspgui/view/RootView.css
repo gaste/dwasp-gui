@@ -7,6 +7,8 @@
 	-col-menu-low: rgb(210,210,210);
 	-col-menu-high: rgb(180,180,180);
 	
+	-col-label-header: #959595;
+	
 	/* colors for lists */
 	-col-list-hover: rgb(229,229,229);
 	-col-list-press: rgb(204,204,204);
@@ -25,25 +27,27 @@
     -fx-border-width: 0 0 1 0; 
 }
 
-#project-view {
+.list-view {
 	-fx-background-color: -col-chrome-low;
 	-fx-padding: 0px;
 	-fx-border-insets: 0px;
 }
 
-#project-view .tree-cell {
+.list-view .list-cell {
     -fx-background-color: -col-chrome-low;
-    -fx-text-fill: #2c2c2c;
+	-fx-text-fill: rgb(81,79,82);
+	-fx-padding: 0.5em 0 0.5em 0.75em;
 }
 
-#project-view .tree-cell:selected {
+.list-view .list-cell:selected,
+.list-view .list-cell:selected:hover {
+	-fx-background-color: -col-chrome-high;/*-col-list-select;*/
+	-fx-text-fill: black;
+	-fx-font-weight: bold;
+}
+
+.list-view .list-cell:selected:focus {
 	-fx-background-color: -col-list-select;
-	-fx-text-fill: white;
-}
-
-#project-view .tree-cell:selected:hover {
-	-fx-background-color: -col-list-select-hover;
-	-fx-text-fill: white;
 }
 
 .split-pane {
@@ -75,19 +79,34 @@
 	-fx-font: 14pt "Consolas";
 }
 
+#query-view {
+	-fx-border-color: -col-chrome-high;
+	-fx-border-width: 1 0 0 0;
+}
+
+.header-label {
+	-fx-text-fill: -col-label-header;
+	-fx-font-weight: bolder;
+	-fx-padding: 0.75em 0.75em 0.25em 0.75em;
+}
+
 .query-container {
 	-fx-padding: 0.25em 0.5em 0.25em 0.5em;
 }
 
+.query-label {
+	-fx-font: 11pt "Consolas";
+	-fx-text-fill: rgb(81,79,82);
+	-fx-padding: 4px 0 0 0;
+}
 
-#icon-true {
+.icon-true {
 	-fx-fill: -col-success;
 }
 
-#icon-false {
+.icon-false {
 	-fx-fill: -col-danger;
 }
-
 
 /*
  * .tool-bar

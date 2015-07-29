@@ -12,7 +12,9 @@ public class QueryResponse extends ResponseMessage {
 	private final List<String> atoms;
 	
 	public QueryResponse(String message) {
-		atoms = Arrays.asList(getMessageParts(message)).stream().filter((atom) -> !atom.isEmpty()).collect(Collectors.toList());
+		atoms = Arrays
+				.asList(getMessageParts(message)).stream().filter((atom) -> !atom.isEmpty())
+				.collect(Collectors.toList());
 	}
 	
 	private String[] getMessageParts(String message) {

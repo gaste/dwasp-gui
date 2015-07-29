@@ -20,7 +20,6 @@ import at.aau.dwaspgui.parser.ProjectParsingException;
 import at.aau.dwaspgui.parser.XMLProjectParser;
 import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.util.Messages;
-import at.aau.dwaspgui.viewmodel.project.AbstractProjectItemViewModel;
 import at.aau.dwaspgui.viewmodel.query.QueryViewModel;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -40,7 +39,7 @@ public class RootViewModel implements ViewModel {
 	private final Debugger debugger;
 	private Project project;
 	private ObjectProperty<Encoding> selectedEncoding = new SimpleObjectProperty<Encoding>();
-	private ObjectProperty<AbstractProjectItemViewModel> projectViewModel = new SimpleObjectProperty<AbstractProjectItemViewModel>();
+	private ObservableList<Encoding> encodings = FXCollections.observableArrayList();
 	private ObservableList<TestCase> testCases = FXCollections.observableArrayList();
 	private ObservableList<CoreItem> coreItems = FXCollections.observableArrayList();
 	private ObservableList<QueryViewModel> queryAtoms = FXCollections.observableArrayList();
@@ -63,6 +62,7 @@ public class RootViewModel implements ViewModel {
 			JFXUtil.runOnJFX(() -> {
 				this.queryAtoms.clear();
 				for (String atom : queryAtoms) {
+					atom = atom.replaceAll("\r", "");
 					this.queryAtoms.add(new QueryViewModel(atom));
 				}
 			});
@@ -91,7 +91,9 @@ public class RootViewModel implements ViewModel {
 	
 	private void openProject(Project project) {
 		this.project = project;
-		this.projectViewModel.set(AbstractProjectItemViewModel.create(project));
+		
+		encodings.clear();
+		encodings.addAll(project.getProgram());
 		
 		testCases.clear();
 		testCases.addAll(project.getTestCases());
@@ -130,9 +132,9 @@ public class RootViewModel implements ViewModel {
 	}
 
 	// properties and lists
-	public ObjectProperty<AbstractProjectItemViewModel> projectProperty() { return projectViewModel; }
 	public ObjectProperty<Encoding> selectedEncodingProperty() { return selectedEncoding; }
 	public BooleanProperty isDebuggingProperty() { return debugger.isRunning(); }
+	public ObservableList<Encoding> encodings() { return this.encodings; }
 	public ObservableList<TestCase> testCases() { return this.testCases; }
 	public ObservableList<CoreItem> coreItems() { return this.coreItems; }
 	public ObservableList<QueryViewModel> queryAtoms() { return this.queryAtoms; }
