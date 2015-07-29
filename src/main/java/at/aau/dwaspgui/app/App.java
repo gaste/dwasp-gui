@@ -1,20 +1,15 @@
 package at.aau.dwaspgui.app;
 
-import it.unical.mat.aspide.closed.gui.debug2.AspideNotifier;
-
 import java.io.File;
 import java.util.List;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
-
-import org.w3c.dom.Document;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 import at.aau.dwaspgui.debug.Debugger;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
-
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 /**
  * Main class of the application.
@@ -24,34 +19,12 @@ import com.google.inject.Injector;
 public class App extends Application {
 	private static Injector injector;
 	
-	@SuppressWarnings("unused")
-	private final AspideNotifier notifier;
-	
 	public static void main(String[] args) {
 		launch(args);
 	}
 	
 	public static Injector getInjector() {
 		return injector;
-	}
-	
-	public App() {
-		this.notifier = null;
-	}
-
-	public App(AspideNotifier notifier) {
-		this.notifier = notifier;
-		
-		launch();
-	}
-	
-	public void openProject(Document project) {
-		WindowManager windowManager = injector.getInstance(WindowManager.class);
-		RootViewModel rootViewModel = injector.getInstance(RootViewModel.class);
-
-		windowManager.show(rootViewModel);
-		
-		rootViewModel.openProject(project);
 	}
 
 	@Override

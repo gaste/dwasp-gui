@@ -68,8 +68,7 @@ public class XMLProjectParserImpl implements XMLProjectParser {
 		}
 	}
 	
-	@Override
-	public Project parseProject(Document doc) throws ProjectParsingException {
+	private Project parseProject(Document doc) throws ProjectParsingException {
 		if (!doc.getDocumentElement().getNodeName().equals(TAG_ROOT))
 			throw new ProjectParsingException("Invalid project file");
 		

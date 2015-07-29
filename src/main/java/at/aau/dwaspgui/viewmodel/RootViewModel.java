@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.w3c.dom.Document;
-
 import com.google.inject.Inject;
 
 import at.aau.dwaspgui.app.WindowManager;
@@ -77,28 +75,16 @@ public class RootViewModel implements ViewModel {
 			windowManager.showErrorDialog(Messages.OPENPRJ_FILE_NOT_FOUND);
 		
 		try {
-			openProject(projectParser.parseProject(projectFile));
+			this.project = projectParser.parseProject(projectFile);
+			
+			encodings.clear();
+			encodings.addAll(project.getProgram());
+			
+			testCases.clear();
+			testCases.addAll(project.getTestCases());
 		} catch (ProjectParsingException e) {
 			windowManager.showErrorDialog(Messages.ERROR_OPEN_PROJECT, e);
 		}
-	}
-	
-	public void openProject(Document projectDocument) {
-		try {
-			openProject(projectParser.parseProject(projectDocument));
-		} catch (ProjectParsingException e) {
-			windowManager.showErrorDialog(Messages.ERROR_OPEN_PROJECT, e);
-		}
-	}
-	
-	private void openProject(Project project) {
-		this.project = project;
-		
-		encodings.clear();
-		encodings.addAll(project.getProgram());
-		
-		testCases.clear();
-		testCases.addAll(project.getTestCases());
 	}
 
 	public void openAction() {

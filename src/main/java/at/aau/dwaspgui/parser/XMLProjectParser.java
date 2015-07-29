@@ -2,8 +2,6 @@ package at.aau.dwaspgui.parser;
 
 import java.io.File;
 
-import org.w3c.dom.Document;
-
 import at.aau.dwaspgui.domain.Project;
 
 /**
@@ -21,14 +19,4 @@ public interface XMLProjectParser {
 	 *             If the project could not be parsed.
 	 */
 	Project parseProject(File projectFile) throws ProjectParsingException;
-
-	/**
-	 * Parse a project from the given XML document.
-	 * 
-	 * @param projectDocument
-	 *            The XML document containing the project.
-	 * @throws ProjectParsingException
-	 *             If the project could not be parsed.
-	 */
-	Project parseProject(Document projectDocument) throws ProjectParsingException;
 }
