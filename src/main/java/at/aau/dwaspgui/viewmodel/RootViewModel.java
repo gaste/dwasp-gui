@@ -84,6 +84,10 @@ public class RootViewModel implements ViewModel {
 			
 			testCases.clear();
 			testCases.addAll(project.getTestCases());
+			
+			if (encodings.size() > 0) {
+				selectedEncoding.set(encodings.get(0));
+			}
 		} catch (ProjectParsingException e) {
 			windowManager.showErrorDialog(Messages.ERROR_OPEN_PROJECT, e);
 		}

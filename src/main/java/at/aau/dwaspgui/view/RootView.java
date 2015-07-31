@@ -17,6 +17,7 @@ import at.aau.dwaspgui.view.highlight.AspCore2Highlight;
 import at.aau.dwaspgui.view.query.QueryListView;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -68,13 +69,26 @@ public class RootView extends AbstractView<RootViewModel> {
 
 		Bindings.bindContentBidirectional(viewModel.queryAtoms(), queryListView.getQueries());
 		
-		initializeProjectView();
 		initializeCodeArea();
 	}
 
 	private void initProjectListView() {
 		projectListView.itemsProperty().set(viewModel.encodings());
 		//projectListView.prefHeightProperty().bind(Bindings.size(viewModel.encodings()).multiply(29));
+		
+		viewModel.selectedEncodingProperty().addListener((ChangeListener<Encoding>) (observable, oldEncoding, newEncoding) -> {
+			projectListView.getSelectionModel().select(newEncoding);
+		});
+		
+		projectListView.getSelectionModel().selectedItemProperty().addListener((obs, oldProjectItem, newProjectItem) -> {
+			if (newProjectItem == null) return;	
+			else testCaseListView.getSelectionModel().clearSelection();
+			
+			viewModel.selectedEncodingProperty().set(newProjectItem);
+			
+			codeArea.replaceText(newProjectItem.getContent());
+			codeArea.getUndoManager().forgetHistory();
+		});
 	}
 
 	private void initTestCaseListView() {
@@ -93,18 +107,6 @@ public class RootView extends AbstractView<RootViewModel> {
 		});
 	}
 
-	private void initializeProjectView() {
-		projectListView.getSelectionModel().selectedItemProperty().addListener((obs, oldProjectItem, newProjectItem) -> {
-			if (newProjectItem == null) return;	
-			else testCaseListView.getSelectionModel().clearSelection();
-			
-			viewModel.selectedEncodingProperty().set(newProjectItem);
-			
-			codeArea.replaceText(newProjectItem.getContent());
-			codeArea.getUndoManager().forgetHistory();
-		});
-	}
-	
 	private void initializeCodeArea() {
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 		codeArea.editableProperty().bind(viewModel.isDebuggingProperty().not());
