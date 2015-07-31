@@ -17,6 +17,10 @@ public class FileEncoding extends Encoding {
 	public FileEncoding(String baseDirectory, String encodingFile) {
 		this.encodingFile = new File(baseDirectory, encodingFile);
 	}
+	
+	public String getFilename() {
+		return encodingFile.getAbsolutePath();
+	}
 
 	@Override
 	public String toString() {

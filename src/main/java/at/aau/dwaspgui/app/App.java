@@ -1,13 +1,11 @@
 package at.aau.dwaspgui.app;
 
-import java.io.File;
-import java.util.List;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import at.aau.dwaspgui.debug.Debugger;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
+import at.aau.input.InvalidOptionException;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -19,6 +17,8 @@ import javafx.stage.Stage;
 public class App extends Application {
 	private static Injector injector;
 	
+	private Options options;
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -28,19 +28,33 @@ public class App extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) {
+		try {
+			options = new Options(getParameters().getRaw().toArray(new String[getParameters().getRaw().size()]));
+		} catch (InvalidOptionException e) {
+			System.err.println(e.getMessage());
+			System.exit(1);
+			return;
+		}
+		
+		if (options.isPrintHelp()) {
+			options.printHelp();
+			System.exit(0);
+			return;
+		}
+		
 		initializeIoC(primaryStage);
 		
 		WindowManager windowManager = injector.getInstance(WindowManager.class);
 		RootViewModel rootViewModel = injector.getInstance(RootViewModel.class);
 		
 		windowManager.show(rootViewModel);
-
-		List<String> params = getParameters().getRaw();
 		
-		if (params.size() == 1) {
-			rootViewModel.openProject(new File(params.get(0)));
-		}
+		if (options.isProjectFileSpecified())
+			rootViewModel.openProject(options.getProjectFile());
+		
+		if (options.isStartedFromAspide())
+			rootViewModel.isAspideSessions().set(true);
 	}
 	
 	@Override

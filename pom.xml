@@ -124,6 +124,13 @@
       <version>${com.google.inject.guice.version}</version>
     </dependency>
     
+    <!-- JCommander: Command line options -->
+    <dependency>
+      <groupId>com.beust</groupId>
+      <artifactId>jcommander</artifactId>
+      <version>${com.beust.jcommander.version}</version>
+    </dependency>
+    
     <!-- RichTextFX - code editor control for JavaFX -->
     <dependency>
       <groupId>org.fxmisc.richtext</groupId>
@@ -157,5 +164,6 @@
     <org.fxmisc.richtext.richtextfx.version>0.6.4</org.fxmisc.richtext.richtextfx.version>
     <de.jensd.fontawesomefx.verison>8.4</de.jensd.fontawesomefx.verison>
     <at.aau.gringo-wrapper.version>1.5.1</at.aau.gringo-wrapper.version>
+    <com.beust.jcommander.version>1.47</com.beust.jcommander.version>
   </properties>
 </project>

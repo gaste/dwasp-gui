@@ -1,14 +1,14 @@
 package at.aau.dwaspgui.app;
 
-import javafx.stage.Stage;
+import com.google.inject.AbstractModule;
+import com.google.inject.Scopes;
+
 import at.aau.dwaspgui.debug.Debugger;
 import at.aau.dwaspgui.debug.DebuggerImpl;
 import at.aau.dwaspgui.parser.XMLProjectParser;
 import at.aau.dwaspgui.parser.XMLProjectParserImpl;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
+import javafx.stage.Stage;
 
 /**
  * Guice IoC module that determines the bindings.

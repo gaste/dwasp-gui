@@ -74,12 +74,12 @@ public class RootView extends AbstractView<RootViewModel> {
 
 	private void initProjectListView() {
 		projectListView.itemsProperty().set(viewModel.encodings());
-		projectListView.prefHeightProperty().bind(Bindings.size(viewModel.encodings()).multiply(29));
+		//projectListView.prefHeightProperty().bind(Bindings.size(viewModel.encodings()).multiply(29));
 	}
 
 	private void initTestCaseListView() {
 		testCaseListView.itemsProperty().set(viewModel.testCases());
-		testCaseListView.prefHeightProperty().bind(Bindings.size(viewModel.testCases()).multiply(29));
+		//testCaseListView.prefHeightProperty().bind(Bindings.size(viewModel.testCases()).multiply(29));
 
 		testCaseListView.getSelectionModel().selectedItemProperty().addListener((obs, oldTC, newTC) -> {
 			if (newTC == null) return;	
@@ -120,22 +120,23 @@ public class RootView extends AbstractView<RootViewModel> {
 		
 		codeArea.setMouseOverTextDelay(Duration.ofSeconds(1));
 		codeArea.addEventHandler(MouseOverTextEvent.MOUSE_OVER_TEXT_BEGIN, e -> {
-			if (viewModel.isDebuggingProperty().get()) {
-				int chIdx = e.getCharacterIndex();
-				
-				for (CoreItem ci : viewModel.coreItems().filtered(ci -> ci.getEncoding() == viewModel.selectedEncodingProperty().get())) {
-					if (chIdx >= ci.getFromIndex() && chIdx <= ci.getFromIndex() + ci.getLength()) {
-						StringBuilder popupText = new StringBuilder();
-						popupText.append(ci.getSubstitutions().toString());
-						popupText.append("\n\n");
-						for (Map<String, String> substitution : ci.getSubstitutions()) {
-							popupText.append(ci.getRule().getGroundedRule(substitution));
-							popupText.append("\n");
-						}
-						
-						popupMsg.setText(popupText.toString());
-						popup.show(codeArea, e.getScreenPosition().getX(), e.getScreenPosition().getY() + 10);
+			if (!viewModel.isDebuggingProperty().get())
+				return;
+			
+			int chIdx = e.getCharacterIndex();
+			
+			for (CoreItem ci : viewModel.coreItems().filtered(ci -> ci.getEncoding() == viewModel.selectedEncodingProperty().get())) {
+				if (chIdx >= ci.getFromIndex() && chIdx <= ci.getFromIndex() + ci.getLength()) {
+					StringBuilder popupText = new StringBuilder();
+					popupText.append(ci.getSubstitutions().toString());
+					popupText.append("\n\n");
+					for (Map<String, String> substitution : ci.getSubstitutions()) {
+						popupText.append(ci.getRule().getGroundedRule(substitution));
+						popupText.append("\n");
 					}
+					
+					popupMsg.setText(popupText.toString());
+					popup.show(codeArea, e.getScreenPosition().getX(), e.getScreenPosition().getY() + 10);
 				}
 			}
 		});
@@ -144,6 +145,7 @@ public class RootView extends AbstractView<RootViewModel> {
 		});
 	}
 	
+	@FXML public void newAction() { }
 	@FXML public void openAction() { viewModel.openAction(); }
 	@FXML public void exitAction() { viewModel.exitAction(); }
 	@FXML public void stopAction() { viewModel.stopAction(); }

@@ -22,6 +22,7 @@ import at.aau.dwaspgui.viewmodel.query.QueryViewModel;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,6 +37,7 @@ public class RootViewModel implements ViewModel {
 	private final XMLProjectParser projectParser;
 	private final Debugger debugger;
 	private Project project;
+	private BooleanProperty isAspideSession = new SimpleBooleanProperty(false);
 	private ObjectProperty<Encoding> selectedEncoding = new SimpleObjectProperty<Encoding>();
 	private ObservableList<Encoding> encodings = FXCollections.observableArrayList();
 	private ObservableList<TestCase> testCases = FXCollections.observableArrayList();
@@ -122,6 +124,7 @@ public class RootViewModel implements ViewModel {
 	// properties and lists
 	public ObjectProperty<Encoding> selectedEncodingProperty() { return selectedEncoding; }
 	public BooleanProperty isDebuggingProperty() { return debugger.isRunning(); }
+	public BooleanProperty isAspideSessions() { return this.isAspideSession; }
 	public ObservableList<Encoding> encodings() { return this.encodings; }
 	public ObservableList<TestCase> testCases() { return this.testCases; }
 	public ObservableList<CoreItem> coreItems() { return this.coreItems; }
