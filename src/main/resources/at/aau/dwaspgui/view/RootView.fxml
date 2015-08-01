@@ -64,9 +64,14 @@
                      <children>
                         <ToolBar prefHeight="40.0" prefWidth="200.0">
                           <items>
-                          	<Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveAction">
+                          	<Button fx:id="saveButton" text="%button.save" mnemonicParsing="false" onAction="#saveAction">
                           		<graphic>
                           			<FontAwesomeIconView glyphName="FLOPPY_ALT" />
+                          		</graphic>
+                          	</Button>
+                          	<Button fx:id="aspideButton" text="%button.aspide" mnemonicParsing="false" onAction="#aspideAction">
+                          		<graphic>
+                          			<FontAwesomeIconView glyphName="EXTERNAL_LINK" />
                           		</graphic>
                           	</Button>
                               <MenuButton fx:id="debugButton" mnemonicParsing="false" styleClass="btn" text="%button.debug">

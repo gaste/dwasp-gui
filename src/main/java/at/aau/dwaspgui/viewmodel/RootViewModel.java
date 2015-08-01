@@ -8,6 +8,7 @@ import java.util.Map;
 import com.google.inject.Inject;
 
 import at.aau.dwaspgui.app.WindowManager;
+import at.aau.dwaspgui.aspide.AspideNotifier;
 import at.aau.dwaspgui.debug.Debugger;
 import at.aau.dwaspgui.debug.DebuggerException;
 import at.aau.dwaspgui.domain.CoreItem;
@@ -38,6 +39,7 @@ public class RootViewModel implements ViewModel {
 	private final WindowManager windowManager;
 	private final XMLProjectParser projectParser;
 	private final Debugger debugger;
+	private final AspideNotifier notifier;
 	private Project project;
 	private BooleanProperty isAspideSession = new SimpleBooleanProperty(false);
 	private ObjectProperty<Encoding> selectedEncoding = new SimpleObjectProperty<Encoding>();
@@ -48,10 +50,12 @@ public class RootViewModel implements ViewModel {
 	
 	@Inject
 	public RootViewModel(WindowManager windowManager,
-			XMLProjectParser projectParser, Debugger debugger) {
+			XMLProjectParser projectParser, Debugger debugger, 
+			AspideNotifier notifier) {
 		this.windowManager = windowManager;
 		this.projectParser = projectParser;
 		this.debugger = debugger;
+		this.notifier = notifier;
 		
 		debugger.registerCoreCallback((coreItems) -> {
 			JFXUtil.runOnJFX(() -> {
@@ -100,9 +104,33 @@ public class RootViewModel implements ViewModel {
 			FileEncoding enc = (FileEncoding) selectedEncoding.get();
 			try {
 				enc.save();
+				
+				if (isAspideSession.get())
+					notifier.notifySave(enc);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	public void aspideAction() {
+		if (!isAspideSession.get())
+			return;
+		
+		FileEncoding enc = null;
+		if (selectedEncoding.get() != null && selectedEncoding.get() instanceof FileEncoding) {
+			enc = (FileEncoding) selectedEncoding.get();
+		} else {
+			for (Encoding encoding : encodings()) {
+				if (encoding instanceof FileEncoding) {
+					enc = (FileEncoding) enc;
+					break;
+				}
+			}
+		}
+		
+		if (enc != null) {
+			notifier.notifyBack(enc, 0);
 		}
 	}
 

@@ -3,6 +3,7 @@ package at.aau.dwaspgui.app;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 
+import at.aau.dwaspgui.aspide.AspideNotifier;
 import at.aau.dwaspgui.debug.Debugger;
 import at.aau.dwaspgui.debug.DebuggerImpl;
 import at.aau.dwaspgui.parser.XMLProjectParser;
@@ -28,5 +29,6 @@ public class IoCModule extends AbstractModule {
 		bind(RootViewModel.class).in(Scopes.SINGLETON);
 		bind(XMLProjectParser.class).to(XMLProjectParserImpl.class).in(Scopes.SINGLETON);
 		bind(Debugger.class).to(DebuggerImpl.class).in(Scopes.SINGLETON);
+		bind(AspideNotifier.class).in(Scopes.SINGLETON);
 	}
 }

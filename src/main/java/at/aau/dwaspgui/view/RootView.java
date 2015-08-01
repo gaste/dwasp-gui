@@ -44,6 +44,7 @@ public class RootView extends AbstractView<RootViewModel> {
 	@FXML private MenuButton debugButton;
 	@FXML private MenuItem saveMenuItem;
 	@FXML private Button saveButton;
+	@FXML private Button aspideButton;
 	@FXML private Button stopButton;
 	@FXML private Button assertButton;
 	
@@ -76,6 +77,7 @@ public class RootView extends AbstractView<RootViewModel> {
 		
 		saveMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN));
 		saveMenuItem.disableProperty().bind(dirtyEncoding.not());
+		aspideButton.visibleProperty().bind(viewModel.isAspideSessions());
 		saveButton.disableProperty().bind(dirtyEncoding.not());
 		debugButton.disableProperty().bind(viewModel.isDebuggingProperty());
 		stopButton.visibleProperty().bind(viewModel.isDebuggingProperty());
@@ -179,6 +181,7 @@ public class RootView extends AbstractView<RootViewModel> {
 	
 	@FXML public void newAction() { }
 	@FXML public void saveAction() { viewModel.saveAction(); }
+	@FXML public void aspideAction() { viewModel.aspideAction(); }
 	@FXML public void openAction() { viewModel.openAction(); }
 	@FXML public void exitAction() { viewModel.exitAction(); }
 	@FXML public void stopAction() { viewModel.stopAction(); }
