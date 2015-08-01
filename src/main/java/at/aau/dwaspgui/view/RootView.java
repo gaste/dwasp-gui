@@ -11,12 +11,15 @@ import org.fxmisc.richtext.MouseOverTextEvent;
 
 import at.aau.dwaspgui.domain.CoreItem;
 import at.aau.dwaspgui.domain.Encoding;
+import at.aau.dwaspgui.domain.FileEncoding;
 import at.aau.dwaspgui.domain.TestCase;
 import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.view.highlight.AspCore2Highlight;
 import at.aau.dwaspgui.view.query.QueryListView;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -25,6 +28,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 
@@ -36,8 +42,13 @@ public class RootView extends AbstractView<RootViewModel> {
 	@FXML private VBox queryView;
 	@FXML private CodeArea codeArea;
 	@FXML private MenuButton debugButton;
+	@FXML private MenuItem saveMenuItem;
+	@FXML private Button saveButton;
 	@FXML private Button stopButton;
 	@FXML private Button assertButton;
+	
+	private BooleanProperty dirtyEncoding = new SimpleBooleanProperty(false);
+	private BooleanProperty editableEncoding = new SimpleBooleanProperty(false);
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -63,6 +74,9 @@ public class RootView extends AbstractView<RootViewModel> {
 			});
 		});
 		
+		saveMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN));
+		saveMenuItem.disableProperty().bind(dirtyEncoding.not());
+		saveButton.disableProperty().bind(dirtyEncoding.not());
 		debugButton.disableProperty().bind(viewModel.isDebuggingProperty());
 		stopButton.visibleProperty().bind(viewModel.isDebuggingProperty());
 		queryView.visibleProperty().bind(viewModel.isDebuggingProperty());
@@ -78,6 +92,17 @@ public class RootView extends AbstractView<RootViewModel> {
 		
 		viewModel.selectedEncodingProperty().addListener((ChangeListener<Encoding>) (observable, oldEncoding, newEncoding) -> {
 			projectListView.getSelectionModel().select(newEncoding);
+			editableEncoding.set(newEncoding instanceof FileEncoding);
+			
+			if (newEncoding instanceof FileEncoding) {
+				FileEncoding enc = (FileEncoding) newEncoding;
+				
+				dirtyEncoding.unbind();
+				dirtyEncoding.bind(enc.dirtyProperty());
+			} else {
+				dirtyEncoding.unbind();
+				dirtyEncoding.set(false);
+			}
 		});
 		
 		projectListView.getSelectionModel().selectedItemProperty().addListener((obs, oldProjectItem, newProjectItem) -> {
@@ -109,10 +134,15 @@ public class RootView extends AbstractView<RootViewModel> {
 
 	private void initializeCodeArea() {
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
-		codeArea.editableProperty().bind(viewModel.isDebuggingProperty().not());
+		codeArea.editableProperty().bind(viewModel.isDebuggingProperty().not().and(editableEncoding));
 		codeArea.textProperty().addListener((obs, oldText, newText) -> {
             codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.selectedEncodingProperty().get(), newText, viewModel.coreItems()));
-        });
+            
+            if (editableEncoding.get()) {
+            	FileEncoding enc = (FileEncoding) viewModel.selectedEncodingProperty().get();
+            	enc.setContent(newText);
+            }
+		});
 			
 		Popup popup = new Popup();
 		Label popupMsg = new Label();
@@ -148,6 +178,7 @@ public class RootView extends AbstractView<RootViewModel> {
 	}
 	
 	@FXML public void newAction() { }
+	@FXML public void saveAction() { viewModel.saveAction(); }
 	@FXML public void openAction() { viewModel.openAction(); }
 	@FXML public void exitAction() { viewModel.exitAction(); }
 	@FXML public void stopAction() { viewModel.stopAction(); }

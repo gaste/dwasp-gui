@@ -1,6 +1,7 @@
 package at.aau.dwaspgui.viewmodel;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import at.aau.dwaspgui.debug.Debugger;
 import at.aau.dwaspgui.debug.DebuggerException;
 import at.aau.dwaspgui.domain.CoreItem;
 import at.aau.dwaspgui.domain.Encoding;
+import at.aau.dwaspgui.domain.FileEncoding;
 import at.aau.dwaspgui.domain.Project;
 import at.aau.dwaspgui.domain.QueryAnswer;
 import at.aau.dwaspgui.domain.TestCase;
@@ -90,6 +92,17 @@ public class RootViewModel implements ViewModel {
 			}
 		} catch (ProjectParsingException e) {
 			windowManager.showErrorDialog(Messages.ERROR_OPEN_PROJECT, e);
+		}
+	}
+	
+	public void saveAction() {
+		if (selectedEncoding.get() != null && selectedEncoding.get() instanceof FileEncoding) {
+			FileEncoding enc = (FileEncoding) selectedEncoding.get();
+			try {
+				enc.save();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

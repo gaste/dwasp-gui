@@ -26,6 +26,8 @@
             	  <MenuItem mnemonicParsing="false" onAction="#newAction" text="%menu.file.new" />
                   <MenuItem mnemonicParsing="false" onAction="#openAction" text="%menu.file.open" />
                   <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveAction" text="%menu.file.save" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
               <MenuItem mnemonicParsing="false" onAction="#exitAction" text="%menu.file.exit" />
             </items>
           </Menu>
@@ -62,6 +64,11 @@
                      <children>
                         <ToolBar prefHeight="40.0" prefWidth="200.0">
                           <items>
+                          	<Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveAction">
+                          		<graphic>
+                          			<FontAwesomeIconView glyphName="FLOPPY_ALT" />
+                          		</graphic>
+                          	</Button>
                               <MenuButton fx:id="debugButton" mnemonicParsing="false" styleClass="btn" text="%button.debug">
                                 <items>
                                   <MenuItem mnemonicParsing="false" text="Action 1" />
