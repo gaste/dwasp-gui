@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 
 import at.aau.GringoWrapper;
 import at.aau.Rule;
+import at.aau.dwaspgui.app.config.ApplicationPreferences;
 import at.aau.dwaspgui.debug.protocol.AssertionMessage;
 import at.aau.dwaspgui.debug.protocol.CoreResponse;
 import at.aau.dwaspgui.debug.protocol.Message;
@@ -44,10 +45,8 @@ public class DebuggerImpl implements Debugger {
 	private Map<String, Rule> debugRuleMap = null;
 	private ExecutorService debuggerExecutor = null;
 	
-	private static final String DEBUGGER_COMMAND = "dwasp";
 	private static final String DEBUGGER_OPTION_INPUT_FILE = "--debug=";
 	private static final String DEBUG_FILE_NAME = "debug.dbg";
-	private static final String GRINGO_WRAPPER_GROUNDER = "gringo";
 	private static final String GRINGO_WRAPPER_OPTIONS = "";
 	private static final String GRINGO_WRAPPER_DEBUGCONSTANT = "_debug";
 	
@@ -71,7 +70,7 @@ public class DebuggerImpl implements Debugger {
 			inputProgram.append(encoding.getContent());
 		}
 
-		GringoWrapper wrapper = new GringoWrapper(GRINGO_WRAPPER_GROUNDER,
+		GringoWrapper wrapper = new GringoWrapper(ApplicationPreferences.COMMAND_GROUNDER.get(),
 				GRINGO_WRAPPER_OPTIONS, GRINGO_WRAPPER_DEBUGCONSTANT, false, false);
 		
 		try {
@@ -87,7 +86,7 @@ public class DebuggerImpl implements Debugger {
 	}
 	
 	private void startDebugger(String filename) throws DebuggerException {
-		ProcessBuilder builder = new ProcessBuilder(DEBUGGER_COMMAND, DEBUGGER_OPTION_INPUT_FILE + filename);
+		ProcessBuilder builder = new ProcessBuilder(ApplicationPreferences.COMMAND_DEBUGGER.get(), DEBUGGER_OPTION_INPUT_FILE + filename);
 		
 		try {
 			debugger = builder.start();

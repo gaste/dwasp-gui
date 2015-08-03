@@ -77,6 +77,7 @@ public class RootView extends AbstractView<RootViewModel> {
 		
 		saveMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN));
 		saveMenuItem.disableProperty().bind(dirtyEncoding.not());
+		aspideButton.managedProperty().bind(aspideButton.visibleProperty());
 		aspideButton.visibleProperty().bind(viewModel.isAspideSessions());
 		saveButton.disableProperty().bind(dirtyEncoding.not());
 		debugButton.disableProperty().bind(viewModel.isDebuggingProperty());
@@ -185,5 +186,6 @@ public class RootView extends AbstractView<RootViewModel> {
 	@FXML public void openAction() { viewModel.openAction(); }
 	@FXML public void exitAction() { viewModel.exitAction(); }
 	@FXML public void stopAction() { viewModel.stopAction(); }
+	@FXML public void preferencesAction() { viewModel.preferencesAction(); }
 	@FXML public void assertAction() { viewModel.assertAction(); }
 }

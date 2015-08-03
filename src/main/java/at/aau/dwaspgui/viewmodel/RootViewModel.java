@@ -29,6 +29,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
 
 /**
  * Main view model of the application.
@@ -113,6 +114,10 @@ public class RootViewModel implements ViewModel {
 		}
 	}
 	
+	public void preferencesAction() {
+		windowManager.showModalDialog(new PreferencesViewModel(windowManager));
+	}
+	
 	public void aspideAction() {
 		if (!isAspideSession.get())
 			return;
@@ -174,4 +179,14 @@ public class RootViewModel implements ViewModel {
 	public ObservableList<TestCase> testCases() { return this.testCases; }
 	public ObservableList<CoreItem> coreItems() { return this.coreItems; }
 	public ObservableList<QueryViewModel> queryAtoms() { return this.queryAtoms; }
+
+	@Override
+	public String getTitle() {
+		return "DWASP - ASP Debugger";
+	}
+
+	@Override
+	public Image getIcon() {
+		return new Image(WindowManager.class.getResourceAsStream("icon.png"));
+	}
 }
