@@ -120,13 +120,14 @@ public class DebuggerImpl implements Debugger {
 							: "";
 					
 					Rule rule = debugRuleMap.get(debugConstant);
-					
-					if (!rules.containsKey(rule)) {
-						rules.put(rule, new ArrayList<Map<String,String>>());
+					if (rule != null) {
+						if (!rules.containsKey(rule)) {
+							rules.put(rule, new ArrayList<Map<String,String>>());
+						}
+						
+						List<Map<String, String>> substitutions = rules.get(rule);
+						substitutions.add(rule.getSubstitution(term));
 					}
-					
-					List<Map<String, String>> substitutions = rules.get(rule);
-					substitutions.add(rule.getSubstitution(term));
 				}
 				
 				List<CoreItem> coreItems = new ArrayList<CoreItem>();
