@@ -3,6 +3,7 @@ package at.aau.dwaspgui.app;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
+import at.aau.dwaspgui.app.config.ApplicationPreferences;
 import at.aau.dwaspgui.debug.Debugger;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
 import at.aau.input.InvalidOptionException;
@@ -41,6 +42,14 @@ public class App extends Application {
 			options.printHelp();
 			System.exit(0);
 			return;
+		}
+		
+		if (options.isDebuggerCommandSpecified()) {
+			ApplicationPreferences.COMMAND_DEBUGGER.set(options.getDebuggerCommand());
+		}
+		
+		if (options.isGrounderCommandSpecified()) {
+			ApplicationPreferences.COMMAND_GROUNDER.set(options.getGrounderCommand());
 		}
 		
 		initializeIoC(primaryStage);

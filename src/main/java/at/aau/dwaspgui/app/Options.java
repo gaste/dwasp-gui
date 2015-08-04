@@ -32,6 +32,12 @@ public class Options {
 	@Parameter(names = { "-aspide" }, description = "Specify this option if the GUI is started from ASPIDE")
 	private boolean aspide = false;
 	
+	@Parameter(names = { "-d" }, description = "The command used to start the debugger", required = false)
+	private String debuggerCommand;
+	
+	@Parameter(names = { "-g" }, description = "The command used to start the grounder", required = false)
+	private String grounderCommand;
+	
 	/**
 	 * Parse the given command line arguments.
 	 * 
@@ -61,4 +67,10 @@ public class Options {
 	
 	public boolean isProjectFileSpecified() { return projectFile.size() > 0; }
 	public File getProjectFile() { return projectFile.size() > 0 ? projectFile.get(0) : null; }
+	
+	public boolean isGrounderCommandSpecified() { return grounderCommand != null; }
+	public String getGrounderCommand() { return grounderCommand; }
+	
+	public boolean isDebuggerCommandSpecified() { return debuggerCommand != null; }
+	public String getDebuggerCommand() { return debuggerCommand; }
 }
