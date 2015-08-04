@@ -29,6 +29,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.IndexRange;
 import javafx.scene.image.Image;
 
 /**
@@ -118,7 +119,7 @@ public class RootViewModel implements ViewModel {
 		windowManager.showModalDialog(new PreferencesViewModel(windowManager));
 	}
 	
-	public void aspideAction() {
+	public void aspideAction(IndexRange selection) {
 		if (!isAspideSession.get())
 			return;
 		
@@ -126,6 +127,7 @@ public class RootViewModel implements ViewModel {
 		if (selectedEncoding.get() != null && selectedEncoding.get() instanceof FileEncoding) {
 			enc = (FileEncoding) selectedEncoding.get();
 		} else {
+			selection = new IndexRange(0, 0);
 			for (Encoding encoding : encodings()) {
 				if (encoding instanceof FileEncoding) {
 					enc = (FileEncoding) enc;
@@ -135,7 +137,7 @@ public class RootViewModel implements ViewModel {
 		}
 		
 		if (enc != null) {
-			notifier.notifyBack(enc, 0);
+			notifier.notifyBack(enc, selection);
 		}
 	}
 
