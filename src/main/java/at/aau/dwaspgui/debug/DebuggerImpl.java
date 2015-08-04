@@ -15,13 +15,14 @@ import java.util.function.Consumer;
 import at.aau.GringoWrapper;
 import at.aau.Rule;
 import at.aau.dwaspgui.app.config.ApplicationPreferences;
-import at.aau.dwaspgui.debug.protocol.AssertionMessage;
-import at.aau.dwaspgui.debug.protocol.CoreResponse;
 import at.aau.dwaspgui.debug.protocol.Message;
 import at.aau.dwaspgui.debug.protocol.MessageParsingException;
-import at.aau.dwaspgui.debug.protocol.QueryResponse;
-import at.aau.dwaspgui.debug.protocol.RequestMessage;
-import at.aau.dwaspgui.debug.protocol.RequestMessage.RequestType;
+import at.aau.dwaspgui.debug.protocol.assertion.AssertionMessage;
+import at.aau.dwaspgui.debug.protocol.request.RequestMessage;
+import at.aau.dwaspgui.debug.protocol.request.RequestMessage.RequestType;
+import at.aau.dwaspgui.debug.protocol.response.CoreResponseMessage;
+import at.aau.dwaspgui.debug.protocol.response.QueryResponseMessage;
+import at.aau.dwaspgui.debug.protocol.response.ResponseMessage;
 import at.aau.dwaspgui.domain.CoreItem;
 import at.aau.dwaspgui.domain.Encoding;
 import at.aau.dwaspgui.domain.QueryAnswer;
@@ -102,10 +103,10 @@ public class DebuggerImpl implements Debugger {
 			RequestMessage request = new RequestMessage(RequestType.GET_CORE);
 			request.writeToOutputStream(debugger.getOutputStream());
 			
-			Message resp = Message.parseFromInputStream(debugger.getInputStream());
+			ResponseMessage resp = Message.parseFromInputStream(debugger.getInputStream());
 			
-			if (resp instanceof CoreResponse) {
-				CoreResponse response = (CoreResponse) resp;
+			if (resp instanceof CoreResponseMessage) {
+				CoreResponseMessage response = (CoreResponseMessage) resp;
 				Map<Rule, List<Map<String, String>>> rules = new HashMap<Rule, List<Map<String, String>>>();
 				
 				for (String coreItem : response.getCoreItems()) {
@@ -156,10 +157,10 @@ public class DebuggerImpl implements Debugger {
 			RequestMessage request = new RequestMessage(RequestType.GET_QUERY);
 			request.writeToOutputStream(debugger.getOutputStream());
 			
-			Message resp = Message.parseFromInputStream(debugger.getInputStream());
+			ResponseMessage resp = Message.parseFromInputStream(debugger.getInputStream());
 			
-			if (resp instanceof QueryResponse) {
-				QueryResponse response = (QueryResponse) resp;
+			if (resp instanceof QueryResponseMessage) {
+				QueryResponseMessage response = (QueryResponseMessage) resp;
 				
 				queryCallbacks.forEach(c -> c.accept(response.getAtoms()));
 			}
@@ -206,6 +207,7 @@ public class DebuggerImpl implements Debugger {
 		}
 		
 		coreCallbacks.forEach((c) -> { c.accept(new ArrayList<CoreItem>()); });
+		queryCallbacks.forEach((c) -> { c.accept(new ArrayList<String>()); });
 		
 		if (debugger != null && debugger.isAlive()) 
 			debugger.destroy();

@@ -1,7 +1,12 @@
-package at.aau.dwaspgui.debug.protocol;
+package at.aau.dwaspgui.debug.protocol.request;
 
+import at.aau.dwaspgui.debug.protocol.WritableMessage;
 
-public class RequestMessage extends Message {
+/**
+ * A message to DWASP for requesting data.
+ * @author Philip Gasteiger
+ */
+public class RequestMessage extends WritableMessage {
 	/** the identifier of this message type */
 	public static final String MESSAGE_IDENTIFIER = "get";
 	
@@ -18,12 +23,13 @@ public class RequestMessage extends Message {
 	
 	@Override
 	protected String serialize() {
-		return MESSAGE_IDENTIFIER + DELIMITER_PART + requestType.getCommand();
-	}
-	
-	protected static RequestMessage parseFromString(String message) {
-		// the debugger must not perform any requests on the GUI
-		throw new UnsupportedOperationException();
+		StringBuilder message = new StringBuilder();
+		
+		message.append(MESSAGE_IDENTIFIER);
+		message.append(DELIM_PART);
+		message.append(requestType.getCommand());
+		
+		return message.toString();
 	}
 	
 	/**

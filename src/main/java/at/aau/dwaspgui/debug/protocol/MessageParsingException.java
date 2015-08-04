@@ -1,5 +1,9 @@
 package at.aau.dwaspgui.debug.protocol;
 
+/**
+ * Indicates an error during the parsing of a message.
+ * @author Philip Gasteiger
+ */
 public class MessageParsingException extends Exception {
 	private static final long serialVersionUID = 1L;
 
