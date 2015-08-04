@@ -22,7 +22,12 @@ public class FileEncoding extends Encoding {
 	private BooleanProperty dirty = new SimpleBooleanProperty(false);
 
 	public FileEncoding(String baseDirectory, String encodingFile) {
-		this.encodingFile = new File(baseDirectory, encodingFile);
+		// check whether the encodingFile is already an absolute path
+		this.encodingFile = new File(encodingFile);
+		
+		if (!this.encodingFile.isAbsolute()) {
+			this.encodingFile = new File(baseDirectory, encodingFile);
+		}
 	}
 	
 	public String getFilename() {
