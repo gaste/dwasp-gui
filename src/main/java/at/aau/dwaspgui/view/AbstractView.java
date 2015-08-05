@@ -1,7 +1,7 @@
 package at.aau.dwaspgui.view;
 
-import javafx.fxml.Initializable;
 import at.aau.dwaspgui.viewmodel.ViewModel;
+import javafx.fxml.Initializable;
 
 /**
  * Abstract view of the MVVM pattern.

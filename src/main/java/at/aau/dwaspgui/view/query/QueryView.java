@@ -1,7 +1,7 @@
 package at.aau.dwaspgui.view.query;
 
 import at.aau.dwaspgui.domain.QueryAnswer;
-import at.aau.dwaspgui.util.ViewLocator;
+import at.aau.dwaspgui.util.locators.FXMLLocator;
 import at.aau.dwaspgui.viewmodel.query.QueryViewModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -23,7 +23,7 @@ public class QueryView extends HBox {
 	private final QueryViewModel viewModel;
 	
 	public QueryView(QueryViewModel viewModel) {
-		ViewLocator.loadControlView(this);
+		FXMLLocator.locateForController(this, true);
 		
 		this.viewModel = viewModel;
 

@@ -3,7 +3,7 @@ package at.aau.dwaspgui.view.query;
 import java.util.HashMap;
 import java.util.Map;
 
-import at.aau.dwaspgui.util.ViewLocator;
+import at.aau.dwaspgui.util.locators.FXMLLocator;
 import at.aau.dwaspgui.viewmodel.query.QueryViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -19,7 +19,7 @@ public class QueryListView extends VBox {
 	private final Map<QueryViewModel, QueryView> queryMap = new HashMap<QueryViewModel, QueryView>();
 	
 	public QueryListView() {
-		ViewLocator.loadControlView(this);
+		FXMLLocator.locateForController(this, true);
 		queries = FXCollections.observableArrayList();
 		queries.addListener((ListChangeListener<QueryViewModel>) c -> {
 			while(c.next()) {

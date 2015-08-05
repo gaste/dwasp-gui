@@ -6,7 +6,8 @@ import java.util.Map;
 
 import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.util.Messages;
-import at.aau.dwaspgui.util.ViewLocator;
+import at.aau.dwaspgui.util.locators.FXMLLocator;
+import at.aau.dwaspgui.util.locators.ViewLocator;
 import at.aau.dwaspgui.view.AbstractView;
 import at.aau.dwaspgui.viewmodel.ViewModel;
 import javafx.scene.Scene;
@@ -32,8 +33,8 @@ public class WindowManager {
 	}
 
 	public void show(ViewModel viewModel) {
-		AbstractView<?> view = ViewLocator.createView(viewModel);
-		Scene scene = ViewLocator.loadScene(view);
+		AbstractView<?> view = ViewLocator.locateForViewModel(viewModel);
+		Scene scene = FXMLLocator.locateForView(view);
 		
 		JFXUtil.runOnJFX(() -> {
 			primaryStage.setScene(scene);
@@ -46,7 +47,7 @@ public class WindowManager {
 	}
 	
 	public void showModalDialog(ViewModel viewModel) {
-		AbstractView<?> view = ViewLocator.createView(viewModel);
+		AbstractView<?> view = ViewLocator.locateForViewModel(viewModel);
 		
 		JFXUtil.runOnJFX(() -> {
 			Stage dialogStage = new Stage();
@@ -55,7 +56,7 @@ public class WindowManager {
 			
 			dialogStage.initModality(Modality.WINDOW_MODAL);
 			dialogStage.initOwner(primaryStage);
-			dialogStage.setScene(ViewLocator.loadScene(view));
+			dialogStage.setScene(FXMLLocator.locateForView(view));
 			dialogStage.getIcons().add(viewModel.getIcon());
 			dialogStage.setTitle(viewModel.getTitle());
 			dialogStage.setResizable(false);

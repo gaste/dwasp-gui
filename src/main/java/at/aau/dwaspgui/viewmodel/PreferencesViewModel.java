@@ -24,7 +24,6 @@ public class PreferencesViewModel implements ViewModel {
 	public StringProperty debuggerCommand() { return debuggerCommand; }
 	
 	public void chooseGrounderCommand() {
-		System.out.println("Chooser call");
 		File f = windowManager.chooseFile();
 		if (f != null && f.exists()) {
 			grounderCommand.set(f.getAbsolutePath());
