@@ -5,8 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -73,8 +73,8 @@ public class XMLProjectParserImpl implements XMLProjectParser {
 			throw new ProjectParsingException("Invalid project file");
 		
 		String baseDirectory = getBaseDirectory(doc);
-		Set<Encoding> encodings = getEncodings(doc, baseDirectory);
-		Set<TestCase> testCases = getTestCases(doc, baseDirectory);
+		List<Encoding> encodings = getEncodings(doc, baseDirectory);
+		List<TestCase> testCases = getTestCases(doc, baseDirectory);
 		
 		return new Project(baseDirectory, encodings, testCases);
 	}
@@ -88,7 +88,7 @@ public class XMLProjectParserImpl implements XMLProjectParser {
 		return node.getTextContent();
 	}
 
-	private Set<Encoding> getEncodings(Document doc, String baseDirectory)
+	private List<Encoding> getEncodings(Document doc, String baseDirectory)
 			throws ProjectParsingException {
 		Node node = doc.getElementsByTagName(TAG_ENDOCINGS).item(0);
 		
@@ -96,7 +96,7 @@ public class XMLProjectParserImpl implements XMLProjectParser {
 			throw new ProjectParsingException(Messages.PRJPARSER_NO_ENCODINGS.format());
 		
 		NodeList encodingsList = node.getChildNodes();
-		Set<Encoding> encodings = new HashSet<Encoding>();
+		List<Encoding> encodings = new ArrayList<Encoding>();
 		
 		for (int i = 0; i < encodingsList.getLength(); i ++) {
 			Node encoding = encodingsList.item(i);
@@ -110,7 +110,7 @@ public class XMLProjectParserImpl implements XMLProjectParser {
 		return encodings;
 	}
 
-	private Set<TestCase> getTestCases(Document doc, String baseDirectory)
+	private List<TestCase> getTestCases(Document doc, String baseDirectory)
 			throws ProjectParsingException {
 		Node node = doc.getElementsByTagName(TAG_TEST_CASES).item(0);
 		
@@ -118,7 +118,7 @@ public class XMLProjectParserImpl implements XMLProjectParser {
 			throw new ProjectParsingException(Messages.PRJPARSER_NO_TESTCASES.format());
 		
 		NodeList testCasesList = node.getChildNodes();
-		Set<TestCase> testCases = new HashSet<TestCase>();
+		List<TestCase> testCases = new ArrayList<TestCase>();
 		
 		for (int i = 0; i < testCasesList.getLength(); i ++) {
 			Node testCase = testCasesList.item(i);

@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -42,7 +42,7 @@ public class DebuggerImpl implements Debugger {
 	private BooleanProperty isComputingQuery = new SimpleBooleanProperty(false);
 	
 	private Process debugger = null;
-	private Set<Encoding> currentProgram = null;
+	private Collection<Encoding> currentProgram = null;
 	private Map<String, Rule> debugRuleMap = null;
 	private ExecutorService debuggerExecutor = null;
 	
@@ -52,7 +52,7 @@ public class DebuggerImpl implements Debugger {
 	private static final String GRINGO_WRAPPER_DEBUGCONSTANT = "_debug";
 	
 	@Override
-	public void startDebugger(Set<Encoding> program, TestCase testCase)
+	public void startDebugger(Collection<Encoding> program, TestCase testCase)
 			throws DebuggerException{
 		isRunning.set(true);
 		
@@ -63,7 +63,7 @@ public class DebuggerImpl implements Debugger {
 		startDebugger(DEBUG_FILE_NAME);
 	}
 	
-	private void groundProgram(Set<Encoding> program, String filename)
+	private void groundProgram(Collection<Encoding> program, String filename)
 			throws DebuggerException {
 		StringBuilder inputProgram = new StringBuilder();
 		
