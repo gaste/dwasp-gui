@@ -30,6 +30,10 @@ public class AssertionMessage extends WritableMessage {
 		
 		message.append(MESSAGE_IDENTIFIER);
 		
+		if (assertions.isEmpty()) {
+			message.append(DELIM_PART);
+		}
+		
 		assertions.forEach((atom, answer) -> {
 			message.append(DELIM_PART);
 			message.append(atom);
