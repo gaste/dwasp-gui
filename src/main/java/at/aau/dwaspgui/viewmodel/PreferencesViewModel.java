@@ -1,6 +1,8 @@
 package at.aau.dwaspgui.viewmodel;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import com.google.inject.Inject;
 
@@ -53,7 +55,8 @@ public class PreferencesViewModel implements ViewModel {
 	}
 
 	@Override
-	public Image getIcon() {
-		return new Image(WindowManager.class.getResourceAsStream("settings-icon.png"));
+	public List<Image> getIcons() {
+		return Arrays.asList(
+			new Image(WindowManager.class.getResourceAsStream("settings-icon.png")));
 	}
 }

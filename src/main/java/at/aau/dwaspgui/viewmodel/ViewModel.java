@@ -1,5 +1,7 @@
 package at.aau.dwaspgui.viewmodel;
 
+import java.util.List;
+
 import javafx.scene.image.Image;
 
 /**
@@ -9,5 +11,5 @@ import javafx.scene.image.Image;
  */
 public interface ViewModel {
 	public String getTitle();
-	public Image getIcon();
+	public List<Image> getIcons();
 }

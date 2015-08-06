@@ -42,7 +42,7 @@ public class WindowManager {
 			primaryStage.toFront();
 			primaryStage.setTitle(viewModel.getTitle());
 			primaryStage.getIcons().clear();
-			primaryStage.getIcons().add(viewModel.getIcon());
+			primaryStage.getIcons().addAll(viewModel.getIcons());
 		});
 	}
 	
@@ -57,7 +57,7 @@ public class WindowManager {
 			dialogStage.initModality(Modality.WINDOW_MODAL);
 			dialogStage.initOwner(primaryStage);
 			dialogStage.setScene(FXMLLocator.locateForView(view));
-			dialogStage.getIcons().add(viewModel.getIcon());
+			dialogStage.getIcons().addAll(viewModel.getIcons());
 			dialogStage.setTitle(viewModel.getTitle());
 			dialogStage.setResizable(false);
 			dialogStage.showAndWait();

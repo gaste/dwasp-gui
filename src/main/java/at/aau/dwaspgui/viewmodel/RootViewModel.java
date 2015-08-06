@@ -2,7 +2,9 @@ package at.aau.dwaspgui.viewmodel;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.inject.Inject;
@@ -188,7 +190,10 @@ public class RootViewModel implements ViewModel {
 	}
 
 	@Override
-	public Image getIcon() {
-		return new Image(WindowManager.class.getResourceAsStream("icon.png"));
+	public List<Image> getIcons() {
+		return Arrays.asList(
+			new Image(WindowManager.class.getResourceAsStream("dwasp-icon-16.png")),
+			new Image(WindowManager.class.getResourceAsStream("dwasp-icon-32.png")),
+			new Image(WindowManager.class.getResourceAsStream("dwasp-icon-64.png")));
 	}
 }
