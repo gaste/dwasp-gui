@@ -1,4 +1,5 @@
-# DWASP GUI
+![DWASP GUI](https://raw.githubusercontent.com/gaste/dwasp-gui/develop/dwasp-banner.png)
+
 A graphical user interface for debugging faulty ASP programs with [gringo-wrapper](https://github.com/gaste/gringo-wrapper) and [DWASP](https://github.com/gaste/wasp).
 
 <p align="center">
