@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import at.aau.dwaspgui.parser.ProjectParsingException;
-import at.aau.dwaspgui.parser.XMLProjectParserImpl;
+import at.aau.dwaspgui.parser.ProjectParserXMLImpl;
 
 /**
  * Unit tests for {@see ProjectParserXMLImpl}.
@@ -20,11 +20,11 @@ import at.aau.dwaspgui.parser.XMLProjectParserImpl;
  */
 @RunWith(JUnit4.class)
 public class ProjectParserXMLImplTest {
-	private XMLProjectParserImpl parser;
+	private ProjectParserXMLImpl parser;
 	
 	@Before
 	public void setUp() throws IOException {
-		parser = new XMLProjectParserImpl();
+		parser = new ProjectParserXMLImpl();
 	}
 	
 	// -------------------------------------------------------------------------

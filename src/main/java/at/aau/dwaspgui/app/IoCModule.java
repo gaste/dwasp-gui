@@ -6,8 +6,8 @@ import com.google.inject.Scopes;
 import at.aau.dwaspgui.aspide.AspideNotifier;
 import at.aau.dwaspgui.debug.Debugger;
 import at.aau.dwaspgui.debug.DebuggerImpl;
-import at.aau.dwaspgui.parser.XMLProjectParser;
-import at.aau.dwaspgui.parser.XMLProjectParserImpl;
+import at.aau.dwaspgui.parser.ProjectParser;
+import at.aau.dwaspgui.parser.ProjectParserXMLImpl;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
 import javafx.stage.Stage;
 
@@ -27,7 +27,7 @@ public class IoCModule extends AbstractModule {
 	protected void configure() {
 		bind(WindowManager.class).toInstance(new WindowManager(primaryStage));
 		bind(RootViewModel.class).in(Scopes.SINGLETON);
-		bind(XMLProjectParser.class).to(XMLProjectParserImpl.class).in(Scopes.SINGLETON);
+		bind(ProjectParser.class).to(ProjectParserXMLImpl.class).in(Scopes.SINGLETON);
 		bind(Debugger.class).to(DebuggerImpl.class).in(Scopes.SINGLETON);
 		bind(AspideNotifier.class).in(Scopes.SINGLETON);
 	}

@@ -2,7 +2,6 @@ package at.aau.dwaspgui.parser;
 
 /**
  * Signals that an error occurred during the parsing of the project.
- * 
  * @author Philip Gasteiger
  */
 public class ProjectParsingException extends Exception {

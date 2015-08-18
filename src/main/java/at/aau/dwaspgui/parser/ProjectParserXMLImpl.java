@@ -1,5 +1,15 @@
 package at.aau.dwaspgui.parser;
 
+import static at.aau.dwaspgui.parser.XMLTagNames.TAG_BASE_DIRECTORY;
+import static at.aau.dwaspgui.parser.XMLTagNames.TAG_ENCODING_DIRECT;
+import static at.aau.dwaspgui.parser.XMLTagNames.TAG_ENCODING_FILE;
+import static at.aau.dwaspgui.parser.XMLTagNames.TAG_ENDOCINGS;
+import static at.aau.dwaspgui.parser.XMLTagNames.TAG_ROOT;
+import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASE;
+import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASES;
+import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASE_ASSERTIONS;
+import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASE_NAME;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,21 +35,11 @@ import at.aau.dwaspgui.domain.TestCase;
 import at.aau.dwaspgui.util.Messages;
 
 /**
- * {@see ProjectParser} implementation that parses projects from XML files.
- * 
+ * Implementation of {@link ProjectParser} that parses projects from XML files.
  * @author Philip Gasteiger
+ * @see ProjectParser
  */
-public class XMLProjectParserImpl implements XMLProjectParser {
-	private static final String TAG_ROOT = "logicProgram";
-	private static final String TAG_BASE_DIRECTORY = "baseDirectory";
-	private static final String TAG_TEST_CASES = "testCases";
-	private static final String TAG_TEST_CASE = "testCase";
-	private static final String TAG_TEST_CASE_NAME = "name";
-	private static final String TAG_TEST_CASE_ASSERTIONS = "assertions";
-	private static final String TAG_ENDOCINGS = "encodings";
-	private static final String TAG_ENCODING_DIRECT = "encodingDirect";
-	private static final String TAG_ENCODING_FILE = "encodingFile";
-
+public class ProjectParserXMLImpl implements ProjectParser {
 	@Override
 	public Project parseProject(File projectFile)
 			throws ProjectParsingException {
