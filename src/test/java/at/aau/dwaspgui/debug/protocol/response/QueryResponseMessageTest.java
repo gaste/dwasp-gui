@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import at.aau.dwaspgui.debugger.protocol.response.QueryResponseMessage;
+
 /**
  * Unit tests for {@link QueryResponseMessage}.
  * @author Philip Gasteiger

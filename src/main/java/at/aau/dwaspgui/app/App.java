@@ -4,7 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import at.aau.dwaspgui.app.config.ApplicationPreferences;
-import at.aau.dwaspgui.debug.Debugger;
+import at.aau.dwaspgui.debugger.Debugger;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
 import at.aau.input.InvalidOptionException;
 import javafx.application.Application;

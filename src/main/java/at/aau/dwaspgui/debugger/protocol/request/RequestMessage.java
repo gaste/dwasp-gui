@@ -1,6 +1,6 @@
-package at.aau.dwaspgui.debug.protocol.request;
+package at.aau.dwaspgui.debugger.protocol.request;
 
-import at.aau.dwaspgui.debug.protocol.WritableMessage;
+import at.aau.dwaspgui.debugger.protocol.WritableMessage;
 
 /**
  * A message to DWASP for requesting data.

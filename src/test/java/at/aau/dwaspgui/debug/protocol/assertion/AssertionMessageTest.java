@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import at.aau.dwaspgui.debugger.protocol.assertion.AssertionMessage;
 import at.aau.dwaspgui.domain.QueryAnswer;
 
 /**

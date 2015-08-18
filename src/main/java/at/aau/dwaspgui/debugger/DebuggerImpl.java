@@ -1,10 +1,11 @@
-package at.aau.dwaspgui.debug;
+package at.aau.dwaspgui.debugger;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,14 +16,14 @@ import java.util.function.Consumer;
 import at.aau.GringoWrapper;
 import at.aau.Rule;
 import at.aau.dwaspgui.app.config.ApplicationPreferences;
-import at.aau.dwaspgui.debug.protocol.Message;
-import at.aau.dwaspgui.debug.protocol.MessageParsingException;
-import at.aau.dwaspgui.debug.protocol.assertion.AssertionMessage;
-import at.aau.dwaspgui.debug.protocol.request.RequestMessage;
-import at.aau.dwaspgui.debug.protocol.request.RequestMessage.RequestType;
-import at.aau.dwaspgui.debug.protocol.response.CoreResponseMessage;
-import at.aau.dwaspgui.debug.protocol.response.QueryResponseMessage;
-import at.aau.dwaspgui.debug.protocol.response.ResponseMessage;
+import at.aau.dwaspgui.debugger.protocol.Message;
+import at.aau.dwaspgui.debugger.protocol.MessageParsingException;
+import at.aau.dwaspgui.debugger.protocol.assertion.AssertionMessage;
+import at.aau.dwaspgui.debugger.protocol.request.RequestMessage;
+import at.aau.dwaspgui.debugger.protocol.request.RequestMessage.RequestType;
+import at.aau.dwaspgui.debugger.protocol.response.CoreResponseMessage;
+import at.aau.dwaspgui.debugger.protocol.response.QueryResponseMessage;
+import at.aau.dwaspgui.debugger.protocol.response.ResponseMessage;
 import at.aau.dwaspgui.domain.CoreItem;
 import at.aau.dwaspgui.domain.Encoding;
 import at.aau.dwaspgui.domain.QueryAnswer;
@@ -53,7 +54,10 @@ public class DebuggerImpl implements Debugger {
 	
 	@Override
 	public void startDebugger(Collection<Encoding> program, TestCase testCase)
-			throws DebuggerException{
+			throws DebuggerException {
+		// guard: do not start the debugger twice
+		if (isRunning.get()) return;
+		
 		isRunning.set(true);
 		
 		currentProgram = program;
@@ -79,9 +83,7 @@ public class DebuggerImpl implements Debugger {
 			String groundedProgram = wrapper.ground(inputProgram.toString(), true, debugRuleMap);
 			
 			Files.write(Paths.get(filename), groundedProgram.getBytes());
-		} catch (GroundingException | PostprocessingException e) {
-			throw new DebuggerException(Messages.ERROR_GROUNDING.format(), e);
-		} catch (IOException e) {
+		} catch (GroundingException | PostprocessingException | IOException e) {
 			throw new DebuggerException(Messages.ERROR_GROUNDING.format(), e);
 		}
 	}
@@ -91,6 +93,7 @@ public class DebuggerImpl implements Debugger {
 		
 		try {
 			debugger = builder.start();
+			
 			notifyCores();
 			getQuery();
 		} catch (IOException e) {
@@ -197,6 +200,9 @@ public class DebuggerImpl implements Debugger {
 	
 	@Override
 	public void stopDebugger() {
+		// guard: debugger must be running
+		if (!isRunning.get()) return;
+		
 		isRunning.set(false);
 		currentProgram = null;
 		debugRuleMap = null;
@@ -206,8 +212,8 @@ public class DebuggerImpl implements Debugger {
 			debuggerExecutor = null;
 		}
 		
-		coreCallbacks.forEach((c) -> { c.accept(new ArrayList<CoreItem>()); });
-		queryCallbacks.forEach((c) -> { c.accept(new ArrayList<String>()); });
+		coreCallbacks.forEach(c -> c.accept(Collections.emptyList()));
+		queryCallbacks.forEach(c -> c.accept(Collections.emptyList()));
 		
 		if (debugger != null && debugger.isAlive()) 
 			debugger.destroy();

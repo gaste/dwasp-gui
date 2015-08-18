@@ -1,4 +1,4 @@
-package at.aau.dwaspgui.debug.protocol;
+package at.aau.dwaspgui.debugger.protocol;
 
 /**
  * Indicates an error during the parsing of a message.

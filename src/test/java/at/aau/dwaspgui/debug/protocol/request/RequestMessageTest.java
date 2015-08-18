@@ -6,7 +6,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import at.aau.dwaspgui.debug.protocol.request.RequestMessage.RequestType;
+import at.aau.dwaspgui.debugger.protocol.request.RequestMessage;
+import at.aau.dwaspgui.debugger.protocol.request.RequestMessage.RequestType;
 
 /**
  * Unit tests for {@link RequestMessage}.

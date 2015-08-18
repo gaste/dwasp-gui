@@ -7,7 +7,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import at.aau.dwaspgui.debug.protocol.MessageParsingException;
+import at.aau.dwaspgui.debugger.protocol.MessageParsingException;
+import at.aau.dwaspgui.debugger.protocol.response.CoreResponseMessage;
+import at.aau.dwaspgui.debugger.protocol.response.QueryResponseMessage;
+import at.aau.dwaspgui.debugger.protocol.response.ResponseMessage;
 
 /**
  * Unit tests for {@link ResponseMessage}.

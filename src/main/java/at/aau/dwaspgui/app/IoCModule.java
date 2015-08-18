@@ -4,8 +4,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 
 import at.aau.dwaspgui.aspide.AspideNotifier;
-import at.aau.dwaspgui.debug.Debugger;
-import at.aau.dwaspgui.debug.DebuggerImpl;
+import at.aau.dwaspgui.debugger.Debugger;
+import at.aau.dwaspgui.debugger.DebuggerImpl;
 import at.aau.dwaspgui.parser.ProjectParser;
 import at.aau.dwaspgui.parser.ProjectParserXMLImpl;
 import at.aau.dwaspgui.viewmodel.RootViewModel;

@@ -1,4 +1,4 @@
-package at.aau.dwaspgui.debug.protocol;
+package at.aau.dwaspgui.debugger.protocol;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-import at.aau.dwaspgui.debug.protocol.response.ResponseMessage;
+import at.aau.dwaspgui.debugger.protocol.response.ResponseMessage;
 import at.aau.dwaspgui.util.Messages;
 
 /**

@@ -1,8 +1,8 @@
-package at.aau.dwaspgui.debug.protocol.assertion;
+package at.aau.dwaspgui.debugger.protocol.assertion;
 
 import java.util.Map;
 
-import at.aau.dwaspgui.debug.protocol.WritableMessage;
+import at.aau.dwaspgui.debugger.protocol.WritableMessage;
 import at.aau.dwaspgui.domain.QueryAnswer;
 
 /**

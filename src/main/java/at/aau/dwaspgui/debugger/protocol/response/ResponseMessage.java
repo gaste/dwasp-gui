@@ -1,9 +1,9 @@
-package at.aau.dwaspgui.debug.protocol.response;
+package at.aau.dwaspgui.debugger.protocol.response;
 
 import java.util.regex.Pattern;
 
-import at.aau.dwaspgui.debug.protocol.Message;
-import at.aau.dwaspgui.debug.protocol.MessageParsingException;
+import at.aau.dwaspgui.debugger.protocol.Message;
+import at.aau.dwaspgui.debugger.protocol.MessageParsingException;
 import at.aau.dwaspgui.util.Messages;
 
 /**

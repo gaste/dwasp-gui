@@ -11,16 +11,16 @@ import com.google.inject.Inject;
 
 import at.aau.dwaspgui.app.WindowManager;
 import at.aau.dwaspgui.aspide.AspideNotifier;
-import at.aau.dwaspgui.debug.Debugger;
-import at.aau.dwaspgui.debug.DebuggerException;
+import at.aau.dwaspgui.debugger.Debugger;
+import at.aau.dwaspgui.debugger.DebuggerException;
 import at.aau.dwaspgui.domain.CoreItem;
 import at.aau.dwaspgui.domain.Encoding;
 import at.aau.dwaspgui.domain.FileEncoding;
 import at.aau.dwaspgui.domain.Project;
 import at.aau.dwaspgui.domain.QueryAnswer;
 import at.aau.dwaspgui.domain.TestCase;
+import at.aau.dwaspgui.parser.ProjectParser;
 import at.aau.dwaspgui.parser.ProjectParsingException;
-import at.aau.dwaspgui.parser.XMLProjectParser;
 import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.util.Messages;
 import at.aau.dwaspgui.viewmodel.query.QueryViewModel;
@@ -41,7 +41,7 @@ import javafx.scene.image.Image;
  */
 public class RootViewModel implements ViewModel {
 	private final WindowManager windowManager;
-	private final XMLProjectParser projectParser;
+	private final ProjectParser projectParser;
 	private final Debugger debugger;
 	private final AspideNotifier notifier;
 	private Project project;
@@ -54,7 +54,7 @@ public class RootViewModel implements ViewModel {
 	
 	@Inject
 	public RootViewModel(WindowManager windowManager,
-			XMLProjectParser projectParser, Debugger debugger, 
+			ProjectParser projectParser, Debugger debugger, 
 			AspideNotifier notifier) {
 		this.windowManager = windowManager;
 		this.projectParser = projectParser;

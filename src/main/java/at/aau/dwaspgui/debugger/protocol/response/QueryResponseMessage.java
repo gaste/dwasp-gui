@@ -1,4 +1,4 @@
-package at.aau.dwaspgui.debug.protocol.response;
+package at.aau.dwaspgui.debugger.protocol.response;
 
 import java.util.ArrayList;
 import java.util.Arrays;

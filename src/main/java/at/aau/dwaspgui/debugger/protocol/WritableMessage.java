@@ -1,4 +1,4 @@
-package at.aau.dwaspgui.debug.protocol;
+package at.aau.dwaspgui.debugger.protocol;
 
 import java.io.IOException;
 import java.io.OutputStream;
