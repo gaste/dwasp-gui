@@ -109,11 +109,19 @@
       <scope>test</scope>
     </dependency>
     
+    <!-- XMLUnit - unit testing of xml documents -->
+    <dependency>
+      <groupId>xmlunit</groupId>
+      <artifactId>xmlunit</artifactId>
+      <version>${xmlunit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    
     <!-- Hamcrest - matchers for JUnit -->
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-all</artifactId>
-      <version>${org.hamcrest.version}</version>
+      <version>${hamcrest.version}</version>
       <scope>test</scope>
     </dependency>
     
@@ -121,37 +129,37 @@
     <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
-      <version>${com.google.inject.guice.version}</version>
+      <version>${guice.version}</version>
     </dependency>
     
     <!-- JCommander: Command line options -->
     <dependency>
       <groupId>com.beust</groupId>
       <artifactId>jcommander</artifactId>
-      <version>${com.beust.jcommander.version}</version>
+      <version>${jcommander.version}</version>
     </dependency>
     
     <!-- RichTextFX - code editor control for JavaFX -->
     <dependency>
       <groupId>org.fxmisc.richtext</groupId>
       <artifactId>richtextfx</artifactId>
-      <version>${org.fxmisc.richtext.richtextfx.version}</version>
+      <version>${richtextfx.version}</version>
     </dependency>
     
     <!-- FontAwesomeFX - icons for JavaFX -->
     <dependency><groupId>de.jensd</groupId>
       <artifactId>fontawesomefx</artifactId>
-      <version>${de.jensd.fontawesomefx.verison}</version>
+      <version>${fontawesomefx.verison}</version>
     </dependency>
-    
+        
     <!-- gringo-wrapper -->
     <dependency>
       <groupId>at.aau</groupId>
       <artifactId>gringo-wrapper</artifactId>
-      <version>${at.aau.gringo-wrapper.version}</version>
+      <version>${gringo-wrapper.version}</version>
       <scope>compile</scope>
     </dependency>
-  </dependencies>
+  </dependencies> 
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -159,11 +167,12 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <junit.version>4.12</junit.version>
-    <org.hamcrest.version>1.3</org.hamcrest.version>
-    <com.google.inject.guice.version>4.0</com.google.inject.guice.version>
-    <org.fxmisc.richtext.richtextfx.version>0.6.4</org.fxmisc.richtext.richtextfx.version>
-    <de.jensd.fontawesomefx.verison>8.4</de.jensd.fontawesomefx.verison>
-    <at.aau.gringo-wrapper.version>1.5.1</at.aau.gringo-wrapper.version>
-    <com.beust.jcommander.version>1.47</com.beust.jcommander.version>
+    <hamcrest.version>1.3</hamcrest.version>
+    <guice.version>4.0</guice.version>
+    <richtextfx.version>0.6.4</richtextfx.version>
+    <fontawesomefx.verison>8.4</fontawesomefx.verison>
+    <gringo-wrapper.version>1.5.1</gringo-wrapper.version>
+    <jcommander.version>1.47</jcommander.version>
+    <xmlunit.version>1.6</xmlunit.version>
   </properties>
 </project>

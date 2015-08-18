@@ -1,4 +1,4 @@
-package at.aau.dwaspgui.debug.protocol.response;
+package at.aau.dwaspgui.debugger.protocol.response;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
