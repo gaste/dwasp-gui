@@ -180,7 +180,7 @@ public class RootView extends AbstractView<RootViewModel> {
 		});
 	}
 	
-	@FXML public void newAction() { }
+	@FXML public void newAction() { viewModel.newProjectAction(); }
 	@FXML public void saveAction() { viewModel.saveAction(); }
 	@FXML public void aspideAction() { viewModel.aspideAction(codeArea.getSelection()); }
 	@FXML public void openAction() { viewModel.openAction(); }

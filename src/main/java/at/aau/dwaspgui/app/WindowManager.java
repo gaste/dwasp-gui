@@ -59,7 +59,6 @@ public class WindowManager {
 			dialogStage.setScene(FXMLLocator.locateForView(view));
 			dialogStage.getIcons().addAll(viewModel.getIcons());
 			dialogStage.setTitle(viewModel.getTitle());
-			dialogStage.setResizable(false);
 			dialogStage.showAndWait();
 		});
 	}

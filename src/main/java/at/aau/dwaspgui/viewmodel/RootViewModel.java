@@ -80,11 +80,12 @@ public class RootViewModel implements ViewModel {
 	}
 	
 	public void openProject(File projectFile) {
-		if (projectFile == null) 
-			return;
+		if (projectFile == null) return;
 		
-		if (!projectFile.exists())
+		if (!projectFile.exists()) {
 			windowManager.showErrorDialog(Messages.OPENPRJ_FILE_NOT_FOUND);
+			return;
+		}
 		
 		try {
 			this.project = projectParser.parseProject(projectFile);
@@ -145,6 +146,10 @@ public class RootViewModel implements ViewModel {
 
 	public void openAction() {
 		openProject(windowManager.chooseFile());
+	}
+
+	public void newProjectAction() {
+		windowManager.showModalDialog(new NewProjectViewModel(windowManager, this));
 	}
 	
 	public void exitAction() {
