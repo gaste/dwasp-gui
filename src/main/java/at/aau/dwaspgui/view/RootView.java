@@ -31,6 +31,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 
@@ -47,6 +48,9 @@ public class RootView extends AbstractView<RootViewModel> {
 	@FXML private Button aspideButton;
 	@FXML private Button stopButton;
 	@FXML private Button assertButton;
+	@FXML private Pane mainPane;
+	@FXML private Pane noProjectPane;
+	@FXML private Pane emptyProjectPane;
 	
 	private BooleanProperty dirtyEncoding = new SimpleBooleanProperty(false);
 	private BooleanProperty editableEncoding = new SimpleBooleanProperty(false);
@@ -74,6 +78,15 @@ public class RootView extends AbstractView<RootViewModel> {
 				codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.selectedEncodingProperty().get(), codeArea.getText(), viewModel.coreItems()));
 			});
 		});
+		
+		mainPane.visibleProperty().bind(viewModel.isMainPaneVisible());
+		mainPane.managedProperty().bind(mainPane.visibleProperty());
+		
+		noProjectPane.visibleProperty().bind(viewModel.isNoProjectPaneVisible());
+		noProjectPane.managedProperty().bind(noProjectPane.visibleProperty());
+		
+		emptyProjectPane.visibleProperty().bind(viewModel.isEmptyProjectPaneVisible());
+		emptyProjectPane.managedProperty().bind(emptyProjectPane.visibleProperty());
 		
 		saveMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN));
 		saveMenuItem.disableProperty().bind(dirtyEncoding.not());

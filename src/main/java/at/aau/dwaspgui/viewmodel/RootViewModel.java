@@ -25,10 +25,12 @@ import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.util.Messages;
 import at.aau.dwaspgui.viewmodel.query.QueryViewModel;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.IndexRange;
@@ -44,7 +46,7 @@ public class RootViewModel implements ViewModel {
 	private final ProjectParser projectParser;
 	private final Debugger debugger;
 	private final AspideNotifier notifier;
-	private Project project;
+	private ObjectProperty<Project> project = new SimpleObjectProperty<Project>(null);
 	private BooleanProperty isAspideSession = new SimpleBooleanProperty(false);
 	private ObjectProperty<Encoding> selectedEncoding = new SimpleObjectProperty<Encoding>();
 	private ObservableList<Encoding> encodings = FXCollections.observableArrayList();
@@ -88,13 +90,13 @@ public class RootViewModel implements ViewModel {
 		}
 		
 		try {
-			this.project = projectParser.parseProject(projectFile);
+			this.project.set(projectParser.parseProject(projectFile));
 			
 			encodings.clear();
-			encodings.addAll(project.getProgram());
+			encodings.addAll(project.get().getProgram());
 			
 			testCases.clear();
-			testCases.addAll(project.getTestCases());
+			testCases.addAll(project.get().getTestCases());
 			
 			if (encodings.size() > 0) {
 				selectedEncoding.set(encodings.get(0));
@@ -158,7 +160,7 @@ public class RootViewModel implements ViewModel {
 	
 	public void debugAction(TestCase testCase) {
 		try {
-			debugger.startDebugger(project.getProgram(), testCase);
+			debugger.startDebugger(project.get().getProgram(), testCase);
 		} catch (DebuggerException e) {
 			windowManager.showErrorDialog(Messages.ERROR_START_DEBUGGER, e);
 		}
@@ -188,6 +190,20 @@ public class RootViewModel implements ViewModel {
 	public ObservableList<TestCase> testCases() { return this.testCases; }
 	public ObservableList<CoreItem> coreItems() { return this.coreItems; }
 	public ObservableList<QueryViewModel> queryAtoms() { return this.queryAtoms; }
+	
+	public ObservableBooleanValue isMainPaneVisible() {
+		return project.isNotNull()
+			   .and(Bindings.size(encodings).greaterThan(0));
+	}
+	
+	public ObservableBooleanValue isNoProjectPaneVisible() {
+		return project.isNull();
+	}
+	
+	public ObservableBooleanValue isEmptyProjectPaneVisible() {
+		return project.isNotNull()
+			   .and(Bindings.size(encodings).isEqualTo(0));
+	}
 
 	@Override
 	public String getTitle() {

@@ -11,6 +11,7 @@ import java.util.prefs.Preferences;
 public enum ApplicationPreferences {
 	COMMAND_GROUNDER("GROUNDER", "gringo")
   , COMMAND_DEBUGGER("DEBUGGER", "dwasp")
+  , FILECHOOSER_LAST_LOCATION("FILECHOOSER_LAST_LOCATION", System.getProperty("user.home"))
   ;
 
 	/** java preferences instance for this file */

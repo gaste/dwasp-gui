@@ -178,3 +178,38 @@
     -fx-background-radius: 0 5 5 0;
 }
 /* .toggle-button */
+
+/*
+ * #no-project-pane
+ */
+#no-project-pane,
+#empty-project-pane {
+	-fx-background-color: white;
+}
+
+#no-project-pane .button,
+#empty-project-pane .button {
+	-fx-content-display: top;
+	-fx-font-size: 1.5em;
+	-fx-text-fill: -col-chrome-mid;
+	-fx-border-width: 0;
+}
+
+#no-project-pane .button:hover,
+#empty-project-pane .button:hover {
+	-fx-cursor: hand;
+	-fx-text-fill: -col-chrome-high;
+	-fx-background-color: transparent;
+}
+
+#no-project-pane .button > .glyph-icon,
+#empty-project-pane .button > .glyph-icon {
+	-fx-fill: -col-chrome-mid;
+	-glyph-size: 100;
+}
+
+#no-project-pane .button:hover > .glyph-icon,
+#empty-project-pane .button:hover > .glyph-icon {
+	-fx-fill: -col-chrome-high;
+}
+/* #no-project-pane */

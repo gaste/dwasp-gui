@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import at.aau.dwaspgui.app.config.ApplicationPreferences;
 import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.util.Messages;
 import at.aau.dwaspgui.util.locators.FXMLLocator;
@@ -25,7 +26,6 @@ import javafx.stage.Stage;
  */
 public class WindowManager {
 	private final Stage primaryStage;
-	private File lastFileChooserLocation = null;
 	private Map<ViewModel, Stage> dialogMap = new HashMap<ViewModel, Stage>();
 
 	public WindowManager(Stage stage) {
@@ -79,15 +79,16 @@ public class WindowManager {
 	
 	public File chooseFile() {
 		FileChooser chooser = new FileChooser();
+		File initialDirectory = new File(ApplicationPreferences.FILECHOOSER_LAST_LOCATION.get());
 		
-		if (lastFileChooserLocation != null) {
-			chooser.setInitialDirectory(lastFileChooserLocation);
+		if (initialDirectory.isDirectory() && initialDirectory.exists()) {
+			chooser.setInitialDirectory(initialDirectory);
 		}
 		
 		File chosenFile = chooser.showOpenDialog(primaryStage);
 		
 		if (chosenFile != null) {
-			lastFileChooserLocation = chosenFile.getParentFile();
+			ApplicationPreferences.FILECHOOSER_LAST_LOCATION.set(chosenFile.getParentFile().getAbsolutePath());
 		}
 		
 		return chosenFile;
