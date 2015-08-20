@@ -26,86 +26,70 @@
 <VBox prefHeight="600.0" prefWidth="1000.0" stylesheets="@RootView.css"
 	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
 	<MenuBar>
-		<menus>
-			<Menu mnemonicParsing="false" text="%menu.file">
-				<items>
-					<MenuItem text="%menu.file.new" mnemonicParsing="false" onAction="#newAction" />
-					<MenuItem text="%menu.file.open" mnemonicParsing="false" onAction="#openAction" />
-					<SeparatorMenuItem mnemonicParsing="false" />
-					<MenuItem text="%menu.file.save" fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveAction" />
-					<SeparatorMenuItem mnemonicParsing="false" />
-					<MenuItem text="%menu.file.preferences" mnemonicParsing="false" onAction="#preferencesAction" />
-					<SeparatorMenuItem mnemonicParsing="false" />
-					<MenuItem text="%menu.file.exit" mnemonicParsing="false" onAction="#exitAction" />
-				</items>
-			</Menu>
-		</menus>
+		<Menu mnemonicParsing="false" text="%menu.file">
+			<MenuItem text="%menu.file.new" mnemonicParsing="false" onAction="#newAction" />
+			<MenuItem text="%menu.file.open" mnemonicParsing="false" onAction="#openAction" />
+			<SeparatorMenuItem mnemonicParsing="false" />
+			<MenuItem text="%menu.file.save" fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveAction" />
+			<SeparatorMenuItem mnemonicParsing="false" />
+			<MenuItem text="%menu.file.preferences" mnemonicParsing="false" onAction="#preferencesAction" />
+			<SeparatorMenuItem mnemonicParsing="false" />
+			<MenuItem text="%menu.file.exit" mnemonicParsing="false" onAction="#exitAction" />
+		</Menu>
 	</MenuBar>
 	<SplitPane dividerPositions="0.28" VBox.vgrow="ALWAYS">
-		<items>
-			<VBox SplitPane.resizableWithParent="false">
-				<children>
-					<Label styleClass="header-label" text="%label.project" />
-					<ListView id="project-view" fx:id="projectListView" />
-					<Label styleClass="header-label" text="%label.testcases" />
-					<ListView fx:id="testCaseListView" />
-					<Pane VBox.vgrow="ALWAYS" />
-					<VBox id="query-view" fx:id="queryView">
-						<Label styleClass="header-label" text="%label.queries" />
-						<QueryListView fx:id="queryListView" />
-						<ToolBar>
-							<items>
-								<Pane HBox.hgrow="ALWAYS" />
-								<Button fx:id="assertButton" mnemonicParsing="false"
-									onAction="#assertAction" text="Send" />
-							</items>
-						</ToolBar>
-					</VBox>
-				</children>
+		<VBox SplitPane.resizableWithParent="false">
+			<Label styleClass="header-label" text="%label.project" />
+			<ListView id="project-view" fx:id="projectListView" />
+			<Label styleClass="header-label" text="%label.testcases" />
+			<ListView fx:id="testCaseListView" />
+			<Pane VBox.vgrow="ALWAYS" />
+			<VBox id="query-view" fx:id="queryView">
+				<Label styleClass="header-label" text="%label.queries" />
+				<QueryListView fx:id="queryListView" />
+				<ToolBar>
+					<Pane HBox.hgrow="ALWAYS" />
+					<Button fx:id="assertButton" mnemonicParsing="false"
+						onAction="#assertAction" text="Send" />
+				</ToolBar>
 			</VBox>
-			<HBox>
-				<children>
-					<VBox fx:id="mainPane" HBox.hgrow="ALWAYS">
-						<children>
-							<ToolBar>
-								<items>
-									<Button fx:id="saveButton" text="%button.save" mnemonicParsing="false" onAction="#saveAction">
-										<graphic><FontAwesomeIconView glyphName="FLOPPY_ALT" /></graphic>
-									</Button>
-									<Button fx:id="aspideButton" text="%button.aspide" mnemonicParsing="false" onAction="#aspideAction">
-										<graphic><FontAwesomeIconView glyphName="EXTERNAL_LINK" /></graphic>
-									</Button>
-									<MenuButton fx:id="debugButton" mnemonicParsing="false"	styleClass="btn" text="%button.debug">
-										<graphic><FontAwesomeIconView fill="#368632" glyphName="PLAY" /></graphic>
-									</MenuButton>
-									<Button fx:id="stopButton" mnemonicParsing="false"
-										onAction="#stopAction" styleClass="btn" textFill="#9d0000">
-										<graphic><FontAwesomeIconView fill="#9d240c" glyphName="STOP" styleClass="btn" /></graphic>
-									</Button>
-								</items>
-							</ToolBar>
-							<CodeArea id="code-area" fx:id="codeArea" stylesheets="@asp-core-2-keywords.css" VBox.vgrow="ALWAYS" />
-						</children>
-					</VBox>
-					<StackPane fx:id="noProjectPane" HBox.hgrow="ALWAYS">
-						<HBox id="no-project-pane"  alignment="CENTER">
-							<Button minWidth="150" text="%button.project.open" onAction="#openAction">
-								<graphic><FontAwesomeIconView glyphName="FOLDER_ALT" /></graphic>
-							</Button>
-							<Button minWidth="150" text="%button.project.new" onAction="#newAction">
-								<graphic><FontAwesomeIconView  glyphName="PLUS_SQUARE_ALT" /></graphic>
-							</Button>
-						</HBox>
-					</StackPane>
-					<StackPane fx:id="emptyProjectPane" HBox.hgrow="ALWAYS">
-						<HBox id="empty-project-pane" alignment="CENTER">
-							<Button minWidth="150" text="%button.encoding.add">
-								<graphic><FontAwesomeIconView  glyphName="FILE_ALT" /></graphic>
-							</Button>
-						</HBox>
-					</StackPane>
-				</children>
-			</HBox>
-		</items>
+		</VBox>
+		<HBox>
+			<VBox fx:id="mainPane" HBox.hgrow="ALWAYS">
+				<ToolBar>
+					<Button fx:id="saveButton" text="%button.save" mnemonicParsing="false" onAction="#saveAction">
+						<graphic><FontAwesomeIconView glyphName="FLOPPY_ALT" /></graphic>
+					</Button>
+					<Button fx:id="aspideButton" text="%button.aspide" mnemonicParsing="false" onAction="#aspideAction">
+						<graphic><FontAwesomeIconView glyphName="EXTERNAL_LINK" /></graphic>
+					</Button>
+					<MenuButton fx:id="debugButton" mnemonicParsing="false"	styleClass="btn" text="%button.debug">
+						<graphic><FontAwesomeIconView fill="#368632" glyphName="PLAY" /></graphic>
+					</MenuButton>
+					<Button fx:id="stopButton" mnemonicParsing="false"
+						onAction="#stopAction" styleClass="btn" textFill="#9d0000">
+						<graphic><FontAwesomeIconView fill="#9d240c" glyphName="STOP" styleClass="btn" /></graphic>
+					</Button>
+				</ToolBar>
+				<CodeArea id="code-area" fx:id="codeArea" stylesheets="@asp-core-2-keywords.css" VBox.vgrow="ALWAYS" />
+			</VBox>
+			<StackPane fx:id="noProjectPane" HBox.hgrow="ALWAYS">
+				<HBox id="no-project-pane">
+					<Button text="%button.project.open" onAction="#openAction">
+						<graphic><FontAwesomeIconView glyphName="FOLDER_ALT" /></graphic>
+					</Button>
+					<Button text="%button.project.new" onAction="#newAction">
+						<graphic><FontAwesomeIconView  glyphName="PLUS_SQUARE_ALT" /></graphic>
+					</Button>
+				</HBox>
+			</StackPane>
+			<StackPane fx:id="emptyProjectPane" HBox.hgrow="ALWAYS">
+				<HBox id="empty-project-pane">
+					<Button text="%button.encoding.add">
+						<graphic><FontAwesomeIconView  glyphName="FILE_ALT" /></graphic>
+					</Button>
+				</HBox>
+			</StackPane>
+		</HBox>
 	</SplitPane>
 </VBox>

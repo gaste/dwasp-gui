@@ -6,42 +6,39 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefWidth="450.0" stylesheets="@RootView.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <GridPane hgap="5.0" vgap="5.0">
-        <columnConstraints>
-          <ColumnConstraints />
-          <ColumnConstraints hgrow="ALWAYS" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints vgrow="SOMETIMES" />
-          <RowConstraints vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label text="%label.command.debugger" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" />
-            <Label text="%label.command.grounder" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-            <HBox spacing="7.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS">
-               <children>
-                  <TextField fx:id="debuggerCommandTextField" HBox.hgrow="ALWAYS" />
-                  <Button mnemonicParsing="false" onAction="#chooseDebuggerCommandAction" text="%button.choose.command.debugger" />
-               </children>
-            </HBox>
-            <HBox spacing="7.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
-               <children>
-                  <TextField fx:id="grounderCommandTextField" HBox.hgrow="ALWAYS" />
-                  <Button mnemonicParsing="false" onAction="#chooseGrounderCommandAction" text="%button.choose.command.grounder" />
-               </children>
-            </HBox>
-         </children>
-      </GridPane>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0">
-        <buttons>
-          <Button defaultButton="true" mnemonicParsing="false" onAction="#saveAction" text="%button.save" />
-            <Button mnemonicParsing="false" onAction="#cancelAction" text="%button.cancel" />
-        </buttons>
-      </ButtonBar>
-   </children>
-   <padding>
-      <Insets left="7.0" right="7.0" top="7.0" />
-   </padding>
+<VBox prefWidth="450" stylesheets="@RootView.css"
+		xmlns="http://javafx.com/javafx/8.0.40"
+		xmlns:fx="http://javafx.com/fxml/1">
+	<GridPane hgap="5.0" vgap="5.0">
+		<columnConstraints>
+			<ColumnConstraints />
+			<ColumnConstraints hgrow="ALWAYS" />
+		</columnConstraints>
+		<rowConstraints>
+			<RowConstraints vgrow="SOMETIMES" />
+			<RowConstraints vgrow="SOMETIMES" />
+		</rowConstraints>
+		<Label text="%label.command.debugger" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" />
+		<Label text="%label.command.grounder" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+		<HBox spacing="7.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS">
+			<TextField fx:id="debuggerCommandTextField" HBox.hgrow="ALWAYS" />
+			<Button mnemonicParsing="false" onAction="#chooseDebuggerCommandAction"
+				text="%button.choose.command.debugger" />
+		</HBox>
+		<HBox spacing="7.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"
+			GridPane.rowIndex="1">
+			<TextField fx:id="grounderCommandTextField" HBox.hgrow="ALWAYS" />
+			<Button mnemonicParsing="false" onAction="#chooseGrounderCommandAction"
+				text="%button.choose.command.grounder" />
+		</HBox>
+	</GridPane>
+	<ButtonBar prefHeight="40.0">
+		<buttons>
+			<Button defaultButton="true" mnemonicParsing="false" onAction="#saveAction" text="%button.save" />
+			<Button mnemonicParsing="false" onAction="#cancelAction" text="%button.cancel" />
+		</buttons>
+	</ButtonBar>
+	<padding>
+		<Insets left="7.0" right="7.0" top="7.0" />
+	</padding>
 </VBox>

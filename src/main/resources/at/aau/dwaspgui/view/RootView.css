@@ -180,11 +180,13 @@
 /* .toggle-button */
 
 /*
- * #no-project-pane
+ * #no-project-pane,
+ * #empty-project-pane
  */
 #no-project-pane,
 #empty-project-pane {
 	-fx-background-color: white;
+	-fx-alignment: center;
 }
 
 #no-project-pane .button,
@@ -193,6 +195,7 @@
 	-fx-font-size: 1.5em;
 	-fx-text-fill: -col-chrome-mid;
 	-fx-border-width: 0;
+	-fx-min-width: 150;
 }
 
 #no-project-pane .button:hover,
