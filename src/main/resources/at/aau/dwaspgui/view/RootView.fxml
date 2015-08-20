@@ -27,14 +27,19 @@
 	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
 	<MenuBar>
 		<Menu mnemonicParsing="false" text="%menu.file">
-			<MenuItem text="%menu.file.new" mnemonicParsing="false" onAction="#newAction" />
-			<MenuItem text="%menu.file.open" mnemonicParsing="false" onAction="#openAction" />
+			<Menu mnemonicParsing="false" text="%menu.file.new">
+				<MenuItem text="%menu.file.new.project" mnemonicParsing="false" onAction="#newProjectAction" />
+				<MenuItem text="%menu.file.new.file" fx:id="newFileMenuItem" mnemonicParsing="false" onAction="#newFileAction" />
+			</Menu>
+			<MenuItem text="%menu.file.openproject" mnemonicParsing="false" onAction="#openProjectAction" />
+			<MenuItem text="%menu.file.addfile" fx:id="addFileMenuItem" mnemonicParsing="false" onAction="#addFileAction" />
 			<SeparatorMenuItem mnemonicParsing="false" />
 			<MenuItem text="%menu.file.save" fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveAction" />
 			<SeparatorMenuItem mnemonicParsing="false" />
-			<MenuItem text="%menu.file.preferences" mnemonicParsing="false" onAction="#preferencesAction" />
-			<SeparatorMenuItem mnemonicParsing="false" />
 			<MenuItem text="%menu.file.exit" mnemonicParsing="false" onAction="#exitAction" />
+		</Menu>
+		<Menu text="%menu.window">
+			<MenuItem text="%menu.window.preferences" mnemonicParsing="false" onAction="#preferencesAction" />
 		</Menu>
 	</MenuBar>
 	<SplitPane dividerPositions="0.28" VBox.vgrow="ALWAYS">
@@ -75,17 +80,20 @@
 			</VBox>
 			<StackPane fx:id="noProjectPane" HBox.hgrow="ALWAYS">
 				<HBox id="no-project-pane">
-					<Button text="%button.project.open" onAction="#openAction">
+					<Button text="%button.project.open" onAction="#openProjectAction">
 						<graphic><FontAwesomeIconView glyphName="FOLDER_ALT" /></graphic>
 					</Button>
-					<Button text="%button.project.new" onAction="#newAction">
+					<Button text="%button.project.new" onAction="#newProjectAction">
 						<graphic><FontAwesomeIconView  glyphName="PLUS_SQUARE_ALT" /></graphic>
 					</Button>
 				</HBox>
 			</StackPane>
 			<StackPane fx:id="emptyProjectPane" HBox.hgrow="ALWAYS">
 				<HBox id="empty-project-pane">
-					<Button text="%button.encoding.add">
+					<Button text="%button.encoding.add" onAction="#addFileAction">
+						<graphic><FontAwesomeIconView  glyphName="PLUS_SQUARE_ALT" /></graphic>
+					</Button>
+					<Button text="%button.encoding.new" onAction="#newFileAction">
 						<graphic><FontAwesomeIconView  glyphName="FILE_ALT" /></graphic>
 					</Button>
 				</HBox>

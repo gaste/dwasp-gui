@@ -2,6 +2,9 @@ package at.aau.dwaspgui.domain;
 
 import java.util.List;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 /**
  * Logic Program consists of a set of encodings, as well as a set of instances
  * of the program.
@@ -13,26 +16,26 @@ public class Project {
 	private final String baseDirectory;
 	
 	/** Set of encodings that represent the logic program */
-	private final List<Encoding> program;
+	private final ObservableList<Encoding> program;
 	
 	/** Set of instances of the program */
-	private final List<TestCase> testCases;
+	private final ObservableList<TestCase> testCases;
 	
 	public Project(String baseDirectory, List<Encoding> program, List<TestCase> testCases) {
 		this.baseDirectory = baseDirectory;
-		this.program = program;
-		this.testCases = testCases;
+		this.program = FXCollections.observableList(program);
+		this.testCases = FXCollections.observableList(testCases);
 	}
-
+	
 	public String getBaseDirectory() {
 		return baseDirectory;
 	}
 
-	public List<Encoding> getProgram() {
+	public ObservableList<Encoding> getProgram() {
 		return program;
 	}
 
-	public List<TestCase> getTestCases() {
+	public ObservableList<TestCase> getTestCases() {
 		return testCases;
 	}
 }

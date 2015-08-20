@@ -22,6 +22,7 @@ public enum Messages {
   , MSGPARSER_INVALID_MESSAGE("msgparser.invalidmessage")
   , MSGPARSER_IOERROR("msgparser.ioerror")
   , ERROR_NEW_PROJECT("newproject.error")
+  , ERROR_SAVE_PROJECT("saveproject.error")
   ;
 
 	private static final String BUNDLE_BASENAME = Messages.class.getCanonicalName();

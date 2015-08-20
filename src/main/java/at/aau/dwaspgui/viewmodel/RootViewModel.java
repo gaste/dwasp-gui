@@ -2,6 +2,8 @@ package at.aau.dwaspgui.viewmodel;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +23,8 @@ import at.aau.dwaspgui.domain.QueryAnswer;
 import at.aau.dwaspgui.domain.TestCase;
 import at.aau.dwaspgui.parser.ProjectParser;
 import at.aau.dwaspgui.parser.ProjectParsingException;
+import at.aau.dwaspgui.serializer.ProjectSerializationException;
+import at.aau.dwaspgui.serializer.ProjectSerializer;
 import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.util.Messages;
 import at.aau.dwaspgui.viewmodel.query.QueryViewModel;
@@ -44,22 +48,25 @@ import javafx.scene.image.Image;
 public class RootViewModel implements ViewModel {
 	private final WindowManager windowManager;
 	private final ProjectParser projectParser;
+	private final ProjectSerializer projectSerializer;
 	private final Debugger debugger;
 	private final AspideNotifier notifier;
-	private ObjectProperty<Project> project = new SimpleObjectProperty<Project>(null);
-	private BooleanProperty isAspideSession = new SimpleBooleanProperty(false);
-	private ObjectProperty<Encoding> selectedEncoding = new SimpleObjectProperty<Encoding>();
-	private ObservableList<Encoding> encodings = FXCollections.observableArrayList();
-	private ObservableList<TestCase> testCases = FXCollections.observableArrayList();
-	private ObservableList<CoreItem> coreItems = FXCollections.observableArrayList();
-	private ObservableList<QueryViewModel> queryAtoms = FXCollections.observableArrayList();
+	private File projectFile;
+	private final ObjectProperty<Project> project = new SimpleObjectProperty<Project>(null);
+	private final BooleanProperty isAspideSession = new SimpleBooleanProperty(false);
+	private final ObjectProperty<Encoding> selectedEncoding = new SimpleObjectProperty<Encoding>();
+	private final ObservableList<Encoding> encodings = FXCollections.observableArrayList();
+	private final ObservableList<TestCase> testCases = FXCollections.observableArrayList();
+	private final ObservableList<CoreItem> coreItems = FXCollections.observableArrayList();
+	private final ObservableList<QueryViewModel> queryAtoms = FXCollections.observableArrayList();
 	
 	@Inject
 	public RootViewModel(WindowManager windowManager,
-			ProjectParser projectParser, Debugger debugger, 
-			AspideNotifier notifier) {
+			ProjectParser projectParser, ProjectSerializer projectSerializer,
+			Debugger debugger, AspideNotifier notifier) {
 		this.windowManager = windowManager;
 		this.projectParser = projectParser;
+		this.projectSerializer = projectSerializer;
 		this.debugger = debugger;
 		this.notifier = notifier;
 		
@@ -92,11 +99,10 @@ public class RootViewModel implements ViewModel {
 		try {
 			this.project.set(projectParser.parseProject(projectFile));
 			
-			encodings.clear();
-			encodings.addAll(project.get().getProgram());
+			this.projectFile = projectFile;
 			
-			testCases.clear();
-			testCases.addAll(project.get().getTestCases());
+			Bindings.bindContent(encodings, project.get().getProgram());
+			Bindings.bindContent(testCases, project.get().getTestCases());
 			
 			if (encodings.size() > 0) {
 				selectedEncoding.set(encodings.get(0));
@@ -118,6 +124,34 @@ public class RootViewModel implements ViewModel {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void newFileAction() {
+		if (project.isNull().get()) return;
+				
+	}
+
+	public void addFileAction() {
+		if (project.isNull().get()) return;
+		
+		File f = windowManager.chooseFile();
+		
+		if (f == null) return;
+		
+		Path basePath = Paths.get(project.get().getBaseDirectory());
+		Path relativePath = basePath.relativize(f.toPath());
+		
+		Encoding encoding = new FileEncoding(basePath.toString(), relativePath.toString());
+		
+		project.get().getProgram().add(encoding);
+		
+		try {
+			projectSerializer.serialize(project.get(), projectFile);
+		} catch (ProjectSerializationException e) {
+			windowManager.showErrorDialog(Messages.ERROR_SAVE_PROJECT, e);
+		}
+
+		selectedEncoding.set(encoding);
 	}
 	
 	public void preferencesAction() {
@@ -151,7 +185,7 @@ public class RootViewModel implements ViewModel {
 	}
 
 	public void newProjectAction() {
-		windowManager.showModalDialog(new NewProjectViewModel(windowManager, this));
+		windowManager.showModalDialog(new NewProjectViewModel(windowManager, this, projectSerializer));
 	}
 	
 	public void exitAction() {
@@ -203,6 +237,14 @@ public class RootViewModel implements ViewModel {
 	public ObservableBooleanValue isEmptyProjectPaneVisible() {
 		return project.isNotNull()
 			   .and(Bindings.size(encodings).isEqualTo(0));
+	}
+	
+	public ObservableBooleanValue isNewFileDisabled() {
+		return project.isNull();
+	}
+	
+	public ObservableBooleanValue isAddFileDisabled() {
+		return project.isNull();
 	}
 
 	@Override

@@ -8,6 +8,8 @@ import at.aau.dwaspgui.debugger.Debugger;
 import at.aau.dwaspgui.debugger.DebuggerImpl;
 import at.aau.dwaspgui.parser.ProjectParser;
 import at.aau.dwaspgui.parser.ProjectParserXMLImpl;
+import at.aau.dwaspgui.serializer.ProjectSerializer;
+import at.aau.dwaspgui.serializer.ProjectSerializerXMLImpl;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
 import javafx.stage.Stage;
 
@@ -28,6 +30,7 @@ public class IoCModule extends AbstractModule {
 		bind(WindowManager.class).toInstance(new WindowManager(primaryStage));
 		bind(RootViewModel.class).in(Scopes.SINGLETON);
 		bind(ProjectParser.class).to(ProjectParserXMLImpl.class).in(Scopes.SINGLETON);
+		bind(ProjectSerializer.class).to(ProjectSerializerXMLImpl.class).in(Scopes.SINGLETON);
 		bind(Debugger.class).to(DebuggerImpl.class).in(Scopes.SINGLETON);
 		bind(AspideNotifier.class).in(Scopes.SINGLETON);
 	}

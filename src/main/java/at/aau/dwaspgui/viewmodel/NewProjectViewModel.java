@@ -8,7 +8,6 @@ import at.aau.dwaspgui.app.WindowManager;
 import at.aau.dwaspgui.domain.Project;
 import at.aau.dwaspgui.serializer.ProjectSerializationException;
 import at.aau.dwaspgui.serializer.ProjectSerializer;
-import at.aau.dwaspgui.serializer.ProjectSerializerXMLImpl;
 import at.aau.dwaspgui.util.Messages;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -18,12 +17,14 @@ import javafx.scene.image.Image;
 public class NewProjectViewModel implements ViewModel {
 	private final WindowManager windowManager;
 	private final RootViewModel rootViewModel;
+	private final ProjectSerializer projectSerializer;
 	private final StringProperty projectName = new SimpleStringProperty();
 	private final StringProperty location = new SimpleStringProperty(System.getProperty("user.home"));
 	
-	public NewProjectViewModel(WindowManager windowManager, RootViewModel rootViewModel) {
+	public NewProjectViewModel(WindowManager windowManager, RootViewModel rootViewModel, ProjectSerializer projectSerializer) {
 		this.windowManager = windowManager;
 		this.rootViewModel = rootViewModel;
+		this.projectSerializer = projectSerializer;
 	}
 	
 	@Override
@@ -48,12 +49,10 @@ public class NewProjectViewModel implements ViewModel {
 	}
 
 	public void create() {
-		Project project = new Project(location.get(), Collections.emptyList(), Collections.emptyList());
-		ProjectSerializer serializer = new ProjectSerializerXMLImpl();
-		
 		try {
 			File projectFile = new File(location.get(), projectName.get() + ".xml");
-			serializer.serialize(project, projectFile);
+			Project project = new Project(location.get(), Collections.emptyList(), Collections.emptyList());
+			projectSerializer.serialize(project, projectFile);
 			
 			rootViewModel.openProject(projectFile);
 		} catch (ProjectSerializationException e) {
