@@ -22,6 +22,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
+<?import at.aau.dwaspgui.view.ResizingListView?>
 
 <VBox prefHeight="600.0" prefWidth="1000.0" stylesheets="@RootView.css"
 	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
@@ -45,9 +46,9 @@
 	<SplitPane dividerPositions="0.28" VBox.vgrow="ALWAYS">
 		<VBox SplitPane.resizableWithParent="false">
 			<Label styleClass="header-label" text="%label.project" />
-			<ListView id="project-view" fx:id="projectListView" />
+			<ResizingListView id="project-view" fx:id="projectListView" />
 			<Label styleClass="header-label" text="%label.testcases" />
-			<ListView fx:id="testCaseListView" />
+			<ResizingListView fx:id="testCaseListView" />
 			<Pane VBox.vgrow="ALWAYS" />
 			<VBox id="query-view" fx:id="queryView">
 				<Label styleClass="header-label" text="%label.queries" />

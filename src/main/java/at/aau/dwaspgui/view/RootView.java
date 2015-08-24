@@ -25,7 +25,6 @@ import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
@@ -37,8 +36,8 @@ import javafx.stage.Popup;
 
 public class RootView extends AbstractView<RootViewModel> {
 	// JavaFX controls
-	@FXML private ListView<Encoding> projectListView;
-	@FXML private ListView<TestCase> testCaseListView;
+	@FXML private ResizingListView<Encoding> projectListView;
+	@FXML private ResizingListView<TestCase> testCaseListView;
 	@FXML private QueryListView queryListView;
 	@FXML private VBox queryView;
 	@FXML private CodeArea codeArea;

@@ -18,7 +18,6 @@ public class NewProjectView extends AbstractView<NewProjectViewModel> {
 		nameTextField.textProperty().bindBidirectional(viewModel.projectNameProperty());
 		locationTextField.textProperty().bindBidirectional(viewModel.locationProperty());
 		createButton.disableProperty().bind(viewModel.createDisabledProperty());
-		
 	}
 	
 	@FXML public void chooseLocationAction() { viewModel.chooseLocation(); }
