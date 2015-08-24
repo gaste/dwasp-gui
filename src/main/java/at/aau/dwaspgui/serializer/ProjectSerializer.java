@@ -1,6 +1,6 @@
 package at.aau.dwaspgui.serializer;
 
-import java.io.File;
+import java.io.OutputStream;
 
 import at.aau.dwaspgui.domain.Project;
 
@@ -12,9 +12,9 @@ public interface ProjectSerializer {
 	/**
 	 * Serialize the project to the given file.
 	 * @param project The project the serialize.
-	 * @param dest    The file to which the project should be serialized.
+	 * @param dest    The stream to which the project should be serialized.
 	 * @throws ProjectSerializationException If the project could not be
 	 *                                       serialized.
 	 */
-	public void serialize(Project project, File dest) throws ProjectSerializationException;
+	public void serialize(Project project, OutputStream dest) throws ProjectSerializationException;
 }

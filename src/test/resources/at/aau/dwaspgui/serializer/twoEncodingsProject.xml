@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<logicProgram>
+<baseDirectory>/path/to/base</baseDirectory>
+<encodings>
+<encodingFile>file1.lp</encodingFile>
+<encodingDirect>a :- b. b : - c. c.</encodingDirect>
+</encodings>
+<testCases />
+</logicProgram>

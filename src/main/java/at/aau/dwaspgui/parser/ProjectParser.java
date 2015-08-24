@@ -1,6 +1,6 @@
 package at.aau.dwaspgui.parser;
 
-import java.io.File;
+import java.io.InputStream;
 
 import at.aau.dwaspgui.domain.Project;
 
@@ -11,8 +11,8 @@ import at.aau.dwaspgui.domain.Project;
 public interface ProjectParser {
 	/**
 	 * Parse a project from the given project file.
-	 * @param projectFile The file containing the project.
+	 * @param source The input stream for reading the project.
 	 * @throws ProjectParsingException If the project could not be parsed.
 	 */
-	Project parseProject(File projectFile) throws ProjectParsingException;
+	Project parseProject(InputStream source) throws ProjectParsingException;
 }

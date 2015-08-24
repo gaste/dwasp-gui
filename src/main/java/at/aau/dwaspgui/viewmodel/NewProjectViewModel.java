@@ -1,6 +1,8 @@
 package at.aau.dwaspgui.viewmodel;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.Collections;
 import java.util.List;
 
@@ -52,10 +54,12 @@ public class NewProjectViewModel implements ViewModel {
 		try {
 			File projectFile = new File(location.get(), projectName.get() + ".xml");
 			Project project = new Project(location.get(), Collections.emptyList(), Collections.emptyList());
-			projectSerializer.serialize(project, projectFile);
+			projectSerializer.serialize(project, new FileOutputStream(projectFile));
 			
 			rootViewModel.openProject(projectFile);
 		} catch (ProjectSerializationException e) {
+			windowManager.showErrorDialog(Messages.ERROR_NEW_PROJECT, e);
+		} catch (FileNotFoundException e) {
 			windowManager.showErrorDialog(Messages.ERROR_NEW_PROJECT, e);
 		} finally {
 			windowManager.closeModalDialog(this);

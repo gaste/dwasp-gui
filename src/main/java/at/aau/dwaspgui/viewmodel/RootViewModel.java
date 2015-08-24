@@ -1,6 +1,9 @@
 package at.aau.dwaspgui.viewmodel;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -97,7 +100,7 @@ public class RootViewModel implements ViewModel {
 		}
 		
 		try {
-			this.project.set(projectParser.parseProject(projectFile));
+			this.project.set(projectParser.parseProject(new FileInputStream(projectFile)));
 			
 			this.projectFile = projectFile;
 			
@@ -108,6 +111,8 @@ public class RootViewModel implements ViewModel {
 				selectedEncoding.set(encodings.get(0));
 			}
 		} catch (ProjectParsingException e) {
+			windowManager.showErrorDialog(Messages.ERROR_OPEN_PROJECT, e);
+		} catch (FileNotFoundException e) {
 			windowManager.showErrorDialog(Messages.ERROR_OPEN_PROJECT, e);
 		}
 	}
@@ -146,8 +151,10 @@ public class RootViewModel implements ViewModel {
 		project.get().getProgram().add(encoding);
 		
 		try {
-			projectSerializer.serialize(project.get(), projectFile);
+			projectSerializer.serialize(project.get(), new FileOutputStream(projectFile));
 		} catch (ProjectSerializationException e) {
+			windowManager.showErrorDialog(Messages.ERROR_SAVE_PROJECT, e);
+		} catch (FileNotFoundException e) {
 			windowManager.showErrorDialog(Messages.ERROR_SAVE_PROJECT, e);
 		}
 

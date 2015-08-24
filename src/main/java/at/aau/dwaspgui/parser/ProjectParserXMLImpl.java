@@ -10,9 +10,6 @@ import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASES;
 import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASE_ASSERTIONS;
 import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASE_NAME;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -40,17 +37,6 @@ import at.aau.dwaspgui.util.Messages;
  * @see ProjectParser
  */
 public class ProjectParserXMLImpl implements ProjectParser {
-	@Override
-	public Project parseProject(File projectFile)
-			throws ProjectParsingException {
-		try {
-			return parseProject(new FileInputStream(projectFile));
-		} catch (FileNotFoundException e) {
-			throw new ProjectParsingException(Messages.PRJPARSER_PROJECT_NOT_FOUND
-					.format(projectFile.getAbsoluteFile()), e);
-		}
-	}
-	
 	public Project parseProject(InputStream projectInput) throws ProjectParsingException {
 		try {
 			Document doc = DocumentBuilderFactory.newInstance()

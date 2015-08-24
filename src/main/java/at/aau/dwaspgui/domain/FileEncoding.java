@@ -15,22 +15,32 @@ import javafx.beans.property.SimpleBooleanProperty;
  */
 public class FileEncoding extends Encoding {
 	/** The file that contains the encoding */
-	private File encodingFile;
+	private final File encodingFile;
+	
+	private final String relativePath;
 	
 	private String content = null;
 	
 	private BooleanProperty dirty = new SimpleBooleanProperty(false);
 
-	public FileEncoding(String baseDirectory, String encodingFile) {
+	public FileEncoding(String baseDirectory, String relativePath) {
+		this.relativePath = relativePath;
+
 		// check whether the encodingFile is already an absolute path
-		this.encodingFile = new File(encodingFile);
+		File f = new File(relativePath);
 		
-		if (!this.encodingFile.isAbsolute()) {
-			this.encodingFile = new File(baseDirectory, encodingFile);
+		if (f.isAbsolute()) {
+			this.encodingFile = f;
+		} else {
+			this.encodingFile = new File(baseDirectory, relativePath);
 		}
 	}
 	
-	public String getFilename() {
+	public String getRelativePath() {
+		return relativePath;
+	}
+	
+	public String getAbsolutePath() {
 		return encodingFile.getAbsolutePath();
 	}
 	

@@ -10,7 +10,7 @@ public class DirectEncoding extends Encoding {
 	private String encoding;
 
 	public DirectEncoding(String encoding) {
-		this.encoding = encoding.replace(" ", "").replace("\t", "");
+		this.encoding = encoding;
 	}
 
 	@Override

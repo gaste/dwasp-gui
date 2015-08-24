@@ -5,7 +5,7 @@ import javafx.scene.control.IndexRange;
 
 public class AspideNotifier {
 	public void notifySave(FileEncoding encoding) {
-		System.out.println("save,\"" + encoding.getFilename() + "\"");
+		System.out.println("save,\"" + encoding.getAbsolutePath() + "\"");
 		System.out.flush();
 	}
 	
@@ -37,7 +37,7 @@ public class AspideNotifier {
 		}
 		
 		
-		System.out.println("notify,\"" + encoding.getFilename() + "\""
+		System.out.println("notify,\"" + encoding.getAbsolutePath() + "\""
 					+ "," + startLine + "," + endLine 
 					+ "," + startColumn + "," + endColumn);
 		System.out.flush();

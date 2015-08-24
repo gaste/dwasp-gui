@@ -10,7 +10,7 @@ import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASES;
 import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASE_ASSERTIONS;
 import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASE_NAME;
 
-import java.io.File;
+import java.io.OutputStream;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -41,7 +41,7 @@ import at.aau.dwaspgui.domain.TestCase;
  */
 public class ProjectSerializerXMLImpl implements ProjectSerializer {
 	@Override
-	public void serialize(Project project, File dest) throws ProjectSerializationException {
+	public void serialize(Project project, OutputStream dest) throws ProjectSerializationException {
 		try {
 			DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = builderFactory.newDocumentBuilder();
@@ -54,18 +54,18 @@ public class ProjectSerializerXMLImpl implements ProjectSerializer {
 			root.appendChild(getEncodings(doc, project.getProgram()));
 			root.appendChild(getTestcases(doc, project.getTestCases()));
 			
-			saveProject(doc, dest);
+			writeDocument(doc, dest);
 		} catch (ParserConfigurationException e) {
 			throw new ProjectSerializationException(e);
 		}
 	}
 
-	private void saveProject(Document project, File dest) throws ProjectSerializationException {
+	private void writeDocument(Document doc, OutputStream dest) throws ProjectSerializationException {
 		try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 	        transformer.setOutputProperty(OutputKeys.INDENT, "yes"); 
 	        
-	        DOMSource source = new DOMSource(project);
+	        DOMSource source = new DOMSource(doc);
 	        StreamResult result = new StreamResult(dest);
 	        
 	        transformer.transform(source, result);
@@ -128,7 +128,7 @@ public class ProjectSerializerXMLImpl implements ProjectSerializer {
 
 	private Node getFileEncoding(Document doc, FileEncoding encoding) {
 		Element enc = doc.createElement(TAG_ENCODING_FILE);
-		enc.appendChild(doc.createTextNode(encoding.getFilename()));
+		enc.appendChild(doc.createTextNode(encoding.getRelativePath()));
 		
 		return enc;
 	}

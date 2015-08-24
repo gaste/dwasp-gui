@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<logicProgram>
+<baseDirectory>/path/to/base</baseDirectory>
+<encodings />
+<testCases>
+<testCase>
+<name>Test Case 1</name>
+<assertions>assertTrue(a).</assertions>
+</testCase>
+<testCase>
+<name>Test Case 2</name>
+<assertions>assertFalse(b).</assertions>
+</testCase>
+</testCases>
+</logicProgram>
