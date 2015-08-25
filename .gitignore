@@ -11,6 +11,9 @@ release.properties
 .project
 .settings/
 
+# dwasp-gui debugging files
+*.dbg
+
 # windows files
 Desktop.ini
 Thumbs.db
