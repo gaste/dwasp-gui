@@ -47,19 +47,27 @@ public class ResizingListView<T> extends ListView<T> {
 	}
 	
 	/**
-	 * Searches for a {@link ListCell} in the scene graph and sets stores the
-	 * height of that cell.
-	 * @param node The node to inspect.
+	 * Searches for a {@link ListCell} in the scene graph and stores the height
+	 * of that cell.
+	 * @param node The root node of the (sub-)tree to inspect.
+	 * @return <code>true</code>, if the cell height has been determined,
+	 *         <code>false</code> otherwise.
 	 */
-	private void determineCellHeight(Node node) {
+	private boolean determineCellHeight(Node node) {
 		if (node instanceof ListCell<?>) {
 			ListCell<?> cell = (ListCell<?>) node;
 			cellHeight.set(cell.getHeight());
-		} else if (node instanceof Parent) {
+			return true;
+		}
+		
+		if (node instanceof Parent) {
 			Parent p = (Parent) node;
 			for (Node child : p.getChildrenUnmodifiable()) {
-				determineCellHeight(child);
+				if (determineCellHeight(child))
+					return true;
 			}
 		}
+		
+		return false;
 	}
 }

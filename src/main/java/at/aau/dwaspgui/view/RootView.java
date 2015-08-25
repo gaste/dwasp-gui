@@ -108,7 +108,6 @@ public class RootView extends AbstractView<RootViewModel> {
 
 	private void initProjectListView() {
 		projectListView.itemsProperty().set(viewModel.encodings());
-		//projectListView.prefHeightProperty().bind(Bindings.size(viewModel.encodings()).multiply(29));
 		
 		viewModel.selectedEncodingProperty().addListener((ChangeListener<Encoding>) (observable, oldEncoding, newEncoding) -> {
 			projectListView.getSelectionModel().select(newEncoding);
@@ -138,7 +137,6 @@ public class RootView extends AbstractView<RootViewModel> {
 
 	private void initTestCaseListView() {
 		testCaseListView.itemsProperty().set(viewModel.testCases());
-		//testCaseListView.prefHeightProperty().bind(Bindings.size(viewModel.testCases()).multiply(29));
 
 		testCaseListView.getSelectionModel().selectedItemProperty().addListener((obs, oldTC, newTC) -> {
 			if (newTC == null) return;	
