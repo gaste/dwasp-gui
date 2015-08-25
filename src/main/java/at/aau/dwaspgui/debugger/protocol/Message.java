@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.aau.dwaspgui.debugger.protocol.response.ResponseMessage;
 import at.aau.dwaspgui.util.Messages;
 
@@ -15,6 +18,9 @@ import at.aau.dwaspgui.util.Messages;
  * @author Philip Gasteiger
  */
 public abstract class Message {
+	/** logger instance */
+	private static final Logger log = LoggerFactory.getLogger(Message.class);
+	
 	/** character set of all messages */ 
 	protected static final Charset CHARSET = StandardCharsets.US_ASCII;
 	
@@ -30,6 +36,7 @@ public abstract class Message {
 		if (message.startsWith(ResponseMessage.MESSAGE_IDENTIFIER))
 			return ResponseMessage.parseFromString(message);
 		
+		log.error("Could not parse the message '{}' because the message type is unknown.", message);
 		throw new MessageParsingException(Messages.MSGPARSER_INVALID_MESSAGE.format());
 	}
 	
@@ -42,8 +49,11 @@ public abstract class Message {
 			while ((c = (char)reader.read()) != -1 && c != DELIM_MSG) {
 				if (c != '\r')
 					message.append(c);
+				else
+					log.warn("Read '\\r' character from the input stream");
 			}
 		} catch (IOException e) {
+			log.error("Could not read the message from the debugger.", e);
 			throw new MessageParsingException(Messages.MSGPARSER_IOERROR.format(), e);
 		}
 		

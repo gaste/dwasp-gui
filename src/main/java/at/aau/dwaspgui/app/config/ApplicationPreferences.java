@@ -3,6 +3,9 @@ package at.aau.dwaspgui.app.config;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Application preferences
  * 
@@ -13,6 +16,9 @@ public enum ApplicationPreferences {
   , COMMAND_DEBUGGER("DEBUGGER", "dwasp")
   , FILECHOOSER_LAST_LOCATION("FILECHOOSER_LAST_LOCATION", System.getProperty("user.home"))
   ;
+	
+	/** logger instance */
+	private static final Logger log = LoggerFactory.getLogger(ApplicationPreferences.class);
 
 	/** java preferences instance for this file */
 	private static final Preferences prefs = Preferences.userNodeForPackage(ApplicationPreferences.class);
@@ -49,8 +55,7 @@ public enum ApplicationPreferences {
 		try {
 			prefs.flush();
 		} catch (BackingStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Could save preference '{}' = '{}'.", key, value, e);			
 		}
 	}
 }

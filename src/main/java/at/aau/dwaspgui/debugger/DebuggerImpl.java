@@ -13,6 +13,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.aau.GringoWrapper;
 import at.aau.Rule;
 import at.aau.dwaspgui.app.config.ApplicationPreferences;
@@ -34,7 +37,13 @@ import at.aau.postprocessing.PostprocessingException;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
+/**
+ * DWASP-{@link Debugger} implementation.
+ * @author Philip Gasteiger
+ */
 public class DebuggerImpl implements Debugger {
+	private static final Logger log = LoggerFactory.getLogger(DebuggerImpl.class);
+	
 	private List<Consumer<List<CoreItem>>> coreCallbacks = new ArrayList<Consumer<List<CoreItem>>>();
 	private List<Consumer<List<String>>> queryCallbacks = new ArrayList<Consumer<List<String>>>();
 	
@@ -84,6 +93,7 @@ public class DebuggerImpl implements Debugger {
 			
 			Files.write(Paths.get(filename), groundedProgram.getBytes());
 		} catch (GroundingException | PostprocessingException | IOException e) {
+			log.error("Could not ground the logic program.", e);
 			throw new DebuggerException(Messages.ERROR_GROUNDING.format(), e);
 		}
 	}
@@ -97,6 +107,7 @@ public class DebuggerImpl implements Debugger {
 			notifyCores();
 			getQuery();
 		} catch (IOException e) {
+			log.error("Could not start the debugger.", e);
 			throw new DebuggerException(Messages.ERROR_START_DEBUGGER.format(), e);
 		}
 	}
@@ -149,9 +160,9 @@ public class DebuggerImpl implements Debugger {
 				coreCallbacks.forEach((c) -> { c.accept(coreItems); });
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Could not write the core request to the debugger.", e);
 		} catch (MessageParsingException e) {
-			e.printStackTrace();
+			log.error("Could not parse the core response from the debugger.", e);
 		}
 	};
 	
@@ -168,9 +179,9 @@ public class DebuggerImpl implements Debugger {
 				queryCallbacks.forEach(c -> c.accept(response.getAtoms()));
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Could not write the query request to the debugger.", e);
 		} catch (MessageParsingException e) {
-			e.printStackTrace();
+			log.error("Could not parse the query response from the debugger.", e);
 		}
 	};
 	
@@ -193,7 +204,7 @@ public class DebuggerImpl implements Debugger {
 				notifyCores();
 				getQuery();
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("Could not write the assertion request to the debugger");
 			}
 		});
 	}

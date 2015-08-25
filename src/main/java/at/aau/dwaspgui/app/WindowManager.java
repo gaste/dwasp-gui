@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.aau.dwaspgui.app.config.ApplicationPreferences;
 import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.util.Messages;
@@ -21,12 +24,12 @@ import javafx.stage.Stage;
 
 /**
  * Provides methods to show views on the main window as well as dialogs.
- * 
  * @author Philip Gasteiger
  */
 public class WindowManager {
+	private static final Logger log = LoggerFactory.getLogger(WindowManager.class);
 	private final Stage primaryStage;
-	private Map<ViewModel, Stage> dialogMap = new HashMap<ViewModel, Stage>();
+	private final Map<ViewModel, Stage> dialogMap = new HashMap<ViewModel, Stage>();
 
 	public WindowManager(Stage stage) {
 		this.primaryStage = stage;
@@ -66,7 +69,10 @@ public class WindowManager {
 	public void closeModalDialog(ViewModel viewModel) {
 		Stage stage = dialogMap.get(viewModel);
 		
-		if (stage == null) return;
+		if (stage == null) {
+			log.warn("Tried closing the modal dialog for view model class '{}', but did not find a stage", viewModel.getClass());
+			return;
+		}
 		
 		stage.close();
 		dialogMap.remove(viewModel);

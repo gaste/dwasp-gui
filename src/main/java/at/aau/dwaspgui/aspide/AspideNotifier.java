@@ -3,6 +3,10 @@ package at.aau.dwaspgui.aspide;
 import at.aau.dwaspgui.domain.FileEncoding;
 import javafx.scene.control.IndexRange;
 
+/**
+ * Notify ASPIDE of debugging events.
+ * @author Philip Gasteiger
+ */
 public class AspideNotifier {
 	public void notifySave(FileEncoding encoding) {
 		System.out.println("save,\"" + encoding.getAbsolutePath() + "\"");
@@ -35,7 +39,6 @@ public class AspideNotifier {
 				endColumn ++;
 			}
 		}
-		
 		
 		System.out.println("notify,\"" + encoding.getAbsolutePath() + "\""
 					+ "," + startLine + "," + endLine 

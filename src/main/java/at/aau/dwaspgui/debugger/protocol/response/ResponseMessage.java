@@ -2,6 +2,9 @@ package at.aau.dwaspgui.debugger.protocol.response;
 
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.aau.dwaspgui.debugger.protocol.Message;
 import at.aau.dwaspgui.debugger.protocol.MessageParsingException;
 import at.aau.dwaspgui.util.Messages;
@@ -12,6 +15,9 @@ import at.aau.dwaspgui.util.Messages;
  * @author Philip Gasteiger
  */
 public class ResponseMessage extends Message {
+	/** logger instance */
+	private static final Logger log = LoggerFactory.getLogger(ResponseMessage.class);
+	
 	/** the identifier of this message type */
 	public static final String MESSAGE_IDENTIFIER = "response";
 	
@@ -37,6 +43,7 @@ public class ResponseMessage extends Message {
 		if (unpacked.startsWith(QueryResponseMessage.MESSAGE_IDENTIFIER))
 			return new QueryResponseMessage(unpacked);
 		
+		log.error("Could not parse the message '{}' because the message type is unkown.", message);
 		throw new MessageParsingException(Messages.MSGPARSER_INVALID_MESSAGE.format());
 	}
 	

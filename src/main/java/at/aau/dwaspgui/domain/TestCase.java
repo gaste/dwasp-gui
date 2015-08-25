@@ -6,7 +6,6 @@ public class TestCase {
 	
 	public TestCase(String name, String assertions) {
 		this.name = name;
-		this.assertions = assertions.replace(" ", "").replace("\t", "");
 	}
 
 	public String getName() {
