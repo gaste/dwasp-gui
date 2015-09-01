@@ -32,6 +32,7 @@ import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.util.Messages;
 import at.aau.dwaspgui.viewmodel.query.QueryViewModel;
 import javafx.application.Platform;
+import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -58,7 +59,7 @@ public class RootViewModel implements ViewModel {
 	private final ObjectProperty<Project> project = new SimpleObjectProperty<Project>(null);
 	private final BooleanProperty isAspideSession = new SimpleBooleanProperty(false);
 	private final ObjectProperty<Encoding> selectedEncoding = new SimpleObjectProperty<Encoding>();
-	private final ObservableList<Encoding> encodings = FXCollections.observableArrayList();
+	private final ObservableList<Encoding> encodings;
 	private final ObservableList<TestCase> testCases = FXCollections.observableArrayList();
 	private final ObservableList<CoreItem> coreItems = FXCollections.observableArrayList();
 	private final ObservableList<QueryViewModel> queryAtoms = FXCollections.observableArrayList();
@@ -72,6 +73,15 @@ public class RootViewModel implements ViewModel {
 		this.projectSerializer = projectSerializer;
 		this.debugger = debugger;
 		this.notifier = notifier;
+		
+		this.encodings = FXCollections.observableArrayList((encoding) -> {
+			if (encoding instanceof FileEncoding) {
+				FileEncoding enc = (FileEncoding) encoding;
+				return new Observable[] { enc.dirtyProperty() };
+			} else {
+				return new Observable[] {};
+			}
+		});
 		
 		debugger.registerCoreCallback((coreItems) -> {
 			JFXUtil.runOnJFX(() -> {

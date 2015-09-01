@@ -5,22 +5,30 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
 /**
  * Encoding of a logic program that is stored in a file.
- * 
  * @author Philip Gasteiger
  */
 public class FileEncoding extends Encoding {
+	/** Logger instance */
+	private static final Logger log = LoggerFactory.getLogger(FileEncoding.class);
+	
 	/** The file that contains the encoding */
 	private final File encodingFile;
 	
+	/** Relative path of the file in the project */
 	private final String relativePath;
 	
-	private String content = null;
+	/** Transient content of the file */
+	private transient String content = null;
 	
+	/** Flag wether there are unsaved changes */
 	private BooleanProperty dirty = new SimpleBooleanProperty(false);
 
 	public FileEncoding(String baseDirectory, String relativePath) {
@@ -31,16 +39,17 @@ public class FileEncoding extends Encoding {
 		
 		if (f.isAbsolute()) {
 			this.encodingFile = f;
+			log.warn("Relative path '{}' is absolute. The base directory '{}' is ignored", relativePath, baseDirectory);
 		} else {
 			this.encodingFile = new File(baseDirectory, relativePath);
 		}
 	}
 	
-	public String getRelativePath() {
+	public final String getRelativePath() {
 		return relativePath;
 	}
 	
-	public String getAbsolutePath() {
+	public final String getAbsolutePath() {
 		return encodingFile.getAbsolutePath();
 	}
 	
@@ -53,7 +62,7 @@ public class FileEncoding extends Encoding {
 
 	@Override
 	public String toString() {
-		return encodingFile.getName() + (dirty.get() ? "*" : "");
+		return encodingFile.getName() + (dirty.get() ? " \u25CF" : "");
 	}
 
 	@Override
@@ -62,6 +71,7 @@ public class FileEncoding extends Encoding {
 			try {
 				content = new String(Files.readAllBytes(Paths.get(encodingFile.getAbsolutePath())));
 			} catch (IOException e) {
+				log.error("Could not open the encoding file '{}'.", encodingFile.getAbsolutePath(), e);
 				// TODO handle here
 				content = "";
 			}
@@ -70,7 +80,7 @@ public class FileEncoding extends Encoding {
 		return content;
 	}
 	
-	public void setContent(String newContent) {
+	public final void setContent(String newContent) {
 		if (content.equals(newContent))
 			return;
 		
@@ -79,5 +89,5 @@ public class FileEncoding extends Encoding {
 	}
 	
 	public BooleanProperty dirtyProperty() { return dirty; }
-	public boolean isDirty() { return dirty.get(); }
+	public final boolean isDirty() { return dirty.get(); }
 }

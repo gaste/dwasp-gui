@@ -40,7 +40,7 @@ public class NewProjectViewModel implements ViewModel {
 	}
 	
 	public void chooseLocation() {
-		File location = windowManager.chooseDirectory();
+		File location = windowManager.chooseDirectory(new File(this.location.get()));
 		
 		if (null != location && location.isDirectory())
 			this.location.set(location.getAbsolutePath());

@@ -6,6 +6,7 @@ public class TestCase {
 	
 	public TestCase(String name, String assertions) {
 		this.name = name;
+		this.assertions = assertions;
 	}
 
 	public String getName() {

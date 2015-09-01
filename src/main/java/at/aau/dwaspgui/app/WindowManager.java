@@ -83,6 +83,15 @@ public class WindowManager {
 		return chooser.showDialog(primaryStage);
 	}
 	
+	public File chooseDirectory(File initialDirectory) {
+		DirectoryChooser chooser = new DirectoryChooser();
+		
+		if (null != initialDirectory && initialDirectory.exists() && initialDirectory.isDirectory())
+			chooser.setInitialDirectory(initialDirectory);
+		
+		return chooser.showDialog(primaryStage);
+	}
+	
 	public File chooseFile() {
 		FileChooser chooser = new FileChooser();
 		File initialDirectory = new File(ApplicationPreferences.FILECHOOSER_LAST_LOCATION.get());

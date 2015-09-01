@@ -162,17 +162,20 @@
 	-fx-background-color: -col-chrome-mid;
 }
 
-.toggle-button.center-pill {
+.toggle-button.center-pill,
+.button.center-pill {
 	-fx-border-width: 1 0 1 1;
 }
 
-.toggle-button.left-pill {
+.toggle-button.left-pill,
+.button.left-pill {
 	-fx-border-width: 1 0 1 1;
 	-fx-border-radius: 5 0 0 5;
 	-fx-background-radius: 5 0 0 5;
 }
 
-.toggle-button.right-pill {
+.toggle-button.right-pill,
+.button.right-pill {
     -fx-border-width: 1 1 1 1;
     -fx-border-radius: 0 5 5 0;
     -fx-background-radius: 0 5 5 0;
