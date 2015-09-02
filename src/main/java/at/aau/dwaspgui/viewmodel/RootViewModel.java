@@ -141,11 +141,6 @@ public class RootViewModel implements ViewModel {
 		}
 	}
 
-	public void newFileAction() {
-		if (project.isNull().get()) return;
-				
-	}
-
 	public void addFileAction() {
 		if (project.isNull().get()) return;
 		
@@ -254,10 +249,6 @@ public class RootViewModel implements ViewModel {
 	public ObservableBooleanValue isEmptyProjectPaneVisible() {
 		return project.isNotNull()
 			   .and(Bindings.size(encodings).isEqualTo(0));
-	}
-	
-	public ObservableBooleanValue isNewFileDisabled() {
-		return project.isNull();
 	}
 	
 	public ObservableBooleanValue isAddFileDisabled() {

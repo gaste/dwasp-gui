@@ -31,6 +31,11 @@ public class FileEncoding extends Encoding {
 	/** Flag wether there are unsaved changes */
 	private BooleanProperty dirty = new SimpleBooleanProperty(false);
 
+	/**
+	 * Instantiate a new file encoding from an existing file.
+	 * @param baseDirectory The base directory.
+	 * @param relativePath The path of the file relative to the base directory.
+	 */
 	public FileEncoding(String baseDirectory, String relativePath) {
 		this.relativePath = relativePath;
 

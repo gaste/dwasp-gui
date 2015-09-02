@@ -43,7 +43,6 @@ public class RootView extends AbstractView<RootViewModel> {
 	@FXML private CodeArea codeArea;
 	@FXML private MenuButton debugButton;
 	@FXML private MenuItem saveMenuItem;
-	@FXML private MenuItem newFileMenuItem;
 	@FXML private MenuItem addFileMenuItem;
 	@FXML private Button saveButton;
 	@FXML private Button aspideButton;
@@ -89,7 +88,6 @@ public class RootView extends AbstractView<RootViewModel> {
 		emptyProjectPane.visibleProperty().bind(viewModel.isEmptyProjectPaneVisible());
 		emptyProjectPane.managedProperty().bind(emptyProjectPane.visibleProperty());
 		
-		newFileMenuItem.disableProperty().bind(viewModel.isNewFileDisabled());
 		addFileMenuItem.disableProperty().bind(viewModel.isAddFileDisabled());
 		
 		saveMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN));
@@ -196,7 +194,6 @@ public class RootView extends AbstractView<RootViewModel> {
 	}
 	
 	@FXML public void newProjectAction() { viewModel.newProjectAction(); }
-	@FXML public void newFileAction() { viewModel.newFileAction(); }
 	@FXML public void addFileAction() { viewModel.addFileAction(); }
 	@FXML public void saveAction() { viewModel.saveAction(); }
 	@FXML public void aspideAction() { viewModel.aspideAction(codeArea.getSelection()); }

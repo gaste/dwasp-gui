@@ -28,10 +28,7 @@
 	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
 	<MenuBar>
 		<Menu mnemonicParsing="false" text="%menu.file">
-			<Menu mnemonicParsing="false" text="%menu.file.new">
-				<MenuItem text="%menu.file.new.project" mnemonicParsing="false" onAction="#newProjectAction" />
-				<MenuItem text="%menu.file.new.file" fx:id="newFileMenuItem" mnemonicParsing="false" onAction="#newFileAction" />
-			</Menu>
+			<MenuItem text="%menu.file.new.project" mnemonicParsing="false" onAction="#newProjectAction" />
 			<MenuItem text="%menu.file.openproject" mnemonicParsing="false" onAction="#openProjectAction" />
 			<MenuItem text="%menu.file.addfile" fx:id="addFileMenuItem" mnemonicParsing="false" onAction="#addFileAction" />
 			<SeparatorMenuItem mnemonicParsing="false" />
@@ -93,9 +90,6 @@
 				<HBox id="empty-project-pane">
 					<Button text="%button.encoding.add" onAction="#addFileAction">
 						<graphic><FontAwesomeIconView  glyphName="PLUS_SQUARE_ALT" /></graphic>
-					</Button>
-					<Button text="%button.encoding.new" onAction="#newFileAction">
-						<graphic><FontAwesomeIconView  glyphName="FILE_ALT" /></graphic>
 					</Button>
 				</HBox>
 			</StackPane>

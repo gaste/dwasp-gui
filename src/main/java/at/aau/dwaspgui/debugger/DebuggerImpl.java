@@ -56,6 +56,7 @@ public class DebuggerImpl implements Debugger {
 	private Map<String, Rule> debugRuleMap = null;
 	private ExecutorService debuggerExecutor = null;
 	
+	private static final String DEBUGGER_OPTION_GUI = "--debug-gui";
 	private static final String DEBUGGER_OPTION_INPUT_FILE = "--debug=";
 	private static final String DEBUG_FILE_NAME = "debug.dbg";
 	private static final String GRINGO_WRAPPER_OPTIONS = "";
@@ -99,7 +100,7 @@ public class DebuggerImpl implements Debugger {
 	}
 	
 	private void startDebugger(String filename) throws DebuggerException {
-		ProcessBuilder builder = new ProcessBuilder(ApplicationPreferences.COMMAND_DEBUGGER.get(), DEBUGGER_OPTION_INPUT_FILE + filename);
+		ProcessBuilder builder = new ProcessBuilder(ApplicationPreferences.COMMAND_DEBUGGER.get(), DEBUGGER_OPTION_GUI, DEBUGGER_OPTION_INPUT_FILE + filename);
 		
 		try {
 			debugger = builder.start();
