@@ -39,6 +39,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableBooleanValue;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.IndexRange;
@@ -188,7 +189,11 @@ public class RootViewModel implements ViewModel {
 		}
 		
 		if (enc != null) {
-			notifier.notifyBack(enc, selection);
+			if (coreItems.size() > 0) {
+				notifier.notifyBack(enc, coreItems);
+			} else {
+				notifier.notifyBack(enc, selection);
+			}
 		}
 	}
 
@@ -266,5 +271,9 @@ public class RootViewModel implements ViewModel {
 			new Image(WindowManager.class.getResourceAsStream("dwasp-icon-16.png")),
 			new Image(WindowManager.class.getResourceAsStream("dwasp-icon-32.png")),
 			new Image(WindowManager.class.getResourceAsStream("dwasp-icon-64.png")));
+	}
+
+	public ObservableValue<? extends Boolean> isDebugButtonDisabled() {
+		return isDebuggingProperty();
 	}
 }

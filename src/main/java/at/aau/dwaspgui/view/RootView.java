@@ -59,10 +59,25 @@ public class RootView extends AbstractView<RootViewModel> {
 	public void initialize(URL location, ResourceBundle resources) {
 		initProjectListView();
 		initTestCaseListView();
-
+		
+		if (viewModel.testCases().size() == 0) {
+			// add one menu item for starting the debugger without an test-case
+			MenuItem item = new MenuItem("no test case");
+			item.setOnAction(e -> viewModel.debugAction(new TestCase("no test case", "")));
+			debugButton.getItems().add(item);
+		}
+		
 		// refresh test cases from the menu
 		viewModel.testCases().addListener((ListChangeListener.Change<? extends TestCase> c) -> {
 			debugButton.getItems().clear();
+			
+			if (viewModel.testCases().size() == 0) {
+				// add one menu item for starting the debugger without an test-case
+				MenuItem item = new MenuItem("no test case");
+				item.setOnAction(e -> viewModel.debugAction(new TestCase("no test case", "")));
+				debugButton.getItems().add(item);
+			}
+			
 			
 			for(TestCase testCase : viewModel.testCases()) {
 				MenuItem item = new MenuItem(testCase.getName());
@@ -95,7 +110,7 @@ public class RootView extends AbstractView<RootViewModel> {
 		aspideButton.managedProperty().bind(aspideButton.visibleProperty());
 		aspideButton.visibleProperty().bind(viewModel.isAspideSessions());
 		saveButton.disableProperty().bind(dirtyEncoding.not());
-		debugButton.disableProperty().bind(viewModel.isDebuggingProperty());
+		debugButton.disableProperty().bind(viewModel.isDebugButtonDisabled());
 		stopButton.visibleProperty().bind(viewModel.isDebuggingProperty());
 		queryView.visibleProperty().bind(viewModel.isDebuggingProperty());
 

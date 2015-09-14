@@ -73,17 +73,19 @@ public class DebuggerImpl implements Debugger {
 		currentProgram = program;
 		debuggerExecutor = Executors.newSingleThreadExecutor();
 		
-		groundProgram(program, DEBUG_FILE_NAME);
+		groundProgram(program, testCase, DEBUG_FILE_NAME);
 		startDebugger(DEBUG_FILE_NAME);
 	}
 	
-	private void groundProgram(Collection<Encoding> program, String filename)
+	private void groundProgram(Collection<Encoding> program, TestCase testCase, String filename)
 			throws DebuggerException {
 		StringBuilder inputProgram = new StringBuilder();
 		
 		for (Encoding encoding : program) {
 			inputProgram.append(encoding.getContent());
 		}
+		
+		inputProgram.append(testCase.getAssertions());
 
 		GringoWrapper wrapper = new GringoWrapper(ApplicationPreferences.COMMAND_GROUNDER.get(),
 				GRINGO_WRAPPER_OPTIONS, GRINGO_WRAPPER_DEBUGCONSTANT, false, false);
