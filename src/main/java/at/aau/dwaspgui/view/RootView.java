@@ -45,6 +45,7 @@ public class RootView extends AbstractView<RootViewModel> {
 	@FXML private MenuButton debugButton;
 	@FXML private MenuItem saveMenuItem;
 	@FXML private MenuItem addFileMenuItem;
+	@FXML private MenuItem newTestCaseMenuItem;
 	@FXML private Button saveButton;
 	@FXML private Button aspideButton;
 	@FXML private Button stopButton;
@@ -105,6 +106,7 @@ public class RootView extends AbstractView<RootViewModel> {
 		emptyProjectPane.managedProperty().bind(emptyProjectPane.visibleProperty());
 		
 		addFileMenuItem.disableProperty().bind(viewModel.isAddFileDisabled());
+		newTestCaseMenuItem.disableProperty().bind(viewModel.isNewTestCaseDisabled());
 		
 		saveMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN));
 		saveMenuItem.disableProperty().bind(dirtyEncoding.not());
@@ -143,6 +145,7 @@ public class RootView extends AbstractView<RootViewModel> {
 			else testCaseListView.getSelectionModel().clearSelection();
 			
 			viewModel.selectedEncodingProperty().set(newProjectItem);
+			viewModel.selectedTestCaseProperty().set(null);
 			
 			codeArea.replaceText(newProjectItem.getContent());
 			codeArea.getUndoManager().forgetHistory();
@@ -151,6 +154,10 @@ public class RootView extends AbstractView<RootViewModel> {
 
 	private void initTestCaseListView() {
 		testCaseListView.itemsProperty().set(viewModel.testCases());
+		
+		viewModel.selectedTestCaseProperty().addListener((ChangeListener<TestCase>) (observable, oldTestCase, newTestCase) -> {
+			testCaseListView.getSelectionModel().select(newTestCase);
+		});
 
 		testCaseListView.getSelectionModel().selectedItemProperty().addListener((obs, oldTC, newTC) -> {
 			if (newTC == null) return;	
@@ -158,6 +165,7 @@ public class RootView extends AbstractView<RootViewModel> {
 			projectListView.getSelectionModel().clearSelection();
 
 			viewModel.selectedEncodingProperty().set(null);
+			viewModel.selectedTestCaseProperty().set(newTC);
 			
 			codeArea.replaceText(newTC.getAssertions());
 			codeArea.getUndoManager().forgetHistory();
@@ -219,4 +227,5 @@ public class RootView extends AbstractView<RootViewModel> {
 	@FXML public void stopAction() { viewModel.stopAction(); }
 	@FXML public void preferencesAction() { viewModel.preferencesAction(); }
 	@FXML public void assertAction() { viewModel.assertAction(); }
+	@FXML public void newTestCaseAction() { viewModel.newTestCaseAction(); }
 }

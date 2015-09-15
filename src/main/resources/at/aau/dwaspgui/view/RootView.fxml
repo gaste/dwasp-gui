@@ -31,6 +31,7 @@
 			<MenuItem text="%menu.file.new.project" mnemonicParsing="false" onAction="#newProjectAction" />
 			<MenuItem text="%menu.file.openproject" mnemonicParsing="false" onAction="#openProjectAction" />
 			<MenuItem text="%menu.file.addfile" fx:id="addFileMenuItem" mnemonicParsing="false" onAction="#addFileAction" />
+			<MenuItem text="%menu.file.newtestcase" fx:id="newTestCaseMenuItem" mnemonicParsing="false" onAction="#newTestCaseAction" />
 			<SeparatorMenuItem mnemonicParsing="false" />
 			<MenuItem text="%menu.file.save" fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveAction" />
 			<SeparatorMenuItem mnemonicParsing="false" />

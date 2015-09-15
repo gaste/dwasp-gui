@@ -60,6 +60,7 @@ public class RootViewModel implements ViewModel {
 	private final ObjectProperty<Project> project = new SimpleObjectProperty<Project>(null);
 	private final BooleanProperty isAspideSession = new SimpleBooleanProperty(false);
 	private final ObjectProperty<Encoding> selectedEncoding = new SimpleObjectProperty<Encoding>();
+	private final ObjectProperty<TestCase> selectedTestCase = new SimpleObjectProperty<TestCase>();
 	private final ObservableList<Encoding> encodings;
 	private final ObservableList<TestCase> testCases = FXCollections.observableArrayList();
 	private final ObservableList<CoreItem> coreItems = FXCollections.observableArrayList();
@@ -166,6 +167,12 @@ public class RootViewModel implements ViewModel {
 
 		selectedEncoding.set(encoding);
 	}
+
+	public void newTestCaseAction() {
+		if (project.isNull().get()) return;
+		
+		windowManager.showModalDialog(new NewTestCaseViewModel(windowManager, this, project.get(), projectFile, projectSerializer));
+	}
 	
 	public void preferencesAction() {
 		windowManager.showModalDialog(new PreferencesViewModel(windowManager));
@@ -235,6 +242,7 @@ public class RootViewModel implements ViewModel {
 
 	// properties and lists
 	public ObjectProperty<Encoding> selectedEncodingProperty() { return selectedEncoding; }
+	public ObjectProperty<TestCase> selectedTestCaseProperty() { return selectedTestCase; }
 	public BooleanProperty isDebuggingProperty() { return debugger.isRunning(); }
 	public BooleanProperty isAspideSessions() { return this.isAspideSession; }
 	public ObservableList<Encoding> encodings() { return this.encodings; }
@@ -257,6 +265,10 @@ public class RootViewModel implements ViewModel {
 	}
 	
 	public ObservableBooleanValue isAddFileDisabled() {
+		return project.isNull();
+	}
+
+	public ObservableBooleanValue isNewTestCaseDisabled() {
 		return project.isNull();
 	}
 
