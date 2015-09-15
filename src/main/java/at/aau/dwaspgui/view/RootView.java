@@ -17,6 +17,7 @@ import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.view.highlight.AspCore2Highlight;
 import at.aau.dwaspgui.view.query.QueryListView;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
+import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -166,9 +167,10 @@ public class RootView extends AbstractView<RootViewModel> {
 	private void initializeCodeArea() {
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 		codeArea.editableProperty().bind(viewModel.isDebuggingProperty().not().and(editableEncoding));
+		codeArea.textProperty().addListener((InvalidationListener) observable -> {
+			codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.selectedEncodingProperty().get(), codeArea.getText(), viewModel.coreItems()));
+		});
 		codeArea.textProperty().addListener((obs, oldText, newText) -> {
-            codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.selectedEncodingProperty().get(), newText, viewModel.coreItems()));
-            
             if (editableEncoding.get()) {
             	FileEncoding enc = (FileEncoding) viewModel.selectedEncodingProperty().get();
             	enc.setContent(newText);
