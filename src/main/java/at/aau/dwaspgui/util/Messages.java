@@ -15,6 +15,7 @@ public enum Messages {
   , PRJPARSER_NO_TESTCASES("prjparser.notestcases")
   , PRJPARSER_NO_ENCODINGS("prjparser.noencodings")
   , PRJPARSER_NO_BASEDIRECTORY("prjparser.nobasedirectory")
+  , PRJPARSER_NO_DIRECT_ENCODING_ATTRIBUTES("prjparser.nodirectencodingattributes")
   , ERROR_OPEN_PROJECT("error.openproject")
   , ERROR_GROUNDING("error.grounding")
   , ERROR_START_DEBUGGER("error.debugger.start")

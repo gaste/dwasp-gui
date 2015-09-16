@@ -61,7 +61,7 @@ public class ProjectSerializerXMLImplTest extends XMLTestCase {
 				"/path/to/base",
 				Arrays.asList(
 						new FileEncoding("/path/to/base", "file1.lp"),
-						new DirectEncoding("a :- b. b : - c. c.")),
+						new DirectEncoding("a :- b. b : - c. c.", "/path/to/sourcefile", 1, 2, 3, 4)),
 				Collections.emptyList());
 		
 		testSerialize(project, "twoEncodingsProject.xml");

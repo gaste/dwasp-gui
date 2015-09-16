@@ -31,7 +31,7 @@ public class ProjectParserXMLImplTest {
 	// parseProject tests
 	// -------------------------------------------------------------------------
 	@Test
-	public void parseProject_projectValid_throwsException()
+	public void parseProject_projectValid_parsesCorrect()
 			throws ProjectParsingException {
 		Project project = parser.parseProject(getClass().getResourceAsStream("projectValid.xml"));
 		
@@ -56,6 +56,12 @@ public class ProjectParserXMLImplTest {
 	}
 	
 	@Test(expected=ProjectParsingException.class)
+	public void parseProject_directEncodingAttributesMissing_throwsException() 
+			throws ProjectParsingException {
+		parser.parseProject(getClass().getResourceAsStream("projectDirectEncodingAttributesMissing.xml"));
+	}
+	
+	@Test(expected=ProjectParsingException.class)
 	public void parseProject_projectNoBasedirectory_throwsException()
 			throws ProjectParsingException {
 		parser.parseProject(getClass().getResourceAsStream("projectNoBasedirectory.xml"));
@@ -68,7 +74,7 @@ public class ProjectParserXMLImplTest {
 	}
 	
 	@Test(expected=ProjectParsingException.class)
-	public void parseProject_projectNoInstances_throwsException()
+	public void parseProject_projectNoTestcases_throwsException()
 			throws ProjectParsingException {
 		parser.parseProject(getClass().getResourceAsStream("projectNoTestcases.xml"));
 	}

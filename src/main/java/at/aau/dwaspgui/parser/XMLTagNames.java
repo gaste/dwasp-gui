@@ -15,6 +15,12 @@ public final class XMLTagNames {
 	public static final String TAG_ENCODING_DIRECT      = "encodingDirect";
 	public static final String TAG_ENCODING_FILE        = "encodingFile";
 	
+	public static final String ATTR_ENCODING_DIRECT_SOURCEFILE  = "sourceFile";
+	public static final String ATTR_ENCODING_DIRECT_STARTLINE   = "startLine";
+	public static final String ATTR_ENCODING_DIRECT_ENDLINE     = "endLine";
+	public static final String ATTR_ENCODING_DIRECT_STARTCOLUMN = "startColumn";
+	public static final String ATTR_ENCODING_DIRECT_ENDCOLUMN   = "endColumn";
+	
 	// prevent construction of this class
 	private XMLTagNames() { throw new AssertionError(); }
 }

@@ -4,14 +4,14 @@
 	<encodings>
 		<encodingFile>enc1.lp</encodingFile>
 		<encodingFile>enc2.lp</encodingFile>
-		<encodingDirect sourceFile="/path/to/source1.lp" startLine="1" endLine="2" startColumn="3" endColumn="4">
+		<encodingDirect>
 			<![CDATA[
 				pred(1).
 				num(1..10).
 				pred(X) :- num(X).
 			]]>
 		</encodingDirect>
-		<encodingDirect sourceFile="/path/to/source2.lp" startLine="5" endLine="6" startColumn="7" endColumn="8">
+		<encodingDirect>
 			<![CDATA[
 				a.
 				b :- a.

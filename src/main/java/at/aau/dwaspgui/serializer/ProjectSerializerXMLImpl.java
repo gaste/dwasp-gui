@@ -9,6 +9,7 @@ import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASE;
 import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASES;
 import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASE_ASSERTIONS;
 import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASE_NAME;
+import static at.aau.dwaspgui.parser.XMLTagNames.*;
 
 import java.io.OutputStream;
 import java.util.List;
@@ -122,6 +123,11 @@ public class ProjectSerializerXMLImpl implements ProjectSerializer {
 	private Node getDirectEncoding(Document doc, DirectEncoding encoding) {
 		Element enc = doc.createElement(TAG_ENCODING_DIRECT);
 		enc.appendChild(doc.createTextNode(encoding.getContent()));
+		enc.setAttribute(ATTR_ENCODING_DIRECT_SOURCEFILE, encoding.getSourceFile());
+		enc.setAttribute(ATTR_ENCODING_DIRECT_STARTLINE, "" + encoding.getStartLine());
+		enc.setAttribute(ATTR_ENCODING_DIRECT_ENDLINE, "" + encoding.getEndLine());
+		enc.setAttribute(ATTR_ENCODING_DIRECT_STARTCOLUMN, "" + encoding.getStartColumn());
+		enc.setAttribute(ATTR_ENCODING_DIRECT_ENDCOLUMN, "" + encoding.getEndColumn());
 		
 		return enc;
 	}

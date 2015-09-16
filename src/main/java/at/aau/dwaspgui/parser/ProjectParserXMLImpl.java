@@ -9,6 +9,7 @@ import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASE;
 import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASES;
 import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASE_ASSERTIONS;
 import static at.aau.dwaspgui.parser.XMLTagNames.TAG_TEST_CASE_NAME;
+import static at.aau.dwaspgui.parser.XMLTagNames.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -90,7 +91,24 @@ public class ProjectParserXMLImpl implements ProjectParser {
 			if (encoding.getNodeName().equals(TAG_ENCODING_FILE)) {
 				encodings.add(new FileEncoding(baseDirectory, encoding.getTextContent()));
 			} else if (encoding.getNodeName().equals(TAG_ENCODING_DIRECT)) {
-				encodings.add(new DirectEncoding(encoding.getTextContent()));
+				Node nSourceFile = encoding.getAttributes().getNamedItem(ATTR_ENCODING_DIRECT_SOURCEFILE);
+				Node nStartLine = encoding.getAttributes().getNamedItem(ATTR_ENCODING_DIRECT_STARTLINE);
+				Node nEndLine = encoding.getAttributes().getNamedItem(ATTR_ENCODING_DIRECT_ENDLINE);
+				Node nStartColumn = encoding.getAttributes().getNamedItem(ATTR_ENCODING_DIRECT_STARTCOLUMN);
+				Node nEndColumn = encoding.getAttributes().getNamedItem(ATTR_ENCODING_DIRECT_ENDCOLUMN);
+				
+				if (null == nSourceFile || null == nStartLine || null == nEndLine || null == nStartColumn || null == nEndColumn) {
+					throw new ProjectParsingException(Messages.PRJPARSER_NO_DIRECT_ENCODING_ATTRIBUTES.format());
+				}
+				
+				String sourceFile = nSourceFile.getTextContent();
+				int startLine = Integer.parseInt(nStartLine.getTextContent());
+				int endLine = Integer.parseInt(nEndLine.getTextContent());
+				int startColumn = Integer.parseInt(nStartColumn.getTextContent());
+				int endColumn = Integer.parseInt(nEndColumn.getTextContent());
+				
+				encoding.getAttributes().getNamedItem("sourceFile").getTextContent();
+				encodings.add(new DirectEncoding(encoding.getTextContent(), sourceFile, startLine, endLine, startColumn, endColumn));
 			}
 		}
 		return encodings;
