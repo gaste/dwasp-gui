@@ -9,8 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import at.aau.dwaspgui.debugger.protocol.response.CoreResponseMessage;
-
 /**
  * Unit tests for {@link CoreResponseMessage}
  * @author Philip Gasteiger
@@ -21,20 +19,20 @@ public class CoreResponseMessageTest {
 	public void construct_emptyCore_returnsCorrect() {
 		CoreResponseMessage msg = new CoreResponseMessage("core:");
 		
-		assertTrue(msg.getCoreItems().isEmpty());
+		assertTrue(msg.getCoreDebugAtoms().isEmpty());
 	}
 	
 	@Test
 	public void construct_oneCoreItem_returnsCorrect() {
 		CoreResponseMessage msg = new CoreResponseMessage("core:_debug1(a)");
 		
-		assertEquals(Arrays.asList("_debug1(a)"), msg.getCoreItems());
+		assertEquals(Arrays.asList("_debug1(a)"), msg.getCoreDebugAtoms());
 	}
 	
 	@Test
 	public void construct_multipleCoreItems_returnsCorrect() {
 		CoreResponseMessage msg = new CoreResponseMessage("core:_debug1(a):_debug2(a,b):_debug3");
 		
-		assertEquals(Arrays.asList("_debug1(a)", "_debug2(a,b)", "_debug3"), msg.getCoreItems());
+		assertEquals(Arrays.asList("_debug1(a)", "_debug2(a,b)", "_debug3"), msg.getCoreDebugAtoms());
 	}
 }

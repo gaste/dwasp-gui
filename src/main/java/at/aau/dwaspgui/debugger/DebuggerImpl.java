@@ -54,6 +54,7 @@ public class DebuggerImpl implements Debugger {
 	private Process debugger = null;
 	private Collection<Encoding> currentProgram = null;
 	private Map<String, Rule> debugRuleMap = null;
+	private ExecutorService messageReaderExecutor = null;
 	private ExecutorService debuggerExecutor = null;
 	
 	private static final String DEBUGGER_OPTION_GUI = "--debug-gui";
@@ -72,6 +73,7 @@ public class DebuggerImpl implements Debugger {
 		
 		currentProgram = program;
 		debuggerExecutor = Executors.newSingleThreadExecutor();
+		messageReaderExecutor = Executors.newSingleThreadExecutor();
 		
 		groundProgram(program, testCase, DEBUG_FILE_NAME);
 		startDebugger(DEBUG_FILE_NAME);
@@ -107,6 +109,8 @@ public class DebuggerImpl implements Debugger {
 		try {
 			debugger = builder.start();
 			
+			messageReaderExecutor.execute(messageReader);
+			
 			notifyCores();
 			getQuery();
 		} catch (IOException e) {
@@ -115,57 +119,32 @@ public class DebuggerImpl implements Debugger {
 		}
 	}
 	
+	private final Runnable messageReader = () -> {
+		while(isRunning.get()) {
+			try{
+				ResponseMessage resp = Message.parseFromInputStream(debugger.getInputStream());
+				
+				if (resp instanceof CoreResponseMessage) {
+					CoreResponseMessage response = (CoreResponseMessage) resp;
+					
+					coreCallbacks.forEach(c -> c.accept(response.getCoreItems(debugRuleMap, currentProgram)));
+				} else if (resp instanceof QueryResponseMessage) {
+					QueryResponseMessage response = (QueryResponseMessage) resp;
+					
+					queryCallbacks.forEach(c -> c.accept(response.getAtoms()));
+				}
+			} catch (MessageParsingException e) {
+				log.error("Could not parse the core response from the debugger.", e);
+			}
+		}
+	};
+	
 	private Runnable coreRequest = () -> {
 		try {
 			RequestMessage request = new RequestMessage(RequestType.GET_CORE);
 			request.writeToOutputStream(debugger.getOutputStream());
-			
-			ResponseMessage resp = Message.parseFromInputStream(debugger.getInputStream());
-			
-			if (resp instanceof CoreResponseMessage) {
-				CoreResponseMessage response = (CoreResponseMessage) resp;
-				Map<Rule, List<Map<String, String>>> rules = new HashMap<Rule, List<Map<String, String>>>();
-				
-				for (String coreItem : response.getCoreItems()) {
-					int termIdx = coreItem.indexOf('(');
-
-					String debugConstant = termIdx != -1 
-							? coreItem.substring(0, termIdx)
-							: coreItem;
-					
-					String term = termIdx != -1
-							? coreItem.substring(termIdx + 1, coreItem.length() - 1)
-							: "";
-					
-					Rule rule = debugRuleMap.get(debugConstant);
-					if (rule != null) {
-						if (!rules.containsKey(rule)) {
-							rules.put(rule, new ArrayList<Map<String,String>>());
-						}
-						
-						List<Map<String, String>> substitutions = rules.get(rule);
-						substitutions.add(rule.getSubstitution(term));
-					}
-				}
-				
-				List<CoreItem> coreItems = new ArrayList<CoreItem>();
-				
-				rules.forEach((rule, substitutions) -> {
-					for (Encoding enc : currentProgram) {
-						int idx = enc.getContent().indexOf(rule.getRule());
-						
-						if (idx != -1) {
-							coreItems.add(new CoreItem(enc, rule, substitutions));
-						}
-					}
-				});
-				
-				coreCallbacks.forEach((c) -> { c.accept(coreItems); });
-			}
 		} catch (IOException e) {
 			log.error("Could not write the core request to the debugger.", e);
-		} catch (MessageParsingException e) {
-			log.error("Could not parse the core response from the debugger.", e);
 		}
 	};
 	
@@ -173,18 +152,8 @@ public class DebuggerImpl implements Debugger {
 		try{
 			RequestMessage request = new RequestMessage(RequestType.GET_QUERY);
 			request.writeToOutputStream(debugger.getOutputStream());
-			
-			ResponseMessage resp = Message.parseFromInputStream(debugger.getInputStream());
-			
-			if (resp instanceof QueryResponseMessage) {
-				QueryResponseMessage response = (QueryResponseMessage) resp;
-				
-				queryCallbacks.forEach(c -> c.accept(response.getAtoms()));
-			}
 		} catch (IOException e) {
 			log.error("Could not write the query request to the debugger.", e);
-		} catch (MessageParsingException e) {
-			log.error("Could not parse the query response from the debugger.", e);
 		}
 	};
 	
@@ -224,6 +193,11 @@ public class DebuggerImpl implements Debugger {
 		if (debuggerExecutor != null) {
 			debuggerExecutor.shutdownNow();
 			debuggerExecutor = null;
+		}
+		
+		if (messageReaderExecutor != null) {
+			messageReaderExecutor.shutdownNow();
+			messageReaderExecutor = null;
 		}
 		
 		coreCallbacks.forEach(c -> c.accept(Collections.emptyList()));

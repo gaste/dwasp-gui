@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<!-- define the default logging pattern -->
-	<property name="logback.pattern.default"
-		value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
-	
 	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
 		<file>${user.home}/.dwasp-gui/dwasp-gui.log</file>
 		<append>true</append>
 		<encoder>
-			<pattern>${logback.pattern.default}</pattern>
+			<pattern>%date{ISO8601} [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
 		
