@@ -1,4 +1,4 @@
-package at.aau.dwaspgui.debugger.protocol.response;
+package at.aau.dwaspgui.debugger.protocol.info;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,16 +8,15 @@ import at.aau.dwaspgui.debugger.protocol.ReadableMessage;
 import at.aau.dwaspgui.util.Messages;
 
 /**
- * A response message from DWASP.
- * 
+ * A information message from the debugger.
  * @author Philip Gasteiger
  */
-public class ResponseMessage extends ReadableMessage {
+public class InfoMessage extends ReadableMessage {
 	/** logger instance */
-	private static final Logger log = LoggerFactory.getLogger(ResponseMessage.class);
+	private static final Logger log = LoggerFactory.getLogger(InfoMessage.class);
 	
 	/** the identifier of this message type */
-	public static final String MESSAGE_IDENTIFIER = "response";
+	public static final String MESSAGE_IDENTIFIER = "info";
 
 	/**
 	 * Parse the given message.
@@ -26,17 +25,14 @@ public class ResponseMessage extends ReadableMessage {
 	 * @throws MessageParsingException If the message is not a valid response
 	 *                                 message.
 	 */
-	public static ResponseMessage parseFromString(String message) throws MessageParsingException {
+	public static InfoMessage parseFromString(String message) throws MessageParsingException {
 		if (!message.startsWith(MESSAGE_IDENTIFIER + DELIM_PART))
 			throw new MessageParsingException(Messages.MSGPARSER_INVALID_MESSAGE.format());
 		
 		String unpacked = message.substring((MESSAGE_IDENTIFIER + DELIM_PART).length());
 		
-		if (unpacked.startsWith(CoreResponseMessage.MESSAGE_IDENTIFIER))
-			return new CoreResponseMessage(unpacked);
-
-		if (unpacked.startsWith(QueryResponseMessage.MESSAGE_IDENTIFIER))
-			return new QueryResponseMessage(unpacked);
+		if (unpacked.startsWith(ProgramCoherentInfoMessage.MESSAGE_IDENTIFIER))
+			return new ProgramCoherentInfoMessage(unpacked);
 		
 		log.error("Could not parse the message '{}' because the message type is unkown.", message);
 		throw new MessageParsingException(Messages.MSGPARSER_INVALID_MESSAGE.format());

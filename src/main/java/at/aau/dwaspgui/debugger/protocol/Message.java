@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.aau.dwaspgui.debugger.protocol.info.InfoMessage;
 import at.aau.dwaspgui.debugger.protocol.response.ResponseMessage;
 import at.aau.dwaspgui.util.Messages;
 
@@ -30,11 +31,14 @@ public abstract class Message {
 	/** delimiter of a message */
 	protected static final char DELIM_MSG = '\n';
 
-	public static ResponseMessage parseFromInputStream(InputStream inputStream) throws MessageParsingException {
+	public static ReadableMessage parseFromInputStream(InputStream inputStream) throws MessageParsingException {
 		String message = readMessage(inputStream);
 		
 		if (message.startsWith(ResponseMessage.MESSAGE_IDENTIFIER))
 			return ResponseMessage.parseFromString(message);
+		
+		if (message.startsWith(InfoMessage.MESSAGE_IDENTIFIER))
+			return InfoMessage.parseFromString(message);
 		
 		log.error("Could not parse the message '{}' because the message type is unknown.", message);
 		throw new MessageParsingException(Messages.MSGPARSER_INVALID_MESSAGE.format());
@@ -45,10 +49,10 @@ public abstract class Message {
 		StringBuilder message = new StringBuilder();
 		
 		try {
-			char c;
-			while ((c = (char)reader.read()) != -1 && c != DELIM_MSG) {
+			int c;
+			while ((c = reader.read()) != -1 && c != DELIM_MSG) {
 				if (c != '\r')
-					message.append(c);
+					message.append((char)c);
 				else
 					log.warn("Read '\\r' character from the input stream");
 			}
