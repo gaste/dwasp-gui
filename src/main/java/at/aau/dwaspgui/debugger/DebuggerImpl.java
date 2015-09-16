@@ -21,12 +21,13 @@ import at.aau.Rule;
 import at.aau.dwaspgui.app.config.ApplicationPreferences;
 import at.aau.dwaspgui.debugger.protocol.Message;
 import at.aau.dwaspgui.debugger.protocol.MessageParsingException;
+import at.aau.dwaspgui.debugger.protocol.ReadableMessage;
 import at.aau.dwaspgui.debugger.protocol.assertion.AssertionMessage;
+import at.aau.dwaspgui.debugger.protocol.info.ProgramCoherentInfoMessage;
 import at.aau.dwaspgui.debugger.protocol.request.RequestMessage;
 import at.aau.dwaspgui.debugger.protocol.request.RequestMessage.RequestType;
 import at.aau.dwaspgui.debugger.protocol.response.CoreResponseMessage;
 import at.aau.dwaspgui.debugger.protocol.response.QueryResponseMessage;
-import at.aau.dwaspgui.debugger.protocol.response.ResponseMessage;
 import at.aau.dwaspgui.domain.CoreItem;
 import at.aau.dwaspgui.domain.Encoding;
 import at.aau.dwaspgui.domain.QueryAnswer;
@@ -46,6 +47,7 @@ public class DebuggerImpl implements Debugger {
 	
 	private List<Consumer<List<CoreItem>>> coreCallbacks = new ArrayList<Consumer<List<CoreItem>>>();
 	private List<Consumer<List<String>>> queryCallbacks = new ArrayList<Consumer<List<String>>>();
+	private List<Consumer<List<String>>> coherentCallbacks = new ArrayList<Consumer<List<String>>>();
 	
 	private BooleanProperty isRunning = new SimpleBooleanProperty(false);
 	private BooleanProperty isComputingCore = new SimpleBooleanProperty(false);
@@ -122,16 +124,21 @@ public class DebuggerImpl implements Debugger {
 	private final Runnable messageReader = () -> {
 		while(isRunning.get()) {
 			try{
-				ResponseMessage resp = Message.parseFromInputStream(debugger.getInputStream());
+				ReadableMessage msg = Message.parseFromInputStream(debugger.getInputStream());
 				
-				if (resp instanceof CoreResponseMessage) {
-					CoreResponseMessage response = (CoreResponseMessage) resp;
+				if (msg instanceof CoreResponseMessage) {
+					CoreResponseMessage response = (CoreResponseMessage) msg;
 					
 					coreCallbacks.forEach(c -> c.accept(response.getCoreItems(debugRuleMap, currentProgram)));
-				} else if (resp instanceof QueryResponseMessage) {
-					QueryResponseMessage response = (QueryResponseMessage) resp;
+				} else if (msg instanceof QueryResponseMessage) {
+					QueryResponseMessage response = (QueryResponseMessage) msg;
 					
 					queryCallbacks.forEach(c -> c.accept(response.getAtoms()));
+				} else if (msg instanceof ProgramCoherentInfoMessage) {
+					ProgramCoherentInfoMessage info = (ProgramCoherentInfoMessage) msg;
+					
+					coherentCallbacks.forEach(c -> c.accept(info.getAnswerSet()));
+					stopDebugger();
 				}
 			} catch (MessageParsingException e) {
 				log.error("Could not parse the core response from the debugger.", e);
@@ -215,6 +222,11 @@ public class DebuggerImpl implements Debugger {
 	@Override
 	public void registerQueryCallback(Consumer<List<String>> callback) {
 		queryCallbacks.add(callback);
+	}
+	
+	@Override
+	public void registerCoherentCallback(Consumer<List<String>> callback) {
+		coherentCallbacks.add(callback);
 	}
 
 	@Override public BooleanProperty isRunning() { return isRunning; }

@@ -49,6 +49,12 @@ public interface Debugger {
 	 */
 	void registerQueryCallback(Consumer<List<String>> callback);
 	
+	/**
+	 * Register a handler that gets called when the program is coherent.
+	 * @param callback The handler that gets called.
+	 */
+	void registerCoherentCallback(Consumer<List<String>> callback);
+	
 	/** 
 	 * @return A property indicating whether the debugger is running.
 	 */

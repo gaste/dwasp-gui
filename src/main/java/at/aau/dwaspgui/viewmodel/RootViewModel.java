@@ -42,7 +42,9 @@ import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.scene.control.IndexRange;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 
 /**
@@ -83,6 +85,16 @@ public class RootViewModel implements ViewModel {
 			} else {
 				return new Observable[] {};
 			}
+		});
+		
+		debugger.registerCoherentCallback((answerSet) -> {
+			JFXUtil.runOnJFX(() -> {
+				Alert a = new Alert(AlertType.INFORMATION);
+				a.setTitle("Answer set found!");
+				a.setHeaderText("The program is coherent (see the answer set below).");
+				a.setContentText(answerSet.toString());
+				a.show();
+			});
 		});
 		
 		debugger.registerCoreCallback((coreItems) -> {
