@@ -43,8 +43,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
-import javafx.scene.control.IndexRange;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.IndexRange;
 import javafx.scene.image.Image;
 
 /**
@@ -64,7 +64,7 @@ public class RootViewModel implements ViewModel {
 	private final ObjectProperty<Encoding> selectedEncoding = new SimpleObjectProperty<Encoding>();
 	private final ObjectProperty<TestCase> selectedTestCase = new SimpleObjectProperty<TestCase>();
 	private final ObservableList<Encoding> encodings;
-	private final ObservableList<TestCase> testCases = FXCollections.observableArrayList();
+	private final ObservableList<TestCase> testCases;
 	private final ObservableList<CoreItem> coreItems = FXCollections.observableArrayList();
 	private final ObservableList<QueryViewModel> queryAtoms = FXCollections.observableArrayList();
 	
@@ -85,6 +85,10 @@ public class RootViewModel implements ViewModel {
 			} else {
 				return new Observable[] {};
 			}
+		});
+		
+		this.testCases = FXCollections.observableArrayList((testCase) -> {
+			return new Observable[] { testCase.dirtyProperty() };
 		});
 		
 		debugger.registerCoherentCallback((answerSet) -> {
@@ -152,6 +156,13 @@ public class RootViewModel implements ViewModel {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		} else if (null != selectedTestCase.get()) {
+			try {
+				projectSerializer.serialize(project.get(), new FileOutputStream(projectFile));
+				selectedTestCase.get().dirtyProperty().set(false);
+			} catch (FileNotFoundException | ProjectSerializationException e) {
+				windowManager.showErrorDialog(Messages.ERROR_SAVE_PROJECT, e);
+			}
 		}
 	}
 
@@ -171,9 +182,7 @@ public class RootViewModel implements ViewModel {
 		
 		try {
 			projectSerializer.serialize(project.get(), new FileOutputStream(projectFile));
-		} catch (ProjectSerializationException e) {
-			windowManager.showErrorDialog(Messages.ERROR_SAVE_PROJECT, e);
-		} catch (FileNotFoundException e) {
+		} catch (ProjectSerializationException | FileNotFoundException e) {
 			windowManager.showErrorDialog(Messages.ERROR_SAVE_PROJECT, e);
 		}
 
@@ -254,7 +263,13 @@ public class RootViewModel implements ViewModel {
 
 	// properties and lists
 	public ObjectProperty<Encoding> selectedEncodingProperty() { return selectedEncoding; }
+	public Encoding getSelectedEncoding() { return selectedEncoding.get(); }
+	public void setSelectedEncoding(Encoding encoding) { selectedEncoding.set(encoding); }
+	
 	public ObjectProperty<TestCase> selectedTestCaseProperty() { return selectedTestCase; }
+	public TestCase getSelectedTestCase() { return selectedTestCase.get(); }
+	public void setSelectedTestCase(TestCase testCase) { selectedTestCase.set(testCase); }
+	
 	public BooleanProperty isDebuggingProperty() { return debugger.isRunning(); }
 	public BooleanProperty isAspideSessions() { return this.isAspideSession; }
 	public ObservableList<Encoding> encodings() { return this.encodings; }

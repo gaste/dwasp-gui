@@ -61,38 +61,16 @@ public class RootView extends AbstractView<RootViewModel> {
 	public void initialize(URL location, ResourceBundle resources) {
 		initProjectListView();
 		initTestCaseListView();
-		
-		if (viewModel.testCases().size() == 0) {
-			// add one menu item for starting the debugger without an test-case
-			MenuItem item = new MenuItem("no test case");
-			item.setOnAction(e -> viewModel.debugAction(new TestCase("no test case", "")));
-			debugButton.getItems().add(item);
-		}
-		
-		// refresh test cases from the menu
-		viewModel.testCases().addListener((ListChangeListener.Change<? extends TestCase> c) -> {
-			debugButton.getItems().clear();
-			
-			if (viewModel.testCases().size() == 0) {
-				// add one menu item for starting the debugger without an test-case
-				MenuItem item = new MenuItem("no test case");
-				item.setOnAction(e -> viewModel.debugAction(new TestCase("no test case", "")));
-				debugButton.getItems().add(item);
-			}
-			
-			
-			for(TestCase testCase : viewModel.testCases()) {
-				MenuItem item = new MenuItem(testCase.getName());
-				item.setOnAction(e -> viewModel.debugAction(testCase));
-
-				debugButton.getItems().add(item);
-			}
-		});
+		initDebugButton();
 		
 		// add listener for the core highlight inside the editor
 		viewModel.coreItems().addListener((ListChangeListener.Change<? extends CoreItem> c) -> {
 			JFXUtil.runOnJFX(() -> {
-				codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.selectedEncodingProperty().get(), codeArea.getText(), viewModel.coreItems()));
+				if (null != viewModel.getSelectedEncoding()) {
+					codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.getSelectedEncoding(), codeArea.getText(), viewModel.coreItems()));
+				} else if (null != viewModel.getSelectedTestCase()) {
+					codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(codeArea.getText()));
+				}
 			});
 		});
 		
@@ -121,34 +99,57 @@ public class RootView extends AbstractView<RootViewModel> {
 		
 		initializeCodeArea();
 	}
+	
+	private void initDebugButton() {
+		if (viewModel.testCases().size() == 0) {
+			debugButton.getItems().add(createDebugMenuItem(new TestCase("No test case", "")));
+		}
+		
+		viewModel.testCases().addListener((InvalidationListener) observable -> {
+			debugButton.getItems().clear();
+			
+			if (viewModel.testCases().size() == 0) {
+				// add one menu item for starting the debugger without an test-case
+				debugButton.getItems().add(createDebugMenuItem(new TestCase("No test case", "")));
+			}
+			
+			for(TestCase testCase : viewModel.testCases()) {
+				debugButton.getItems().add(createDebugMenuItem(testCase));
+			}
+		});
+	}
+	
+	private MenuItem createDebugMenuItem(TestCase testCase) {
+		MenuItem item = new MenuItem(testCase.getName());
+		item.setOnAction(e -> viewModel.debugAction(testCase));
+		return item;
+	}
 
 	private void initProjectListView() {
 		projectListView.itemsProperty().set(viewModel.encodings());
 		
 		viewModel.selectedEncodingProperty().addListener((ChangeListener<Encoding>) (observable, oldEncoding, newEncoding) -> {
 			projectListView.getSelectionModel().select(newEncoding);
+			
+			if (null == newEncoding) return;
+			
+			viewModel.setSelectedTestCase(null);
 			editableEncoding.set(newEncoding instanceof FileEncoding);
+			
+			codeArea.replaceText(newEncoding.getContent());
+			codeArea.getUndoManager().forgetHistory();
 			
 			if (newEncoding instanceof FileEncoding) {
 				FileEncoding enc = (FileEncoding) newEncoding;
 				
-				dirtyEncoding.unbind();
 				dirtyEncoding.bind(enc.dirtyProperty());
 			} else {
-				dirtyEncoding.unbind();
 				dirtyEncoding.set(false);
 			}
 		});
 		
 		projectListView.getSelectionModel().selectedItemProperty().addListener((obs, oldProjectItem, newProjectItem) -> {
-			if (newProjectItem == null) return;	
-			else testCaseListView.getSelectionModel().clearSelection();
-			
-			viewModel.selectedEncodingProperty().set(newProjectItem);
-			viewModel.selectedTestCaseProperty().set(null);
-			
-			codeArea.replaceText(newProjectItem.getContent());
-			codeArea.getUndoManager().forgetHistory();
+			viewModel.setSelectedEncoding(newProjectItem);
 		});
 	}
 
@@ -157,18 +158,19 @@ public class RootView extends AbstractView<RootViewModel> {
 		
 		viewModel.selectedTestCaseProperty().addListener((ChangeListener<TestCase>) (observable, oldTestCase, newTestCase) -> {
 			testCaseListView.getSelectionModel().select(newTestCase);
+			
+			if (null == newTestCase) return;
+			
+			viewModel.setSelectedEncoding(null);
+			editableEncoding.set(true);
+			dirtyEncoding.bind(newTestCase.dirtyProperty());
+			
+			codeArea.replaceText(newTestCase.getAssertions());
+			codeArea.getUndoManager().forgetHistory();
 		});
 
 		testCaseListView.getSelectionModel().selectedItemProperty().addListener((obs, oldTC, newTC) -> {
-			if (newTC == null) return;	
-			
-			projectListView.getSelectionModel().clearSelection();
-
-			viewModel.selectedEncodingProperty().set(null);
-			viewModel.selectedTestCaseProperty().set(newTC);
-			
-			codeArea.replaceText(newTC.getAssertions());
-			codeArea.getUndoManager().forgetHistory();
+			viewModel.setSelectedTestCase(newTC);
 		});
 	}
 
@@ -176,13 +178,22 @@ public class RootView extends AbstractView<RootViewModel> {
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 		codeArea.editableProperty().bind(viewModel.isDebuggingProperty().not().and(editableEncoding));
 		codeArea.textProperty().addListener((InvalidationListener) observable -> {
-			codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.selectedEncodingProperty().get(), codeArea.getText(), viewModel.coreItems()));
+			if (null != viewModel.getSelectedEncoding()) {
+				codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(viewModel.getSelectedEncoding(), codeArea.getText(), viewModel.coreItems()));
+			} else if (null != viewModel.getSelectedTestCase()) {
+				codeArea.setStyleSpans(0, AspCore2Highlight.computeHighlighting(codeArea.getText()));
+			}		
 		});
 		codeArea.textProperty().addListener((obs, oldText, newText) -> {
-            if (editableEncoding.get()) {
-            	FileEncoding enc = (FileEncoding) viewModel.selectedEncodingProperty().get();
-            	enc.setContent(newText);
-            }
+			if (!editableEncoding.get()) return;
+			
+			if (null != viewModel.getSelectedEncoding()) {
+            	FileEncoding enc = (FileEncoding) viewModel.getSelectedEncoding();
+            	enc.setContent(newText);				
+			} else if (null != viewModel.getSelectedTestCase()) {
+				TestCase tc = viewModel.getSelectedTestCase();
+				tc.setAssertions(newText);
+			}
 		});
 			
 		Popup popup = new Popup();
@@ -193,8 +204,7 @@ public class RootView extends AbstractView<RootViewModel> {
 		
 		codeArea.setMouseOverTextDelay(Duration.ofSeconds(1));
 		codeArea.addEventHandler(MouseOverTextEvent.MOUSE_OVER_TEXT_BEGIN, e -> {
-			if (!viewModel.isDebuggingProperty().get())
-				return;
+			if (!viewModel.isDebuggingProperty().get()) return;
 			
 			int chIdx = e.getCharacterIndex();
 			

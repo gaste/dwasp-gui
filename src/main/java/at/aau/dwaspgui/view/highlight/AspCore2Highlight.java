@@ -62,12 +62,8 @@ public class AspCore2Highlight {
             + "|(?<" + GROUP_STRING + ">" + STRING_PATTERN + ")"
             + "|(?<" + GROUP_COMMENT + ">" + COMMENT_PATTERN + ")"
     );
-
-	public static StyleSpans<Collection<String>> computeHighlighting(Encoding encoding, String text) {
-		return computeHighlighting(encoding, text, Collections.emptyList());
-	}
 	
-	public static StyleSpans<Collection<String>> computeHighlighting(Encoding encoding, String text, List<CoreItem> coreItems) {
+	public static StyleSpans<Collection<String>> computeHighlighting(String text) {
 		StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
 		Matcher matcher = HIGHLIGHT_PATTERN.matcher(text);
         
@@ -90,8 +86,18 @@ public class AspCore2Highlight {
         }
         
         spansBuilder.add(new ArrayList<String>(), text.length() - lastMatchEnd);
-        StyleSpans<Collection<String>> styleSpans = spansBuilder.create();
+        return spansBuilder.create();
+	}
+
+	public static StyleSpans<Collection<String>> computeHighlighting(Encoding encoding, String text) {
+		return computeHighlighting(encoding, text, Collections.emptyList());
+	}
+	
+	public static StyleSpans<Collection<String>> computeHighlighting(Encoding encoding, String text, List<CoreItem> coreItems) {
+		// compute the basic highlighting
+		StyleSpans<Collection<String>> styleSpans = computeHighlighting(text);
         
+		// add the highlighting for the core items
         for (CoreItem ci : coreItems) {
 			if (ci.getEncoding().equals(encoding)) {
 				StyleSpans<Collection<String>> sv = styleSpans.subView(ci.getFromIndex(), ci.getFromIndex() + ci.getLength());

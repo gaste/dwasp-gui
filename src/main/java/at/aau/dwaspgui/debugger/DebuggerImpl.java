@@ -133,7 +133,7 @@ public class DebuggerImpl implements Debugger {
 				} else if (msg instanceof QueryResponseMessage) {
 					QueryResponseMessage response = (QueryResponseMessage) msg;
 					
-					queryCallbacks.forEach(c -> c.accept(response.getAtoms()));
+					queryCallbacks.forEach(c -> c.accept(response.getAtoms().subList(0, response.getAtoms().size() > 9 ? 9 : response.getAtoms().size())));
 				} else if (msg instanceof ProgramCoherentInfoMessage) {
 					ProgramCoherentInfoMessage info = (ProgramCoherentInfoMessage) msg;
 					
