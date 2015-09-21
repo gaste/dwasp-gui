@@ -1,5 +1,6 @@
 package at.aau.dwaspgui.debugger;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -61,7 +62,6 @@ public class DebuggerImpl implements Debugger {
 	
 	private static final String DEBUGGER_OPTION_GUI = "--debug-gui";
 	private static final String DEBUGGER_OPTION_INPUT_FILE = "--debug=";
-	private static final String DEBUG_FILE_NAME = "debug.dbg";
 	private static final String GRINGO_WRAPPER_OPTIONS = "";
 	private static final String GRINGO_WRAPPER_DEBUGCONSTANT = "_debug";
 	
@@ -77,8 +77,16 @@ public class DebuggerImpl implements Debugger {
 		debuggerExecutor = Executors.newSingleThreadExecutor();
 		messageReaderExecutor = Executors.newSingleThreadExecutor();
 		
-		groundProgram(program, testCase, DEBUG_FILE_NAME);
-		startDebugger(DEBUG_FILE_NAME);
+		try {
+			File debugFile = File.createTempFile(".dbg", "debug");
+			debugFile.deleteOnExit();
+			
+			groundProgram(program, testCase, debugFile.getAbsolutePath());
+			startDebugger(debugFile.getAbsolutePath());
+		} catch (IOException e) {
+			log.error("Could not create a temporary file for the debugger", e);
+			throw new DebuggerException(Messages.ERROR_GROUNDING.format());
+		}
 	}
 	
 	private void groundProgram(Collection<Encoding> program, TestCase testCase, String filename)
