@@ -115,6 +115,13 @@ public class RootViewModel implements ViewModel {
 					atom = atom.replaceAll("\r", "");
 					this.queryAtoms.add(new QueryViewModel(atom));
 				}
+				
+				if (queryAtoms.isEmpty() && this.debugger.isRunning().get()) {
+					Alert a = new Alert(AlertType.INFORMATION);
+					a.setTitle("No more queries possible!");
+					a.setHeaderText("There are no more queries possible. Please check the rules highlighted in red.");
+					a.show();
+				}
 			});
 		});
 	}
@@ -241,6 +248,7 @@ public class RootViewModel implements ViewModel {
 		try {
 			debugger.startDebugger(project.get().getProgram(), testCase);
 		} catch (DebuggerException e) {
+			debugger.stopDebugger();
 			windowManager.showErrorDialog(Messages.ERROR_START_DEBUGGER, e);
 		}
 	}

@@ -144,6 +144,7 @@ public class RootView extends AbstractView<RootViewModel> {
 				
 				dirtyEncoding.bind(enc.dirtyProperty());
 			} else {
+				dirtyEncoding.unbind();
 				dirtyEncoding.set(false);
 			}
 		});
