@@ -2,6 +2,7 @@ package at.aau.dwaspgui.debugger;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ import at.aau.dwaspgui.debugger.protocol.Message;
 import at.aau.dwaspgui.debugger.protocol.MessageParsingException;
 import at.aau.dwaspgui.debugger.protocol.ReadableMessage;
 import at.aau.dwaspgui.debugger.protocol.assertion.AssertionMessage;
+import at.aau.dwaspgui.debugger.protocol.info.ComputingCoreInfoMessage;
+import at.aau.dwaspgui.debugger.protocol.info.ComputingQueryInfoMessage;
 import at.aau.dwaspgui.debugger.protocol.info.ProgramCoherentInfoMessage;
 import at.aau.dwaspgui.debugger.protocol.request.RequestMessage;
 import at.aau.dwaspgui.debugger.protocol.request.RequestMessage.RequestType;
@@ -49,6 +52,8 @@ public class DebuggerImpl implements Debugger {
 	private List<Consumer<List<CoreItem>>> coreCallbacks = new ArrayList<Consumer<List<CoreItem>>>();
 	private List<Consumer<List<String>>> queryCallbacks = new ArrayList<Consumer<List<String>>>();
 	private List<Consumer<List<String>>> coherentCallbacks = new ArrayList<Consumer<List<String>>>();
+	private List<Runnable> computeCoreCallbacks = new ArrayList<Runnable>();
+	private List<Runnable> computeQueryCallbacks = new ArrayList<Runnable>();
 	
 	private BooleanProperty isRunning = new SimpleBooleanProperty(false);
 	private BooleanProperty isComputingCore = new SimpleBooleanProperty(false);
@@ -130,9 +135,10 @@ public class DebuggerImpl implements Debugger {
 	}
 	
 	private final Runnable messageReader = () -> {
+		InputStreamReader reader = new InputStreamReader(debugger.getInputStream(), Message.CHARSET);
 		while(isRunning.get()) {
 			try{
-				ReadableMessage msg = Message.parseFromInputStream(debugger.getInputStream());
+				ReadableMessage msg = Message.parseFromInputStream(reader);
 				
 				if (msg instanceof CoreResponseMessage) {
 					CoreResponseMessage response = (CoreResponseMessage) msg;
@@ -147,6 +153,10 @@ public class DebuggerImpl implements Debugger {
 					
 					coherentCallbacks.forEach(c -> c.accept(info.getAnswerSet()));
 					stopDebugger();
+				} else if (msg instanceof ComputingCoreInfoMessage) {
+					computeCoreCallbacks.forEach(c -> c.run());
+				} else if (msg instanceof ComputingQueryInfoMessage) {
+					computeQueryCallbacks.forEach(c -> c.run());
 				}
 			} catch (MessageParsingException e) {
 				log.error("Could not parse the core response from the debugger.", e);
@@ -235,6 +245,16 @@ public class DebuggerImpl implements Debugger {
 	@Override
 	public void registerCoherentCallback(Consumer<List<String>> callback) {
 		coherentCallbacks.add(callback);
+	}
+	
+	@Override
+	public void registerComputeCoreCallback(Runnable callback) {
+		computeCoreCallbacks.add(callback);
+	}
+	
+	@Override
+	public void registerComputeQueryCallback(Runnable callback) {
+		computeQueryCallbacks.add(callback);
 	}
 
 	@Override public BooleanProperty isRunning() { return isRunning; }

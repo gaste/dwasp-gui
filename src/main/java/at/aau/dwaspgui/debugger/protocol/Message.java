@@ -1,8 +1,6 @@
 package at.aau.dwaspgui.debugger.protocol;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -23,7 +21,7 @@ public abstract class Message {
 	private static final Logger log = LoggerFactory.getLogger(Message.class);
 	
 	/** character set of all messages */ 
-	protected static final Charset CHARSET = StandardCharsets.US_ASCII;
+	public static final Charset CHARSET = StandardCharsets.US_ASCII;
 	
 	/** delimiter of the parts of a single message */
 	protected static final char DELIM_PART = ':';
@@ -31,7 +29,7 @@ public abstract class Message {
 	/** delimiter of a message */
 	protected static final char DELIM_MSG = '\n';
 
-	public static ReadableMessage parseFromInputStream(InputStream inputStream) throws MessageParsingException {
+	public static ReadableMessage parseFromInputStream(InputStreamReader inputStream) throws MessageParsingException {
 		String message = readMessage(inputStream);
 		
 		if (message.startsWith(ResponseMessage.MESSAGE_IDENTIFIER))
@@ -44,8 +42,7 @@ public abstract class Message {
 		throw new MessageParsingException(Messages.MSGPARSER_INVALID_MESSAGE.format());
 	}
 	
-	private static String readMessage(InputStream inputStream) throws MessageParsingException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, CHARSET));
+	private static String readMessage(InputStreamReader reader) throws MessageParsingException {
 		StringBuilder message = new StringBuilder();
 		
 		try {

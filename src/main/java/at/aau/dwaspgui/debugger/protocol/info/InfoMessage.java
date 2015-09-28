@@ -34,6 +34,12 @@ public class InfoMessage extends ReadableMessage {
 		if (unpacked.startsWith(ProgramCoherentInfoMessage.MESSAGE_IDENTIFIER))
 			return new ProgramCoherentInfoMessage(unpacked);
 		
+		if (unpacked.startsWith(ComputingCoreInfoMessage.MESSAGE_IDENTIFIER))
+			return new ComputingCoreInfoMessage();
+		
+		if (unpacked.startsWith(ComputingQueryInfoMessage.MESSAGE_IDENTIFIER))
+			return new ComputingQueryInfoMessage();
+		
 		log.error("Could not parse the message '{}' because the message type is unkown.", message);
 		throw new MessageParsingException(Messages.MSGPARSER_INVALID_MESSAGE.format());
 	}

@@ -54,6 +54,20 @@ public interface Debugger {
 	 * @param callback The handler that gets called.
 	 */
 	void registerCoherentCallback(Consumer<List<String>> callback);
+
+	/**
+	 * Register a handler that gets called when the debugger is computing the
+	 * core.
+	 * @param callback The handler that gets called.
+	 */
+	void registerComputeCoreCallback(Runnable callback);
+	
+	/**
+	 * Register a handler that gets called when the debugger is computing the
+	 * query.
+	 * @param callback The handler that gets called.
+	 */
+	void registerComputeQueryCallback(Runnable callback);
 	
 	/** 
 	 * @return A property indicating whether the debugger is running.
