@@ -12,7 +12,33 @@
   <packaging>jar</packaging>
 
   <name>dwasp-gui</name>
-  <url>https://github.com/gaste</url>
+  <description>
+    A graphical user interface for debugging faulty ASP programs with
+    gringo-wrapper and DWASP.
+  </description>
+  <url>https://github.com/gaste/dwasp-gui</url>
+  
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+  
+  <developers>
+    <developer>
+      <name>Philip Gasteiger</name>
+      <email>philip.gasteiger@gmail.com</email>
+      <organization>Alpen-Adria-Universität Klagenfurt</organization>
+      <organizationUrl>http://www.aau.at</organizationUrl>
+    </developer>
+  </developers>
+  
+  <scm>
+    <connection>scm:git:git@github.com:gaste/gringo-wrapper.git</connection>
+    <developerConnection>scm:git:git@github.com:gaste/gringo-wrapper.git</developerConnection>
+    <url>git@github.com:gaste/gringo-wrapper.git</url>
+  </scm>
   
   <build>
     <plugins>
