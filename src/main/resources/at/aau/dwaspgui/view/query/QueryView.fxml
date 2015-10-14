@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<fx:root styleClass="query-container" type="HBox"
+		xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+	<Label fx:id="atomNameLabel" styleClass="query-label" text="[atom name]" />
+	<StackPane HBox.hgrow="ALWAYS">
+		<HBox alignment="CENTER_RIGHT">
+			<ToggleButton fx:id="trueButton" minWidth="30.0"
+				mnemonicParsing="false" styleClass="left-pill" text="%button.true">
+				<graphic>
+					<FontAwesomeIconView glyphName="CHECK" styleClass="icon-true" />
+				</graphic>
+			</ToggleButton>
+			<ToggleButton fx:id="falseButton" minWidth="30.0"
+				mnemonicParsing="false" styleClass="center-pill" text="%button.false">
+				<graphic>
+					<FontAwesomeIconView glyphName="TIMES" styleClass="icon-false" />
+				</graphic>
+			</ToggleButton>
+			<ToggleButton fx:id="undefinedButton" minWidth="30.0"
+				mnemonicParsing="false" selected="true" styleClass="right-pill"
+				text="%button.undef">
+				<graphic>
+					<FontAwesomeIconView glyphName="QUESTION" styleClass="icon-undefined" />
+				</graphic>
+			</ToggleButton>
+		</HBox>
+	</StackPane>
+</fx:root>

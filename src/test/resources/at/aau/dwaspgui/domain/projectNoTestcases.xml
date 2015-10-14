@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<logicProgram>
+	<baseDirectory>/foo/bar</baseDirectory>
+	<encodings>
+		<encodingFile>enc1.lp</encodingFile>
+		<encodingFile>enc2.lp</encodingFile>
+		<encodingDirect sourceFile="/path/to/source1.lp" startLine="1" endLine="2" startColumn="3" endColumn="4">
+			<![CDATA[
+				pred(1).
+				num(1..10).
+				pred(X) :- num(X).
+			]]>
+		</encodingDirect>
+		<encodingDirect sourceFile="/path/to/source2.lp" startLine="5" endLine="6" startColumn="7" endColumn="8">
+			<![CDATA[
+				a.
+				b :- a.
+			]]>
+		</encodingDirect>
+	</encodings>
+</logicProgram>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+   Copyright 2015 Philip Gasteiger
+ 
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<?import javafx.scene.paint.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import org.fxmisc.richtext.*?>
+<?import javafx.scene.text.Font?>
+<?import org.fxmisc.richtext.LineNumberFactory?>
+<?import at.aau.dwaspgui.view.query.QueryListView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import at.aau.dwaspgui.view.ResizingListView?>
+
+<VBox prefHeight="600.0" prefWidth="1000.0" stylesheets="@RootView.css"
+	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+	<MenuBar>
+		<Menu mnemonicParsing="false" text="%menu.file">
+			<MenuItem text="%menu.file.new.project" mnemonicParsing="false" onAction="#newProjectAction" />
+			<MenuItem text="%menu.file.openproject" mnemonicParsing="false" onAction="#openProjectAction" />
+			<MenuItem text="%menu.file.addfile" fx:id="addFileMenuItem" mnemonicParsing="false" onAction="#addFileAction" />
+			<MenuItem text="%menu.file.newtestcase" fx:id="newTestCaseMenuItem" mnemonicParsing="false" onAction="#newTestCaseAction" />
+			<SeparatorMenuItem mnemonicParsing="false" />
+			<MenuItem text="%menu.file.save" fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveAction" />
+			<SeparatorMenuItem mnemonicParsing="false" />
+			<MenuItem text="%menu.file.exit" mnemonicParsing="false" onAction="#exitAction" />
+		</Menu>
+		<Menu text="%menu.window">
+			<MenuItem text="%menu.window.preferences" mnemonicParsing="false" onAction="#preferencesAction" />
+		</Menu>
+	</MenuBar>
+	<SplitPane dividerPositions="0.28" VBox.vgrow="ALWAYS">
+		<VBox SplitPane.resizableWithParent="false">
+			<Label styleClass="header-label" text="%label.project" />
+			<ResizingListView id="project-view" fx:id="projectListView" />
+			<Label styleClass="header-label" text="%label.testcases" />
+			<ResizingListView fx:id="testCaseListView" />
+			<Pane VBox.vgrow="ALWAYS" />
+			<VBox id="query-view" fx:id="queryView">
+				<Label styleClass="header-label" text="%label.queries" />
+				<QueryListView fx:id="queryListView" />
+				<ToolBar>
+					<Pane HBox.hgrow="ALWAYS" />
+					<Button fx:id="assertButton" mnemonicParsing="false"
+						onAction="#assertAction" text="Send" />
+				</ToolBar>
+			</VBox>
+		</VBox>
+		<HBox>
+			<VBox fx:id="mainPane" HBox.hgrow="ALWAYS">
+				<ToolBar>
+					<Button fx:id="saveButton" text="%button.save" mnemonicParsing="false" onAction="#saveAction">
+						<graphic><FontAwesomeIconView glyphName="FLOPPY_ALT" /></graphic>
+					</Button>
+					<Button fx:id="aspideButton" text="%button.aspide" mnemonicParsing="false" onAction="#aspideAction">
+						<graphic><FontAwesomeIconView glyphName="EXTERNAL_LINK" /></graphic>
+					</Button>
+					<MenuButton fx:id="debugButton" mnemonicParsing="false"	styleClass="btn" text="%button.debug">
+						<graphic><FontAwesomeIconView fill="#368632" glyphName="PLAY" /></graphic>
+					</MenuButton>
+					<Button fx:id="stopButton" mnemonicParsing="false"
+						onAction="#stopAction" styleClass="btn" textFill="#9d0000">
+						<graphic><FontAwesomeIconView fill="#9d240c" glyphName="STOP" styleClass="btn" /></graphic>
+					</Button>
+				</ToolBar>
+				<CodeArea id="code-area" fx:id="codeArea" stylesheets="@asp-core-2-keywords.css" VBox.vgrow="ALWAYS" />
+			</VBox>
+			<StackPane fx:id="noProjectPane" HBox.hgrow="ALWAYS">
+				<HBox id="no-project-pane">
+					<Button text="%button.project.open" onAction="#openProjectAction">
+						<graphic><FontAwesomeIconView glyphName="FOLDER_ALT" /></graphic>
+					</Button>
+					<Button text="%button.project.new" onAction="#newProjectAction">
+						<graphic><FontAwesomeIconView  glyphName="PLUS_SQUARE_ALT" /></graphic>
+					</Button>
+				</HBox>
+			</StackPane>
+			<StackPane fx:id="emptyProjectPane" HBox.hgrow="ALWAYS">
+				<HBox id="empty-project-pane">
+					<Button text="%button.encoding.add" onAction="#addFileAction">
+						<graphic><FontAwesomeIconView  glyphName="PLUS_SQUARE_ALT" /></graphic>
+					</Button>
+				</HBox>
+			</StackPane>
+		</HBox>
+	</SplitPane>
+</VBox>

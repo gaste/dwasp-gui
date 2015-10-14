@@ -1,0 +1,19 @@
+# maven binaries and release files
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# eclipse project files
+.classpath
+.project
+.settings/
+
+# dwasp-gui debugging files
+*.dbg
+
+# windows files
+Desktop.ini
+Thumbs.db

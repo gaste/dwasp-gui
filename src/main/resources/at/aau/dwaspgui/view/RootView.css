@@ -1,0 +1,237 @@
+/*
+ *  Copyright 2015 Philip Gasteiger
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+* {
+	/* colors for window chrome */
+	-col-chrome-low: rgb(242,242,242);
+	-col-chrome-mid: rgb(230,230,230);
+	-col-chrome-high: rgb(204,204,204);
+	
+	-col-menu-low: rgb(210,210,210);
+	-col-menu-high: rgb(180,180,180);
+	
+	-col-label-header: #959595;
+	
+	/* colors for lists */
+	-col-list-hover: rgb(229,229,229);
+	-col-list-press: rgb(204,204,204);
+	-col-list-select: rgb(153,201,239);
+	-col-list-select-hover: rgb(102,174,231);
+	-col-list-select-press: rgb(77,161,227);
+	
+	/* colors for specific contexts */
+	-col-success: #5cb85c;
+	-col-danger: #d9534f;
+}
+
+.menu-bar {
+    -fx-background-color: -col-menu-low;
+    -fx-border-color: -col-menu-high;
+    -fx-border-width: 0 0 1 0; 
+}
+
+.list-view {
+	-fx-background-color: -col-chrome-low;
+	-fx-padding: 0px;
+	-fx-border-insets: 0px;
+}
+
+.list-view .list-cell {
+    -fx-background-color: -col-chrome-low;
+	-fx-text-fill: rgb(81,79,82);
+	-fx-padding: 0.5em 0 0.5em 0.75em;
+}
+
+.list-view .list-cell:selected,
+.list-view .list-cell:selected:hover {
+	-fx-background-color: -col-chrome-high;/*-col-list-select;*/
+	-fx-text-fill: black;
+	-fx-font-weight: bold;
+}
+
+.list-view .list-cell:selected:focus {
+	-fx-background-color: -col-list-select;
+}
+
+.split-pane {
+	-fx-background-color: -col-chrome-low;
+	-fx-padding: 0px;
+}
+
+.split-pane *.split-pane-divider, 
+.split-pane *.vertical-grabber, 
+.split-pane *.horizontal-grabber {
+   -fx-background-color: null;
+   -fx-border-color: -col-chrome-high;
+   -fx-border-width: 0 1 0 0;
+   -fx-border-insets: 0;
+   -fx-padding: 0px;
+}
+
+.lineno {
+	-fx-font: 14pt "Consolas";
+	-fx-background-color: #ffffff;
+	-fx-text-fill: -col-chrome-mid;
+	-fx-border-color: #d3d3d3;
+	-fx-border-width: 0 1 0 0;
+	-fx-border-insets: 0 15 0 0;
+	-fx-padding: 0 15 0 15;
+}
+
+#code-area {
+	-fx-font: 14pt "Consolas";
+}
+
+#query-view {
+	-fx-border-color: -col-chrome-high;
+	-fx-border-width: 1 0 0 0;
+}
+
+.header-label {
+	-fx-text-fill: -col-label-header;
+	-fx-font-weight: bolder;
+	-fx-padding: 0.75em 0.75em 0.25em 0.75em;
+}
+
+.query-container {
+	-fx-padding: 0.25em 0.5em 0.25em 0.5em;
+}
+
+.query-label {
+	-fx-font: 11pt "Consolas";
+	-fx-text-fill: rgb(81,79,82);
+	-fx-padding: 4px 0 0 0;
+}
+
+.icon-true {
+	-fx-fill: -col-success;
+}
+
+.icon-false {
+	-fx-fill: -col-danger;
+}
+
+/*
+ * .tool-bar
+ */
+.tool-bar {
+	-fx-background-color: -col-chrome-low;
+	-fx-border-width: 0 0 1 0;
+	-fx-border-color: -col-chrome-high;
+}
+ 
+.tool-bar .button,
+.tool-bar .menu-button,
+.button {
+	-fx-border-color: -col-chrome-high;
+	-fx-border-width: 1;
+	-fx-border-radius: 5;
+	-fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-background-radius: 5;
+}
+
+.tool-bar .button:hover,
+.tool-bar .menu-button:hover,
+.button:hover {
+	-fx-background-color: derive(-col-chrome-mid, 30%);
+}
+
+.tool-bar .button:armed,
+.tool-bar .menu-button:armed,
+.button:armed {
+	-fx-background-color: -col-chrome-mid;
+}
+/* .tool-bar */
+
+
+/*
+ * .toggle-button
+ */
+.toggle-button {
+	-fx-border-color: -col-chrome-high;
+	-fx-border-width: 1;
+	-fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.toggle-button:hover {
+	-fx-background-color: derive(-col-chrome-mid, 30%);
+}
+
+.toggle-button:selected,
+.toggle-button:hover:selected {
+	-fx-background-color: -col-chrome-mid;
+}
+
+.toggle-button.center-pill,
+.button.center-pill {
+	-fx-border-width: 1 0 1 1;
+}
+
+.toggle-button.left-pill,
+.button.left-pill {
+	-fx-border-width: 1 0 1 1;
+	-fx-border-radius: 5 0 0 5;
+	-fx-background-radius: 5 0 0 5;
+}
+
+.toggle-button.right-pill,
+.button.right-pill {
+    -fx-border-width: 1 1 1 1;
+    -fx-border-radius: 0 5 5 0;
+    -fx-background-radius: 0 5 5 0;
+}
+/* .toggle-button */
+
+/*
+ * #no-project-pane,
+ * #empty-project-pane
+ */
+#no-project-pane,
+#empty-project-pane {
+	-fx-background-color: white;
+	-fx-alignment: center;
+}
+
+#no-project-pane .button,
+#empty-project-pane .button {
+	-fx-content-display: top;
+	-fx-font-size: 1.5em;
+	-fx-text-fill: -col-chrome-mid;
+	-fx-border-width: 0;
+	-fx-min-width: 150;
+}
+
+#no-project-pane .button:hover,
+#empty-project-pane .button:hover {
+	-fx-cursor: hand;
+	-fx-text-fill: -col-chrome-high;
+	-fx-background-color: transparent;
+}
+
+#no-project-pane .button > .glyph-icon,
+#empty-project-pane .button > .glyph-icon {
+	-fx-fill: -col-chrome-mid;
+	-glyph-size: 100;
+}
+
+#no-project-pane .button:hover > .glyph-icon,
+#empty-project-pane .button:hover > .glyph-icon {
+	-fx-fill: -col-chrome-high;
+}
+/* #no-project-pane */

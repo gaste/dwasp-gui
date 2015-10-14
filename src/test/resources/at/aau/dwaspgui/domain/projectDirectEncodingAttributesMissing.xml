@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<logicProgram>
+	<baseDirectory>/foo/bar</baseDirectory>
+	<encodings>
+		<encodingFile>enc1.lp</encodingFile>
+		<encodingFile>enc2.lp</encodingFile>
+		<encodingDirect>
+			<![CDATA[
+				pred(1).
+				num(1..10).
+				pred(X) :- num(X).
+			]]>
+		</encodingDirect>
+		<encodingDirect>
+			<![CDATA[
+				a.
+				b :- a.
+			]]>
+		</encodingDirect>
+	</encodings>
+	<testCases>
+		<testCase>
+			<name>Test case 1.1</name>
+			<assertions>
+			<![CDATA[
+				assertTrue(pred(1)).
+				assertFalse(pred(11)).
+			]]>
+			</assertions>
+		</testCase>
+		<testCase>
+			<name>Test case 1.2</name>
+			<assertions>
+			<![CDATA[
+				assertTrue(pred(2)).
+			]]>
+			</assertions>
+		</testCase>
+		<testCase>
+			<name>Test case 2.1</name>
+			<assertions>
+			<![CDATA[
+				assertTrue(b).
+			]]>
+			</assertions>
+		</testCase>
+	</testCases>
+</logicProgram>

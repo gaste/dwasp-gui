@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+   Copyright 2015 Philip Gasteiger
+ 
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefWidth="350" stylesheets="@RootView.css" xmlns="http://javafx.com/javafx/8.0.40"
+	xmlns:fx="http://javafx.com/fxml/1">
+	<GridPane hgap="7.0" vgap="7.0">
+		<columnConstraints>
+			<ColumnConstraints hgrow="SOMETIMES" />
+			<ColumnConstraints hgrow="ALWAYS" />
+		</columnConstraints>
+		<rowConstraints>
+			<RowConstraints vgrow="SOMETIMES" />
+			<RowConstraints vgrow="SOMETIMES" />
+		</rowConstraints>
+		<children>
+			<Label text="%label.name" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+			<Label text="%label.location" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+			<TextField fx:id="nameTextField" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+			<HBox GridPane.rowIndex="1" GridPane.columnIndex="1">
+				<TextField fx:id="locationTextField" HBox.hgrow="ALWAYS" />
+				<Button mnemonicParsing="false" onAction="#chooseLocationAction" text="%button.location" />
+			</HBox>
+		</children>
+	</GridPane>
+	<ButtonBar prefHeight="40.0" prefWidth="200.0">
+		<buttons>
+			<Button fx:id="createButton" mnemonicParsing="false" onAction="#createAction" text="%button.create" />
+			<Button mnemonicParsing="false" onAction="#cancelAction" text="%button.cancel" />
+		</buttons>
+	</ButtonBar>
+	<padding>
+		<Insets left="7.0" right="7.0" top="7.0" />
+	</padding>
+</VBox>
