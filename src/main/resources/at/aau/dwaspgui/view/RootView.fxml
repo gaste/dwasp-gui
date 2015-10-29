@@ -39,6 +39,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 <?import at.aau.dwaspgui.view.ResizingListView?>
+<?import at.aau.dwaspgui.view.history.HistoryListView?>
 
 <VBox prefHeight="600.0" prefWidth="1000.0" stylesheets="@RootView.css"
 	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
@@ -70,8 +71,10 @@
 				<ToolBar>
 					<Pane HBox.hgrow="ALWAYS" />
 					<Button fx:id="assertButton" mnemonicParsing="false"
-						onAction="#assertAction" text="Send" />
+						onAction="#assertAction" text="%button.answer" />
 				</ToolBar>
+				<Label styleClass="header-label" text="%label.history" />
+				<HistoryListView fx:id="historyListView" />
 			</VBox>
 		</VBox>
 		<HBox>

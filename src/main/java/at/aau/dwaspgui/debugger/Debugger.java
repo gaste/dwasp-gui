@@ -53,6 +53,12 @@ public interface Debugger {
 	void assertAtoms(Map<String, QueryAnswer> assertions);
 	
 	/**
+	 * Undo the given assertion.
+	 * @param atom The atom whose assertion should be undone.
+	 */
+	void undoAssertion(String atom);
+	
+	/**
 	 * Register a handler that gets called when the items inside the UNSAT core
 	 * change.
 	 * @param callback The handler that gets called.

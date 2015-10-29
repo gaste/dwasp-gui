@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+
+<fx:root styleClass="query-container" type="HBox"
+		xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+	<FontAwesomeIconView fx:id="answerIcon" />
+	<Label fx:id="atomNameLabel" styleClass="query-label" text="[atom name]" />
+	<StackPane HBox.hgrow="ALWAYS">
+		<HBox alignment="CENTER_RIGHT">
+			<Button onAction="#undo">
+				<graphic>
+					<FontAwesomeIconView glyphName="UNDO" styleClass="icon-undefined" />
+				</graphic>
+			</Button>
+		</HBox>
+	</StackPane>
+</fx:root>

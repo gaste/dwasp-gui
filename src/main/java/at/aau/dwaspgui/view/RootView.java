@@ -31,6 +31,7 @@ import at.aau.dwaspgui.domain.FileEncoding;
 import at.aau.dwaspgui.domain.TestCase;
 import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.view.highlight.AspCore2Highlight;
+import at.aau.dwaspgui.view.history.HistoryListView;
 import at.aau.dwaspgui.view.query.QueryListView;
 import at.aau.dwaspgui.viewmodel.RootViewModel;
 import javafx.beans.InvalidationListener;
@@ -56,6 +57,7 @@ public class RootView extends AbstractView<RootViewModel> {
 	@FXML private ResizingListView<Encoding> projectListView;
 	@FXML private ResizingListView<TestCase> testCaseListView;
 	@FXML private QueryListView queryListView;
+	@FXML private HistoryListView historyListView;
 	@FXML private VBox queryView;
 	@FXML private CodeArea codeArea;
 	@FXML private MenuButton debugButton;
@@ -112,6 +114,7 @@ public class RootView extends AbstractView<RootViewModel> {
 		queryView.visibleProperty().bind(viewModel.isDebuggingProperty());
 
 		Bindings.bindContentBidirectional(viewModel.queryAtoms(), queryListView.getQueries());
+		Bindings.bindContentBidirectional(viewModel.history(), historyListView.getHistory());
 		
 		initializeCodeArea();
 	}

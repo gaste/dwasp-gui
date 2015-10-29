@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 
@@ -46,6 +47,7 @@ import at.aau.dwaspgui.serializer.ProjectSerializationException;
 import at.aau.dwaspgui.serializer.ProjectSerializer;
 import at.aau.dwaspgui.util.JFXUtil;
 import at.aau.dwaspgui.util.Messages;
+import at.aau.dwaspgui.viewmodel.history.HistoryViewModel;
 import at.aau.dwaspgui.viewmodel.query.QueryViewModel;
 import javafx.application.Platform;
 import javafx.beans.Observable;
@@ -54,6 +56,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -83,6 +86,7 @@ public class RootViewModel implements ViewModel {
 	private final ObservableList<TestCase> testCases;
 	private final ObservableList<CoreItem> coreItems = FXCollections.observableArrayList();
 	private final ObservableList<QueryViewModel> queryAtoms = FXCollections.observableArrayList();
+	private final ObservableList<HistoryViewModel> history = FXCollections.observableArrayList();
 	
 	@Inject
 	public RootViewModel(WindowManager windowManager,
@@ -112,7 +116,7 @@ public class RootViewModel implements ViewModel {
 				Alert a = new Alert(AlertType.INFORMATION);
 				a.setTitle("Answer set found!");
 				a.setHeaderText("The program is coherent (see the answer set below).");
-				a.setContentText(answerSet.toString());
+				a.setContentText(answerSet.stream().filter(s -> !s.contains("_debug") && !s.isEmpty()).collect(Collectors.toList()).toString());
 				a.show();
 			});
 		});
@@ -139,6 +143,12 @@ public class RootViewModel implements ViewModel {
 					a.show();
 				}
 			});
+		});
+		
+		debugger.isRunning().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+			if (!newValue) {
+				history.clear();
+			}
 		});
 	}
 	
@@ -279,10 +289,16 @@ public class RootViewModel implements ViewModel {
 		for (QueryViewModel query : queryAtoms) {
 			if (query.getAnswer() != QueryAnswer.UNKNOWN) {
 				assertions.put(query.getAtom(), query.getAnswer());
+				history.add(new HistoryViewModel(query.getAtom(), QueryAnswer.YES, this));
 			}
 		}
 		
 		debugger.assertAtoms(assertions);
+	}
+	
+	public void undoAssertion(HistoryViewModel assertion) {
+		debugger.undoAssertion(assertion.getAtom());
+		history.remove(assertion);
 	}
 
 	// properties and lists
@@ -300,6 +316,7 @@ public class RootViewModel implements ViewModel {
 	public ObservableList<TestCase> testCases() { return this.testCases; }
 	public ObservableList<CoreItem> coreItems() { return this.coreItems; }
 	public ObservableList<QueryViewModel> queryAtoms() { return this.queryAtoms; }
+	public ObservableList<HistoryViewModel> history() { return this.history; }
 	
 	public ObservableBooleanValue isMainPaneVisible() {
 		return project.isNotNull()
