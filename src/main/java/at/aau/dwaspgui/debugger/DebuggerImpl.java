@@ -41,6 +41,7 @@ import at.aau.dwaspgui.debugger.protocol.Message;
 import at.aau.dwaspgui.debugger.protocol.MessageParsingException;
 import at.aau.dwaspgui.debugger.protocol.ReadableMessage;
 import at.aau.dwaspgui.debugger.protocol.assertion.AssertionMessage;
+import at.aau.dwaspgui.debugger.protocol.assertion.UndoAssertionMessage;
 import at.aau.dwaspgui.debugger.protocol.info.ComputingCoreInfoMessage;
 import at.aau.dwaspgui.debugger.protocol.info.ComputingQueryInfoMessage;
 import at.aau.dwaspgui.debugger.protocol.info.ProgramCoherentInfoMessage;
@@ -218,6 +219,21 @@ public class DebuggerImpl implements Debugger {
 				getQuery();
 			} catch (Exception e) {
 				log.error("Could not write the assertion request to the debugger");
+			}
+		});
+	}
+
+	@Override
+	public void undoAssertion(String atom) {
+		debuggerExecutor.execute(() -> {
+			try {
+				UndoAssertionMessage msg = new UndoAssertionMessage(atom);
+				msg.writeToOutputStream(debugger.getOutputStream());
+				
+				notifyCores();
+				getQuery();
+			} catch (Exception e) {
+				log.error("Could not write the undo assertion request to the debugger");
 			}
 		});
 	}
