@@ -45,6 +45,7 @@ import at.aau.dwaspgui.debugger.protocol.assertion.UndoAssertionMessage;
 import at.aau.dwaspgui.debugger.protocol.info.ComputingCoreInfoMessage;
 import at.aau.dwaspgui.debugger.protocol.info.ComputingQueryInfoMessage;
 import at.aau.dwaspgui.debugger.protocol.info.ProgramCoherentInfoMessage;
+import at.aau.dwaspgui.debugger.protocol.info.UnfoundedCoreInfoMessage;
 import at.aau.dwaspgui.debugger.protocol.request.RequestMessage;
 import at.aau.dwaspgui.debugger.protocol.request.RequestMessage.RequestType;
 import at.aau.dwaspgui.debugger.protocol.response.CoreResponseMessage;
@@ -75,6 +76,7 @@ public class DebuggerImpl implements Debugger {
 	private BooleanProperty isRunning = new SimpleBooleanProperty(false);
 	private BooleanProperty isComputingCore = new SimpleBooleanProperty(false);
 	private BooleanProperty isComputingQuery = new SimpleBooleanProperty(false);
+	private BooleanProperty isUnfoundedCase = new SimpleBooleanProperty(false);
 	
 	private Process debugger = null;
 	private Collection<Encoding> currentProgram = null;
@@ -94,6 +96,7 @@ public class DebuggerImpl implements Debugger {
 		if (isRunning.get()) return;
 		
 		isRunning.set(true);
+		isUnfoundedCase.set(false);
 		
 		currentProgram = program;
 		debuggerExecutor = Executors.newSingleThreadExecutor();
@@ -174,6 +177,8 @@ public class DebuggerImpl implements Debugger {
 					computeCoreCallbacks.forEach(c -> c.run());
 				} else if (msg instanceof ComputingQueryInfoMessage) {
 					computeQueryCallbacks.forEach(c -> c.run());
+				} else if (msg instanceof UnfoundedCoreInfoMessage) {
+					isUnfoundedCase.set(true);
 				}
 			} catch (MessageParsingException e) {
 				log.error("Could not parse the core response from the debugger.", e);
@@ -215,8 +220,10 @@ public class DebuggerImpl implements Debugger {
 				AssertionMessage msg = new AssertionMessage(assertions);
 				msg.writeToOutputStream(debugger.getOutputStream());
 				
-				notifyCores();
-				getQuery();
+				if (!isUnfoundedCase.get()) {
+					notifyCores();
+					getQuery();
+				}
 			} catch (Exception e) {
 				log.error("Could not write the assertion request to the debugger");
 			}
@@ -244,6 +251,7 @@ public class DebuggerImpl implements Debugger {
 		if (!isRunning.get()) return;
 		
 		isRunning.set(false);
+		isUnfoundedCase.set(false);
 		currentProgram = null;
 		debugRuleMap = null;
 		
